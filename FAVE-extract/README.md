@@ -1,16 +1,16 @@
 # Contents
 
-I. [Introduction](#introduction)
+I. [Introduction](#i-introduction)
 
-II. [System Requirements][]
+II. [System Requirements](#ii-system-requirements)
 
-III. [Usage][]
+III. [Usage](#iii-usage)
 
 IV. [Changing Configuration Parameters][]
 
 V. [Description of the Output File][]
 
-##Introduction##
+##I. Introduction##
 
 ## II. System requirements ##
 
@@ -26,13 +26,13 @@ extractFormants relies on an external speech analysis program for the LPC analys
 Praat:  http://www.praat.org/
 ESPS:  
 
-# III. Usage
+## III. Usage ##
 
 Currently, extractFormants is set up so that it must be run from the main directory of the extractFormants package.  To run extractFormants, three arguments are required:  the WAV file containing the speech data, the TextGrid file containing the alignments, and the name of an output file for the extracted formants.  So, in the directory extractFormants/, type:
 
 `$ python bin/extractFormants.py filename.wav filename.TextGrid outputFile`
 
-# Changing configuration parameters
+## IV Changing configuration parameters ##
 
 There are many configuration parameters that can alter the behavior of extractFormants.  The user can modify their values by creating a config file; otherwise, default values will be set internally.  To use a config file, use the argument '--config=' followed by the name of the config file.  For example, to load a configuration file named 'config.txt' located in the current directory, type:
 
@@ -79,42 +79,26 @@ For example, here are the contents of a possible configuration file:
 This file specifies that Praat will be used as the speech analysis program (this line is actually redundant here, since Praat is set internally to be the default speech software), that unstressed vowels will not be measured, that vowels shorter than 30 msec will not be measured, and that the vowel formants will be predicted using the Mahalanobis distance algorithm described in Evanini (2009).
 
 Here is a description of the function of all of the parameters.
-
-	speechSoftware		The speech software program to be used for LPC analysis
-
-	multipleFiles		If true, then the three command line arguments are namesof files that contain lists of the WAV files, TextGrid files and output files.  All three files must have the same number of items and they must be in the same order in each.
-
-	removeStopWords		If true, then vowels in stop words are not measured.  A basic list of stop words including prepositions and other function words (the words most likely to have reduced vowels) is included in extractFormants.  The user can specify a list of stop words in a file with the command line argument --stopWords.
-
-	measureUnstressed	If false, then vowels marked with 0 stress in the pronouncing dictionary are not measured.  If true, then all vowels are measured.
-
-	minVowelDuration	Any vowel with a duration shorter than this value (in seconds) will not be measured (use this to minimize the number of reduced vowels that are measured).
-
-	case			If 'upper', then word transcriptions are output in upper case in the output file.  If 'lower', then lower case (this makes visual displays in, e.g., Plotnik easier to read, since each word takes up less space).
-
-	outputFormat		If 'text', then the vowel formant measurements are output to a tab-delimited file.  If 'plotnik', then the output is a Plotnik file.  If 'both', then both output files are produced.  See Section V for details about interpreting the contents of these files.
-
-	outputHeader		If true, then a header row is output as the first line of the text output file.  If false, then no header row is output.  Only applies if outputFormat=text.
-
-	formantPredictionMethod	If 'default', then the default formant values produced by the speech analysis program (either Praat or ESPS) are used.  If 'mahalanobis', then the formant prediction algorithm from Evanini (2009) is used.  This algorithm compares all poles and bandwidths returned by the LPC analysis for the vowel to a distribution of expected formant poles and bandwidths taken from the ANAE measurements.  In order to use the 'mahalanobis' option, the files containing the means and covariance matrices must be available.  The default files are means.txt and covs.txt, included with the distribution.
-
-	measurementPointMethod	This parameter determines at which point within the vowel the formant measurements are taken.  'third' measures the vowel formants at one third of the vowel's duration.  'mid' measures at the vowel's midpoint, and 'fourth' at one fourth of the vowel's duration.  'lennig' uses the algorithm from Lennig (1978) to find a steady state within the vowel.  'anae' uses the guidelines from Labov, Ash & Boberg (2006), namely, to measure at an F1 maximum.  The default method, 'faav', modifies the 'third' method in that /ay/, /ey/ are measured at maximum F1, /ow, aw/ halfway between maximum F1 and the beginning of the vowel, and /Tuw/ (/uw/ after coronal consonants) at the beginning of the vowel.
-
-	nFormants		Specifies the number of formants to be returned, i.e., specify the order of the LPC analysis to be conducted.  Only used if the speech analysis software is Praat.
-
-	maxFormant		Specifies the maximum frequency to consider for vowel formants.  Only used if the speech analysis software is Praat.  Praat recommends a default value of 5000 Hz for male speakers and 5500 for females.  However, adjustment may be necessary on a per-speaker basis to obtain the optimal values for this parameter and nFormants.
-
-	windowSize		In sec, the size of the Gaussian window to be used for LPC analysis.  Only used if the speech analysis software is Praat (see the Praat manual for further details).
-
-	preEmphasis		The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.  Only used if the speech analysis software is Praat (see the Praat manual for further details).
-
-	nSmoothing		Specifies the number of samples to be used for the smoothing of the formant tracks.  The window size for the running average will be (2 * nSmoothing + 1).  Default value is 12, which corresponds to a 25 ms window.
-
-	remeasurement		Specifies whether a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance.  Only used if the formantPredictionMethod is 'mahalanobis'.
-
-	candidates		Specifies whether the list of candidate formant values are included in the output.  Only used if the output format is 'text'.
-
-	vowelSystem		If set to "Phila", a number of vowels will be reclassified to reflect the phonemic distinctions of the Philadelphia vowel system (tense short-a etc.).
+Parameter | Description
+----------|------------
+`speechSoftware` | The speech software program to be used for LPC analysis
+`multipleFiles` | If true, then the three command line arguments are namesof files that contain lists of the WAV files, TextGrid files and output files.  All three files must have the same number of items and they must be in the same order in each.
+`removeStopWords` | If `T`, then vowels in stop words are not measured.  A basic list of stop words including prepositions and other function words (the words most likely to have reduced vowels) is included in extractFormants.  The user can specify a list of stop words in a file with the command line argument `--stopWords`.
+`measureUnstressed`  |  If `F`, then vowels marked with 0 stress in the pronouncing dictionary are not measured.  If `T`, then all vowels are measured.
+`minVowelDuration`  |  Any vowel with a duration shorter than this value (in seconds) will not be measured (use this to minimize the number of reduced vowels that are measured).
+`case` | 	If `upper`, then word transcriptions are output in upper case in the output file.  If `lower`, then lower case (this makes visual displays in, e.g., Plotnik easier to read, since each word takes up less space).
+`outputFormat` | If `text`, then the vowel formant measurements are output to a tab-delimited file.  If `plotnik`, then the output is a Plotnik file.  If `both`, then both output files are produced.  See Section V for details about interpreting the contents of these files.
+`outputHeader` | If `T`, then a header row is output as the first line of the text output file.  If `false`, then no header row is output.  Only applies if `outputFormat=text`.
+`formantPredictionMethod` | If `default`, then the default formant values produced by the speech analysis program (either Praat or ESPS) are used.  If `mahalanobis`, then the formant prediction algorithm from Evanini (2009) is used.  This algorithm compares all poles and bandwidths returned by the LPC analysis for the vowel to a distribution of expected formant poles and bandwidths taken from the ANAE measurements.  In order to use the `mahalanobis` option, the files containing the means and covariance matrices must be available.  The default files are `means.txt` and `covs.txt`, included with the distribution.
+`measurementPointMethod` | This parameter determines at which point within the vowel the formant measurements are taken.  `third` measures the vowel formants at one third of the vowel's duration.  `mid` measures at the vowel's midpoint, and `fourth` at one fourth of the vowel's duration.  `lennig` uses the algorithm from Lennig (1978) to find a steady state within the vowel.  `anae` uses the guidelines from Labov, Ash & Boberg (2006), namely, to measure at an F1 maximum.  The default method, `faav`, modifies the `third` method in that /ay/, /ey/ are measured at maximum F1, /ow, aw/ halfway between maximum F1 and the beginning of the vowel, and /Tuw/ (/uw/ after coronal consonants) at the beginning of the vowel.
+`nFormants` | Specifies the number of formants to be returned, i.e., specify the order of the LPC analysis to be conducted.  Only used if the speech analysis software is Praat.
+`maxFormant` | Specifies the maximum frequency to consider for vowel formants.  Only used if the speech analysis software is Praat.  Praat recommends a default value of 5000 Hz for male speakers and 5500 for females.  However, adjustment may be necessary on a per-speaker basis to obtain the optimal values for this parameter and nFormants.
+`windowSize` | In sec, the size of the Gaussian window to be used for LPC analysis.  Only used if the speech analysis software is Praat (see the Praat manual for further details).
+`preEmphasis` | The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.  Only used if the speech analysis software is Praat (see the Praat manual for further details).
+`nSmoothing` | Specifies the number of samples to be used for the smoothing of the formant tracks.  The window size for the running average will be (2 * nSmoothing + 1).  Default value is 12, which corresponds to a 25 ms window.
+`remeasurement` | Specifies whether a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance.  Only used if `formantPredictionMethod=mahalanobis`.
+`candidates` | Specifies whether the list of candidate formant values are included in the output.  Only used if the `outputFormat=text`.
+`vowelSystem` | If set to `Phila`, a number of vowels will be reclassified to reflect the phonemic distinctions of the Philadelphia vowel system (tense short-a etc.).
 
 
 References

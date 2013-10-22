@@ -47,26 +47,26 @@ I.e., each line contains first the name of the configuration parameter, then '='
 Here is a list of all of the configuration parameters that can be set by the user in the config file, along with their possible values and the default value that is set internally (the default value is listed first surrounded by asterisks).
 
 
-	Parameter		Values
-	---------		______
-	speechSoftware		*praat*, esps
-	multipleFiles		*F*, T
-	removeStopWords		*F*, T
-	measureUnstressed	*T*, F
-	minVowelDuration	*0.05*, any value > 0, or 0 to not use
-	case			*upper*, lower
-	outputFormat		*text*, plotnik, both
-	outputHeader		*T*, F
-	formantPredictionMethod	default, *mahalanobis*
-	measurementPointMethod	third, mid, fourth, lennig, anae, *faav*
-	nFormants		*5*, an integer typically between 3 and 7
-	maxFormant		*5000*, any integer 
-	windowSize		*0.025*
-	preEmphasis		*50*
-	nSmoothing		*12*
-	remeasurement		T, *F*
-	candidates		T, *F*
-	vowelSystem		Phila, *NorthAmerican*
+Parameter	|	Values
+---------	| -------------	
+`speechSoftware`	|	`=praat` (`esps`)
+`multipleFiles`	|	`=F` (`T`)
+`removeStopWords`	|	`=F` (`T`)
+`measureUnstressed`	| `=T` (`F`)
+`minVowelDuration` |	`=0.05` (any value >`0`, or `0` to not use)
+`case`	|		`=upper` (lower)
+`outputFormat`	|	`=text` (`plotnik`, `both`)
+`outputHeader`	|	`=T` (`F`)
+`formantPredictionMethod`	 | `=mahalanobis` (`default`)
+`measurementPointMethod` |	`=faav`, (`third`, `mid`, `fourth`, `lennig`, `anae`)
+`nFormants`	|	`=5` (an integer typically between `3` and `7`)
+`maxFormant`	|	`=5000` (any integer)
+`windowSize`|	`=0.025`
+`preEmphasis`	|	`=50`
+`nSmoothing`	|	`=12`
+`remeasurement`	|	`=F` (`T`)
+`candidates`	|	`=F` (T)
+`vowelSystem`	 |	`=NorthAmerican` (Phila)
 
 
 For example, here are the contents of a possible configuration file:
@@ -93,7 +93,7 @@ Parameter | Description
 `formantPredictionMethod` | If `default`, then the default formant values produced by the speech analysis program (either Praat or ESPS) are used.  If `mahalanobis`, then the formant prediction algorithm from Evanini (2009) is used.  This algorithm compares all poles and bandwidths returned by the LPC analysis for the vowel to a distribution of expected formant poles and bandwidths taken from the ANAE measurements.  In order to use the `mahalanobis` option, the files containing the means and covariance matrices must be available.  The default files are `means.txt` and `covs.txt`, included with the distribution.
 `measurementPointMethod` | This parameter determines at which point within the vowel the formant measurements are taken.  `third` measures the vowel formants at one third of the vowel's duration.  `mid` measures at the vowel's midpoint, and `fourth` at one fourth of the vowel's duration.  `lennig` uses the algorithm from Lennig (1978) to find a steady state within the vowel.  `anae` uses the guidelines from Labov, Ash & Boberg (2006), namely, to measure at an F1 maximum.  The default method, `faav`, modifies the `third` method in that /ay/, /ey/ are measured at maximum F1, /ow, aw/ halfway between maximum F1 and the beginning of the vowel, and /Tuw/ (/uw/ after coronal consonants) at the beginning of the vowel.
 `nFormants` | Specifies the number of formants to be returned, i.e., specify the order of the LPC analysis to be conducted.  Only used if the speech analysis software is Praat.
-`maxFormant` | Specifies the maximum frequency to consider for vowel formants.  Only used if the speech analysis software is Praat.  Praat recommends a default value of 5000 Hz for male speakers and 5500 for females.  However, adjustment may be necessary on a per-speaker basis to obtain the optimal values for this parameter and nFormants.
+`maxFormant` | Specifies the maximum frequency to consider for vowel formants.  Only used if the speech analysis software is Praat.  Praat recommends a default value of 5000 Hz for male speakers and 5500 for females.  However, adjustment may be necessary on a per-speaker basis to obtain the optimal values for this parameter and `nFormants`.
 `windowSize` | In sec, the size of the Gaussian window to be used for LPC analysis.  Only used if the speech analysis software is Praat (see the Praat manual for further details).
 `preEmphasis` | The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.  Only used if the speech analysis software is Praat (see the Praat manual for further details).
 `nSmoothing` | Specifies the number of samples to be used for the smoothing of the formant tracks.  The window size for the running average will be (2 * nSmoothing + 1).  Default value is 12, which corresponds to a 25 ms window.

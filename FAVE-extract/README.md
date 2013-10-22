@@ -79,6 +79,7 @@ For example, here are the contents of a possible configuration file:
 This file specifies that Praat will be used as the speech analysis program (this line is actually redundant here, since Praat is set internally to be the default speech software), that unstressed vowels will not be measured, that vowels shorter than 30 msec will not be measured, and that the vowel formants will be predicted using the Mahalanobis distance algorithm described in Evanini (2009).
 
 Here is a description of the function of all of the parameters.
+
 Parameter | Description
 ----------|------------
 `speechSoftware` | The speech software program to be used for LPC analysis

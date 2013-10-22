@@ -1,10 +1,14 @@
 # Contents
 
-I.  [Introduction][]
-II.  [System Requirements][]
-III.  [Usage][]
-IV.  [Changing Configuration Parameters][]
-V.  [Description of the Output File][]
+I. [Introduction][]
+
+II. [System Requirements][]
+
+III. [Usage][]
+
+IV. [Changing Configuration Parameters][]
+
+V. [Description of the Output File][]
 
 ## I. Introduction ##
 

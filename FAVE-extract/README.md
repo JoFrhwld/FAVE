@@ -6,9 +6,9 @@ II. [System Requirements](#ii-system-requirements)
 
 III. [Usage](#iii-usage)
 
-IV. [Changing Configuration Parameters][]
+IV. [Changing Configuration Parameters](#iv-changing-configuration-parameters)
 
-V. [Description of the Output File][]
+V. Description of the Output File
 
 ##I. Introduction##
 

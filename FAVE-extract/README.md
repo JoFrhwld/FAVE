@@ -105,6 +105,6 @@ Parameter | Description
 References
 ----------
 
-*Evanini, Keelan.  2009.  Doctoral dissertation, University of Pennsylvania.
-*Labov, William, Sharon Ash, and Charles Boberg.  2006.  The Atlas of North American English.  Mouton de Gruyter.
-*Lennig, Matthew.  1978.  Acoustic measurement of linguistic change:  The modern Paris vowel system.  Doctoral dissertation, University of Pennsylvania.
+* Evanini, Keelan.  2009.  Doctoral dissertation, University of Pennsylvania.
+* Labov, William, Sharon Ash, and Charles Boberg.  2006.  The Atlas of North American English.  Mouton de Gruyter.
+* Lennig, Matthew.  1978.  Acoustic measurement of linguistic change:  The modern Paris vowel system.  Doctoral dissertation, University of Pennsylvania.

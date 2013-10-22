@@ -1,6 +1,6 @@
 # Contents
 
-I. [Introduction][Introduction]
+I. [Introduction](#introduction)
 
 II. [System Requirements][]
 
@@ -10,7 +10,7 @@ IV. [Changing Configuration Parameters][]
 
 V. [Description of the Output File][]
 
-## I. Introduction [Introduction] ##
+##Introduction##
 
 ## II. System requirements ##
 

@@ -47,14 +47,14 @@ I.e., each line contains first the name of the configuration parameter, then '='
 Here is a list of all of the configuration parameters that can be set by the user in the config file, along with their possible values and the default value that is set internally (the default value is listed first surrounded by asterisks).
 
 
-Parameter	|	Values
+Parameter	|	=default (other possible values)
 ---------	| -------------	
 `speechSoftware`	|	`=praat` (`esps`)
 `multipleFiles`	|	`=F` (`T`)
 `removeStopWords`	|	`=F` (`T`)
 `measureUnstressed`	| `=T` (`F`)
 `minVowelDuration` |	`=0.05` (any value >`0`, or `0` to not use)
-`case`	|		`=upper` (lower)
+`case`	|		`=upper` (`lower`)
 `outputFormat`	|	`=text` (`plotnik`, `both`)
 `outputHeader`	|	`=T` (`F`)
 `formantPredictionMethod`	 | `=mahalanobis` (`default`)
@@ -65,8 +65,8 @@ Parameter	|	Values
 `preEmphasis`	|	`=50`
 `nSmoothing`	|	`=12`
 `remeasurement`	|	`=F` (`T`)
-`candidates`	|	`=F` (T)
-`vowelSystem`	 |	`=NorthAmerican` (Phila)
+`candidates`	|	`=F` (`T`)
+`vowelSystem`	 |	`=NorthAmerican` (`Phila`)
 
 
 For example, here are the contents of a possible configuration file:

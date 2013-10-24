@@ -20,7 +20,7 @@ It is necessary to install a C compiler. If you already know how to do this, ski
 
     gcc -v
 
-If you see `-bash: gcc: command not found`, then you need to install the C compiler. Directions for that follow.
+If you see `-bash: gcc: command not found`, then you need to install the C compiler. Directions for that follow. ([Skip to directions for OS X Mavericks 10.9][mavericks])
 
 **Lion & Mountain Lion (10.7 & 10.8)**
 
@@ -52,7 +52,7 @@ A graphical representation:
 
 
 
-**Mavericks (10.9)**
+**Mavericks (10.9)** [mavericks]
 
 `xcode-select --install`
 

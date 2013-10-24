@@ -6,8 +6,9 @@
       * [OS X](#os-x)
         * [Command Line Tools](#command-line-tools)
             * [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-            * [Mavericks](#mavericks_109)
-        * [Intalling X11](#installing-x11)           
+            * [Mavericks (10.9)](#mavericks_109)
+        * [Intalling X11](#installing-x11)      
+        * [Download HTK](#download-htk)     
         * [Fixing HTK Source](#fixing-htk-source)
         * [Installing HTK](#installing-htk)
     * [sox](#sox)
@@ -22,16 +23,19 @@ As such, you'll need to have these installed.
 
 #### HTK 3.4.1
 ##### OS X
+From OS X 10.7 onwards (Lion, Mountain Lion and Mavericks), you'll need to install Command Line Tools and X11 before moving forward in the rest of the installation.
+Then you'll have to download the HTK code, and fix a bug in its source code. These steps are documented here.
+
 * [Command Line Tools](#command-line-tools)
     * [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-    * [Mavericks](#mavericks_109)
+    * [Mavericks (10.9)](#mavericks_109)
 * [Intalling X11](#installing-x11)           
 * [Fixing HTK Source](#fixing-htk-source)
 * [Installing HTK](#installing-htk)
 
 ###### Command line tools
 * [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-* [Mavericks](#mavericks_109)
+* [Mavericks (10.9)](#mavericks_109)
 
 
 It is necessary to install a C compiler. 
@@ -88,9 +92,27 @@ Just select "Install" in the window which pops open.
 
 ###### Installing X11
 
+Go to http://xquartz.macosforge.org/, download XQuartz from there and install it using the installer.
 
+###### Download HTK
+
+You'll need to register (free) with HTK to download it.
+Visit http://htk.eng.cam.ac.uk/register.shtml to register, and they will e-mail you a password.
+
+After that, visit http://htk.eng.cam.ac.uk/download.shtml, and download the HTK source code under Linux/Unix downloads.
+
+After downloading HTK, unpack the `.tar.gz` file, which will unpack into a directory called "htk".
 
 ###### Fixing HTK Source
+
+In the htk directory, navigate to htk>HTKLib, and open the file HRec.c in a plain text editor.
+Find the line 1626 which reads
+
+    if (dur<=0 && labid != splabid) HError(8522,"LatFromPaths: Align  have dur<=0");
+
+![htk edit](readme_img/htk_edit.png)
+
+
 
 ###### Installing HTK
 

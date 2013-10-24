@@ -20,9 +20,9 @@ It is necessary to install a C compiler. If you already know how to do this, ski
 
     gcc -v
 
-If you see `-bash: gcc: command not found`, then you need to install the C compiler. Directions for that follow. ([Skip to directions for OS X Mavericks 10.9][mavericks])
+If you see `-bash: gcc: command not found`, then you need to install the C compiler. Directions for that follow. ([Skip to directions for OS X Mavericks 10.9][#mavericks_109])
 
-**Lion & Mountain Lion (10.7 & 10.8)**
+####### Lion & Mountain Lion (10.7 & 10.8)
 
 You need to install command line tools. The here are the steps involved:
 
@@ -52,7 +52,7 @@ A graphical representation:
 
 
 
-**Mavericks (10.9)** [mavericks]
+####### Mavericks (10.9)
 
 `xcode-select --install`
 

@@ -22,7 +22,8 @@ It is necessary to install a C compiler. If you already know how to do this, ski
 
 If you see `-bash: gcc: command not found`, then you need to install the C compiler. Directions for that follow.
 
-*Lion & Mountain Lion (10.7 & 10.8)*
+**Lion & Mountain Lion (10.7 & 10.8)**
+
 You need to install command line tools. The here are the steps involved:
 
 1. Go to the [Mac Dev Center](https://developer.apple.com/devcenter/mac/index.action), register (for free) and log in.
@@ -32,13 +33,26 @@ You need to install command line tools. The here are the steps involved:
 
 A graphical representation:
 
-*Register and login*
+*1. Register and login*
 
 ![login](readme_img/developer_login.png)
 
+*2. Downloads*
+
+![download1](readme_img/developer_downloads1.png)
 
 
-*Mavericks (10.9)*
+*2. View All Downloads*
+
+![download2](readme_img/developer_downloads2.png)
+
+*3 & 4. Search for "command line tools" and download*
+
+![download3](readme_img/developer_downloads3.png)
+
+
+
+**Mavericks (10.9)**
 
 `xcode-select --install`
 

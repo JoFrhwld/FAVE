@@ -22,7 +22,17 @@ As such, you'll need to have these installed.
 
 #### HTK 3.4.1
 ##### OS X
+* [Command Line Tools](#command-line-tools)
+    * [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
+    * [Mavericks](#mavericks_109)
+* [Intalling X11](#installing-x11)           
+* [Fixing HTK Source](#fixing-htk-source)
+* [Installing HTK](#installing-htk)
+
 ###### Command line tools
+* [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
+* [Mavericks](#mavericks_109)
+
 
 It is necessary to install a C compiler. 
 If you already know how to do this, skip down to [Fixing HTK Source][#fixing-htk-source]. 

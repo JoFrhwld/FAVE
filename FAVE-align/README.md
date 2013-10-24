@@ -16,15 +16,35 @@ FAVE-align depends on HTK and sox to work. As such, you'll need to have these in
 ##### OS X
 ###### Command line tools
 
-*Lion & Mountain Lion*
+It is necessary to install a C compiler. If you already know how to do this, skip down to [Fixing HTK Source][#fixing-htk-source]. If you are not sure whether you have a C compiler installed, open the Terminal application and type
+
+    gcc -v
+
+If you see `-bash: gcc: command not found`, then you need to install the C compiler. Directions for that follow.
+
+*Lion & Mountain Lion (10.7 & 10.8)*
+You need to install command line tools. The here are the steps involved:
+
+1. Go to the [Mac Dev Center](https://developer.apple.com/devcenter/mac/index.action), register (for free) and log in.
+2. Go to Downloads, and and then View All Downloads.
+3. Search for "command line tools."
+4. Download and install the version appropriate for your operating system.
+
+A graphical representation:
+
+*Register and login*
+
+![login](readme_img/developer_login.png)
 
 
-*Mavericks*
+
+*Mavericks (10.9)*
+
+`xcode-select --install`
+
+###### Fixing HTK Source
 
 
-* a g++ compiler
-    * xcode -or-
-    * https://github.com/kennethreitz/osx-gcc-installer/
 * htk/HTKlib/HRec.c
 	* `labid != splabid` -> `labpr != splabid`	
 

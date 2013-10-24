@@ -22,6 +22,10 @@ FAVE-align depends on **HTK** and **sox** to work.
 As such, you'll need to have these installed.
 
 #### HTK 3.4.1
+* [OS X](#os-x)
+* Windows
+* Linux
+
 ##### OS X
 From OS X 10.7 onwards (Lion, Mountain Lion and Mavericks), you'll need to install Command Line Tools and X11 before moving forward in the rest of the installation.
 Then you'll have to download the HTK code, and fix a bug in its source code. These steps are documented here.

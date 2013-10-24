@@ -124,11 +124,21 @@ It should look like this:
 
 ###### Installing HTK
 
+Nearly there!
+Now, open the Terminal application, and navigate to the htk, folder, which is probably in your Downloads.
 
-* htk/HTKlib/HRec.c
-	* `labid != splabid` -> `labpr != splabid`	
+    cd ~/Downloads/htk
+
+Now run the following lines of code
+
+    export CPPFLAGS=-I/opt/X11/include
+    ./configure
+    make all
+    sudo make install
+
+You'll be asked to enter your administrative password after that last line of code.
+
 
 #### sox
-#### OS X
 
 ## Usage

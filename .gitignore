@@ -1,3 +1,4 @@
 *.py[cod]
 *\~
 .Rhistory
+.DS_Store

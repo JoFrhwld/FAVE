@@ -1,15 +1,16 @@
 # FAVE-align
 
 * [Installation](#installation)
-    * [Dependencies](#dependencies)
-        * [HTK 3.4.1](#htk-341)
-            * [OS X](#os-x)
-                *[Command Line Tools](#command-line-tools)
-                    *[Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-                    *[Mavericks](#mavericks_109)           
-                *[Fixing HTK Source](#fixing-htk-source)
-                *[Installing HTK](#installing-htk)
-        * [sox](#sox)
+  * [Dependencies](#dependencies)
+    * [HTK 3.4.1](#htk-341)
+      * [OS X](#os-x)
+        *[Command Line Tools](#command-line-tools)
+            *[Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
+            *[Mavericks](#mavericks_109)
+        *[Intalling X11](#installing-x11)           
+        *[Fixing HTK Source](#fixing-htk-source)
+        *[Installing HTK](#installing-htk)
+    * [sox](#sox)
 * [Usage](#usage)
 
 ## Installation
@@ -37,7 +38,7 @@ Directions for that follow, but depend on your version of OS X.
 
 ###### *Lion & Mountain Lion (10.7 & 10.8)*
 
-You need to install command line tools. 
+You need to install command line tools and X11.
 The here are the steps involved:
 
 1. Go to the [Mac Dev Center](https://developer.apple.com/devcenter/mac/index.action), register (for free) and log in.
@@ -66,6 +67,7 @@ A graphical representation:
 
 
 
+
 ###### *Mavericks (10.9)*
 
 To install Command Line Tools in OS X Mavericks (10.9), just open the Terminal Application, and type
@@ -74,9 +76,13 @@ To install Command Line Tools in OS X Mavericks (10.9), just open the Terminal A
 
 Just select "Install" in the window which pops open.
 
+###### Installing X11
+
+
+
 ###### Fixing HTK Source
 
-##### Installing HTK
+###### Installing HTK
 
 
 * htk/HTKlib/HRec.c

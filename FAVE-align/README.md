@@ -16,13 +16,11 @@ FAVE-align depends on HTK and sox to work. As such, you'll need to have these in
 ##### OS X
 ###### Command line tools
 
-Lion & Mountain Lion
+*Lion & Mountain Lion*
 
----
 
-Mavericks
+*Mavericks*
 
----
 
 * a g++ compiler
     * xcode -or-

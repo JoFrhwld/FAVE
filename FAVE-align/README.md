@@ -1,9 +1,9 @@
 # FAVE-align
 
-* [Installation][#installation]
-    * [Dependencies][#dependencies]
-        * [HTK 3.4.1][#htk-3.4.1]
-        * [sox][#sox]
+* [Installation](#installation)
+    * [Dependencies](#dependencies)
+        * [HTK 3.4.1](#htk-341)
+        * [sox](#sox)
 
 ## Installation
 

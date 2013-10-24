@@ -101,18 +101,26 @@ Visit http://htk.eng.cam.ac.uk/register.shtml to register, and they will e-mail 
 
 After that, visit http://htk.eng.cam.ac.uk/download.shtml, and download the HTK source code under Linux/Unix downloads.
 
+![htk download](readme_img/htk_download.png)
+
 After downloading HTK, unpack the `.tar.gz` file, which will unpack into a directory called "htk".
 
 ###### Fixing HTK Source
 
 In the htk directory, navigate to htk>HTKLib, and open the file HRec.c in a plain text editor.
+
+![hrec](readme_img/HTKLib-3.png)
+
 Find the line 1626 which reads
 
     if (dur<=0 && labid != splabid) HError(8522,"LatFromPaths: Align  have dur<=0");
 
 ![htk edit](readme_img/htk_edit.png)
 
+`labid` in this line should be changed to `labpr`.
+It should look like this:
 
+    if (dur<=0 && labpr != splabid) HError(8522,"LatFromPaths: Align  have dur<=0");
 
 ###### Installing HTK
 

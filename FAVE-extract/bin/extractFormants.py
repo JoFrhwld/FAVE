@@ -934,8 +934,6 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     along with their associated phones, and Plotnik codes for the vowels"""
     
     words = []
-    ## initialize counter for phone intervals
-    i = 0
     ## iterate along word tier for given speaker
     for w in tg[speaker.tiernum + 1]:  ## for each interval...
         word = Word()
@@ -943,15 +941,21 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
         word.xmin = w.xmin()
         word.xmax = w.xmax()
         word.phones = []
-        ## iterate through corresponding phone intervals on corresponding phone tier
+        
+        ## skip to the first phone in the corresponding phone tier that could belong to this word
+        i, ph = 0, None
+        for i, ph in enumerate(n for n in tg[speaker.tiernum] if word.xmin >= n.xmin()):
+            pass
+        
+        ## iterate through phones until end of word
         ## ("i < len(tg[speaker.tiernum])":  stop "runaway" index at end of tier)
-        while (i < len(tg[speaker.tiernum]) and tg[speaker.tiernum][i].xmin() >= word.xmin and tg[speaker.tiernum][i].xmax() <= word.xmax):
+        while (i < len(tg[speaker.tiernum]) and tg[speaker.tiernum][i].xmax() <= word.xmax):
             phone = Phone()
             phone.label = tg[speaker.tiernum][i].mark().upper()
             phone.xmin = tg[speaker.tiernum][i].xmin()
             phone.xmax = tg[speaker.tiernum][i].xmax()
             word.phones.append(phone)
-            ## count initial number of vowels here! (because uncertain transcriptions are discareded on a by-word basis)
+            ## count initial number of vowels here! (because uncertain transcriptions are discarded on a by-word basis)
             if phone.label and isVowel(phone.label):
                 global count_vowels
                 count_vowels += 1 

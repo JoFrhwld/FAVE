@@ -485,7 +485,7 @@ def checkSpeechSoftware(speechSoftware):
             return 'esps'
     elif speechSoftware in ['praat', 'Praat']:
         if not ((PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat') or programExists('praatcon.exe')):
-            print "ERROR: Praat was specified as the speech analysis program, but the command 'praat' is not in your path"
+            print "ERROR: Praat was specified as the speech analysis program, but the command 'praat' ('praatcon' for Windows) is not in your path"
             sys.exit()
         else:
             return 'praat'
@@ -758,7 +758,7 @@ def getSoundEditor():
     elif (PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat') or programExists('praatcon.exe'):
         soundEditor = 'praat'
     else:
-        print "ERROR:  neither 'praat' nor 'sox' can be found in your path"
+        print "ERROR:  neither 'praat' ('praatcon' for Windows) nor 'sox' can be found in your path"
         print "One of these two programs must be available for processing the audio file"
         sys.exit()
         

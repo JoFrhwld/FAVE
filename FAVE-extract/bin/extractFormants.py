@@ -429,7 +429,7 @@ def checkConfigOption(f, option):
     
     allowedOptions = ['case', 'outputFormat', 'outputHeader', 'formantPredictionMethod', 'measurementPointMethod', 'speechSoftware', 'nFormants', 'maxFormant',
                       'removeStopWords', 'measureUnstressed', 'minVowelDuration', 'windowSize', 'preEmphasis', 'multipleFiles', 'nSmoothing', 'remeasurement',
-                      'candidates', 'vowelSystem', 'windowsPC]
+                      'candidates', 'vowelSystem', 'windowsPC']
     if option not in allowedOptions:
         print "ERROR:  unrecognized option '%s' in config file %s" % (option, f)
         print "The following options are recognized:  ", ", ".join(allowedOptions)

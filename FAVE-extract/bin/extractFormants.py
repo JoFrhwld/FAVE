@@ -753,9 +753,9 @@ def getSoundEditor():
     """checks whether SoX or Praat are available as sound editors"""
     
     # use sox for manipulating the files if we have it, since it's faster
-    if (SOXPATH and programExists('sox', SOXPATH)) or programExists('sox'):
+    if (SOXPATH and programExists('sox', SOXPATH)) or programExists('sox') or programExists('sox.exe'):
         soundEditor = 'sox'
-    elif (PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat'):
+    elif (PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat') or programExists('praatcon.exe'):
         soundEditor = 'praat'
     else:
         print "ERROR:  neither 'praat' nor 'sox' can be found in your path"

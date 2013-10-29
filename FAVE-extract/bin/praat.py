@@ -713,8 +713,8 @@ class PointTier:
 
     def append(self, point):
         self.__points.append(point)
-        self.__xmax = max(self.__xmax, point.xmax())
-        self.__xmin = min(self.__xmin, point.xmin())
+        self.__xmax = max(self.__xmax, point.time())
+        self.__xmin = min(self.__xmin, point.time())
         self.__n = len(self.__points)
 
     def read(self, file):

@@ -947,7 +947,10 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
 def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     """takes a Praat TextGrid file and returns a list of the words in the file,
     along with their associated phones, and Plotnik codes for the vowels"""
-    
+
+    print ''
+    print 'Indentifying vowels in the TextGrid'
+
     words = []
     ## iterate along word tier for given speaker
     for w in tg[speaker.tiernum + 1]:  ## for each interval...

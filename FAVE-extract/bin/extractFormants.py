@@ -951,9 +951,27 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     print ''
     print 'Indentifying vowels in the TextGrid'
 
+    n_words = len(tg[speaker.tiernum+1])
+    word_iter = 0
+    old_percent = 0
+
+    progressbar_width = 100
+    sys.stdout.write("[%s]" % (" " * progressbar_width))
+    sys.stdout.flush()
+    sys.stdout.write("\b" * (progressbar_width+1)) # return to start of line, after '['
+
     words = []
     ## iterate along word tier for given speaker
     for w in tg[speaker.tiernum + 1]:  ## for each interval...
+
+        word_iter = word_iter + 1
+        new_percent = math.floor((float(word_iter)/n_words)*100)
+
+        if new_percent != old_percent:
+            sys.stdout.write("-")
+            sys.stdout.flush()
+            old_percent = new_percent
+
         word = Word()
         word.transcription = w.mark()
         word.xmin = w.xmin()

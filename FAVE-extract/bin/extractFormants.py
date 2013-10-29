@@ -957,12 +957,12 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
         word.xmax = w.xmax()
         word.phones = []
         
-        ## skip to the first phone in the corresponding phone tier that could belong to this word
+        # skip to the first phone in the corresponding phone tier that could belong to this word
         i, ph = 0, None
         for i, ph in enumerate(n for n in tg[speaker.tiernum] if word.xmin >= n.xmin()):
             pass
         
-        ## iterate through phones until end of word
+        # iterate through phones until end of word
         ## ("i < len(tg[speaker.tiernum])":  stop "runaway" index at end of tier)
         while (i < len(tg[speaker.tiernum]) and tg[speaker.tiernum][i].xmax() <= word.xmax):
             phone = Phone()

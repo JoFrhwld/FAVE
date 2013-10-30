@@ -1851,6 +1851,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     PRAATPATH = PPATH
     
     # set OS-specific variables
+    global PRAATNAME
     if os.name == 'nt':
         PRAATNAME = 'praatcon'
     elif os.name == 'posix':

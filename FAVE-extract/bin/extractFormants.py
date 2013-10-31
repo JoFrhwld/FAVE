@@ -67,13 +67,13 @@ and outputs automatically extracted F1 and F2 measurements for each vowel
 
 SCRIPTS_HOME = 'bin'
 
-import sys, os, getopt, math
+import sys, os, getopt, math, re, time
 import praat, esps, plotnik, cmu, vowel
+
+FAVE_WD = os.getcwd()
 import rpy2.robjects as robjects
-import re
-import time
 import remeasure
-import math
+os.chdir(FAVE_WD)
 
 uncertain = re.compile(r"\(\(([\*\+]?['\w]+\-?)\)\)")
 
@@ -475,19 +475,22 @@ def checkSpeechSoftware(speechSoftware):
     """checks that either Praat or ESPS is available as a speech analysis program"""
     
     if speechSoftware in ['ESPS', 'esps']:
+        if os.name == 'nt':
+            print "ERROR:  ESPS was specified as the speech analysis program, but this option is not yet compatible with Windows"
+            sys.exit()
         if not programExists('formant'):
             print "ERROR:  ESPS was specified as the speech analysis program, but the command 'formant' is not in your path"
             sys.exit()
         else:
             return 'esps'
     elif speechSoftware in ['praat', 'Praat']:
-        if not ((PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat')):
-            print "ERROR:  Praat was specified as the speech analysis program, but the command 'praat' is not in your path"
+        if not ((PRAATPATH and programExists('praat', PRAATPATH)) or (os.name == 'posix' and programExists('praat')) or (os.name == 'nt' and programExists('praatcon.exe'))):
+            print "ERROR: Praat was specified as the speech analysis program, but the command 'praat' ('praatcon' for Windows) is not in your path"
             sys.exit()
         else:
             return 'praat'
     else:
-        print "ERROR:  unsupported speech analysis software %s" % speechSoftware
+        print "ERROR: unsupported speech analysis software %s" % speechSoftware
         sys.exit()
 
 
@@ -575,11 +578,11 @@ def detectMonophthong(formants, measurementPoint, index):
 def extractPortion(wavFile, vowelWavFile, beg, end, soundEditor):
     """extracts a single vowel (or any other part) from the main sound file"""
     
-    if soundEditor == 'sox':  ## this is the default setting, since it's faster 
+    if soundEditor == 'sox': ## this is the default setting, since it's faster
         ## force output format because there have been issues with some sound files where Praat could not read the extracted portion
         os.system(os.path.join(SOXPATH, 'sox') + ' ' + wavFile + ' -t wavpcm ' + os.path.join(SCRIPTS_HOME, vowelWavFile) + ' trim ' + str(beg) + ' ' + str(end - beg))
     elif soundEditor == 'praat':
-        os.system(os.path.join(PRAATPATH, 'praat') + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' + os.path.join(os.path.pardir, wavFile)  + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
+        os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' + os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
     else:
         pass
 
@@ -747,12 +750,12 @@ def getSoundEditor():
     """checks whether SoX or Praat are available as sound editors"""
     
     # use sox for manipulating the files if we have it, since it's faster
-    if (SOXPATH and programExists('sox', SOXPATH)) or programExists('sox'):
+    if (SOXPATH and programExists('sox', SOXPATH)) or (os.name == 'posix' and programExists('sox')) or (os.name == 'nt' and programExists('sox.exe')):
         soundEditor = 'sox'
-    elif (PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat'):
+    elif (PRAATPATH and programExists('praat', PRAATPATH)) or (os.name == 'posix' and programExists('praat')) or (os.name == 'nt' and programExists('praatcon.exe')):
         soundEditor = 'praat'
     else:
-        print "ERROR:  neither 'praat' nor 'sox' can be found in your path"
+        print "ERROR:  neither 'praat' ('praatcon' for Windows) nor 'sox' can be found in your path"
         print "One of these two programs must be available for processing the audio file"
         sys.exit()
         
@@ -887,20 +890,20 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
             LPCs = []
             nFormants = 3
             while nFormants <= 6:
-                os.system(os.path.join(PRAATPATH, 'praat') + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
+                os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
                 lpc = praat.Formant()
                 lpc.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
                 LPCs.append(lpc)
                 nFormants +=1
         else:
-            os.system(os.path.join(PRAATPATH, 'praat') + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
+            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
             fmt = praat.Formant()
             fmt.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
         os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
         ## get Intensity object for intensity cutoff
         ## (only for those vowels where we need it)
         if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
-            os.system(os.path.join(PRAATPATH, 'praat') + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
+            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
             intensity = praat.Intensity()
             intensity.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
             os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
@@ -932,32 +935,57 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
 def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     """takes a Praat TextGrid file and returns a list of the words in the file,
     along with their associated phones, and Plotnik codes for the vowels"""
-    
+
+    print ''
+    print 'Identifying vowels in the TextGrid'
+
+    n_words = len(tg[speaker.tiernum+1])
+    word_iter = 0
+    old_percent = 0
+
+    progressbar_width = 100
+    sys.stdout.write("[%s]" % (" " * progressbar_width))
+    sys.stdout.flush()
+    sys.stdout.write("\b" * (progressbar_width+1)) # return to start of line, after '['
+
     words = []
-    ## initialize counter for phone intervals
-    i = 0
     ## iterate along word tier for given speaker
     for w in tg[speaker.tiernum + 1]:  ## for each interval...
+
+        word_iter = word_iter + 1
+        new_percent = math.floor((float(word_iter)/n_words)*100)
+
+        if new_percent != old_percent:
+            sys.stdout.write("-")
+            sys.stdout.flush()
+            old_percent = new_percent
+
         word = Word()
         word.transcription = w.mark()
         word.xmin = w.xmin()
         word.xmax = w.xmax()
         word.phones = []
-        ## iterate through corresponding phone intervals on corresponding phone tier
+        
+        # skip to the first phone in the corresponding phone tier that could belong to this word
+        i, ph = 0, None
+        for i, ph in enumerate(n for n in tg[speaker.tiernum] if word.xmin >= n.xmin()):
+            pass
+        
+        # iterate through phones until end of word
         ## ("i < len(tg[speaker.tiernum])":  stop "runaway" index at end of tier)
-        while (i < len(tg[speaker.tiernum]) and tg[speaker.tiernum][i].xmin() >= word.xmin and tg[speaker.tiernum][i].xmax() <= word.xmax):
+        while (i < len(tg[speaker.tiernum]) and tg[speaker.tiernum][i].xmax() <= word.xmax):
             phone = Phone()
             phone.label = tg[speaker.tiernum][i].mark().upper()
             phone.xmin = tg[speaker.tiernum][i].xmin()
             phone.xmax = tg[speaker.tiernum][i].xmax()
             word.phones.append(phone)
-            ## count initial number of vowels here! (because uncertain transcriptions are discareded on a by-word basis)
+            ## count initial number of vowels here! (because uncertain transcriptions are discarded on a by-word basis)
             if phone.label and isVowel(phone.label):
                 global count_vowels
                 count_vowels += 1 
             i += 1
         ## skip unclear transcriptions and silences
-        if w.mark() != "((xxxx))" and w.mark().upper() != "SP":
+        if w.mark() != '' and w.mark() != "((xxxx))" and w.mark().upper() != "SP":
             words.append(word)
             
     ## add Plotnik-style codes for the preceding and following segments for all vowels
@@ -1565,15 +1593,21 @@ def processInput(wavInput, tgInput, output):
 
 def programExists(program, path=''):
     """checks whether a given command line program exists (path can be specified optionally)"""
-    
+
     if not path:
-        p = os.popen('which ' + program)
-        if p.readlines() == []:
-            return False
+        if os.name == 'posix':
+            pathDirs = os.environ['PATH'].split(':')
+        elif os.name == 'nt':
+            pathDirs = os.environ['PATH'].split(';')
         else:
-            return True
+            print "ERROR: did not recognize OS type '%s'. Paths to 'praat' and 'sox' must be specified manually" % os.name
+            sys.exit()
+        for p in pathDirs:
+            if os.path.isfile(os.path.join(p, program)):
+                return True
+        return False
     else:  ## path is specified
-        return os.path.isfile(os.path.join(path, program))
+        return os.path.isfile(os.path.join(path, program))   
 
 
 def readSpeakerFile(speakerFile):
@@ -1811,6 +1845,16 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     SOXPATH = SPATH
     global PRAATPATH
     PRAATPATH = PPATH
+    
+    # set OS-specific variables
+    global PRAATNAME
+    if os.name == 'nt':
+        PRAATNAME = 'praatcon'
+    elif os.name == 'posix':
+        PRAATNAME = 'praat'
+    else:
+        print "WARNING: unknown OS type '%s' may not be supported" % os.name
+        PRAATNAME = 'praat'
 
     # by default, assume that these files are located in the current directory
     meansFile = 'means.txt'
@@ -1940,8 +1984,26 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements = []
 
         markTime("prelim2")
-       
+
+        n_words = len(words)
+        word_iter = 0
+        old_percent = 0
+
+        progressbar_width = 100
+        sys.stdout.write("\nExtracting Formants\n")
+        sys.stdout.write("[%s]" % (" " * progressbar_width))
+        sys.stdout.flush()
+        sys.stdout.write("\b" * (progressbar_width+1)) # return to start of line, after '['
+
         for w in words:
+            word_iter = word_iter + 1
+            new_percent = math.floor((float(word_iter)/n_words)*100)
+
+            if new_percent != old_percent:
+                sys.stdout.write("-")
+                sys.stdout.flush()
+                old_percent = new_percent            
+
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
             numV = getNumVowels(w)
@@ -1992,11 +2054,12 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     count_too_short += 1
                     continue
   
+
                 vowelFileStem = fileStem + '_' + p.label  ## name of sound file - ".wav" + phone label
                 vowelWavFile = vowelFileStem + '.wav'
   
-                print ''
-                print "Extracting formants for vowel %s in word %s" % (p.label, w.transcription)
+                #print ''
+                #print "Extracting formants for vowel %s in word %s" % (p.label, w.transcription)
                 markTime(count_analyzed + 1, p.label + " in " + w.transcription)
 
                 ## get padding for vowel in question  

@@ -26,6 +26,17 @@ extractFormants relies on an external speech analysis program for the LPC analys
 Praat:  http://www.praat.org/
 ESPS:  
 
+### 3) FAVE-extract on Windows
+
+Installing FAVE-extract on Windows requires a few extra steps.
+
+First, the rpy2 library can be installed from this site: http://www.lfd.uci.edu/~gohlke/pythonlibs/#rpy2
+Select a version that is the same version as your Python installation (probably 2.7) and the same architecture as your Python and R installations. All three need to be 32-bit or all three need to be 64-bit for rpy2 to work.
+
+Second, two user environment variables need to be added. In Windows 7, this can be done through Control Panel -> System -> Advanced System Settings, then select the Advanced tab, then click on Environment Variables in the bottom right. Select "New" under "User variables" at the top, then create a variable named R\_HOME that contains the path to your R installation (for example: C:\Program Files\R\R-2.15.3\ ), and a second variable named R\_USER that contains your Windows username.
+
+You also need to edit your PATH variable to include a directory with sox.exe (for example: C:\Program Files (x86)\sox-14-4-1 ), a directory with the R executables (for example: C:\Program Files\R\R-2.15.3\bin\x64 ), and a directory with praatcon.exe. Directories in the Windows PATH are separated by semi-colons.
+
 ## III. Usage ##
 
 Currently, extractFormants is set up so that it must be run from the main directory of the extractFormants package.  To run extractFormants, three arguments are required:  the WAV file containing the speech data, the TextGrid file containing the alignments, and the name of an output file for the extracted formants.  So, in the directory extractFormants/, type:

@@ -1600,12 +1600,8 @@ def programExists(program, path=''):
         elif os.name == 'nt':
             pathDirs = os.environ['PATH'].split(';')
         else:
-            # this can be bypassed by specifying paths to praat (and sox) on other OS types (still assumes PRAATNAME = 'praat')
-            print "WARNING: could not recognize OS as 'posix' or 'nt', guessing posix-like PATH"
-            pathDirs = os.environ['PATH'].split(':')
-            if not os.path.isdir(pathDirs[0]):
-                print "ERROR: could not parse PATH environment variable"
-                sys.exit()
+            print "ERROR: did not recognize OS type '%s'. Paths to 'praat' and 'sox' must be specified manually" % os.name
+            sys.exit()
         for p in pathDirs:
             if os.path.isfile(os.path.join(p, program)):
                 return True

@@ -429,7 +429,7 @@ def checkConfigOption(f, option):
     
     allowedOptions = ['case', 'outputFormat', 'outputHeader', 'formantPredictionMethod', 'measurementPointMethod', 'speechSoftware', 'nFormants', 'maxFormant',
                       'removeStopWords', 'measureUnstressed', 'minVowelDuration', 'windowSize', 'preEmphasis', 'multipleFiles', 'nSmoothing', 'remeasurement',
-                      'candidates', 'vowelSystem', 'windowsPC']
+                      'candidates', 'vowelSystem']
     if option not in allowedOptions:
         print "ERROR:  unrecognized option '%s' in config file %s" % (option, f)
         print "The following options are recognized:  ", ", ".join(allowedOptions)
@@ -455,7 +455,7 @@ def checkConfigValue(f, option, value):
     if option == 'speechSoftware':
         allowedValues = ['praat', 'Praat', 'esps', 'ESPS']
         checkAllowedValues(f, option, value, allowedValues)
-    if option in ['removeStopWords', 'measureUnstressed', 'outputHeader', 'multipleFiles', 'remeasurement', 'candidates', 'windowsPC']:
+    if option in ['removeStopWords', 'measureUnstressed', 'outputHeader', 'multipleFiles', 'remeasurement', 'candidates']:
         allowedValues = ['T', 'F', 'True', 'False']
         checkAllowedValues(f, option, value, allowedValues)
     if option == 'vowelSystem':
@@ -475,7 +475,7 @@ def checkSpeechSoftware(speechSoftware):
     """checks that either Praat or ESPS is available as a speech analysis program"""
     
     if speechSoftware in ['ESPS', 'esps']:
-        if windowsPC:
+        if os.name == 'nt':
             print "ERROR:  ESPS was specified as the speech analysis program, but this option is not yet compatible with Windows"
             sys.exit()
         if not programExists('formant'):
@@ -484,7 +484,7 @@ def checkSpeechSoftware(speechSoftware):
         else:
             return 'esps'
     elif speechSoftware in ['praat', 'Praat']:
-        if not ((PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat') or programExists('praatcon.exe')):
+        if not ((PRAATPATH and programExists('praat', PRAATPATH)) or (os.name == 'posix' and programExists('praat')) or (os.name == 'nt' and programExists('praatcon.exe'))):
             print "ERROR: Praat was specified as the speech analysis program, but the command 'praat' ('praatcon' for Windows) is not in your path"
             sys.exit()
         else:
@@ -582,10 +582,7 @@ def extractPortion(wavFile, vowelWavFile, beg, end, soundEditor):
         ## force output format because there have been issues with some sound files where Praat could not read the extracted portion
         os.system(os.path.join(SOXPATH, 'sox') + ' ' + wavFile + ' -t wavpcm ' + os.path.join(SCRIPTS_HOME, vowelWavFile) + ' trim ' + str(beg) + ' ' + str(end - beg))
     elif soundEditor == 'praat':
-        if not windowsPC:
-            os.system(os.path.join(PRAATPATH, 'praat') + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' + os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
-        else:
-            os.system(os.path.join(PRAATPATH, 'praatcon') + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' + os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
+        os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' + os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
     else:
         pass
 
@@ -753,9 +750,9 @@ def getSoundEditor():
     """checks whether SoX or Praat are available as sound editors"""
     
     # use sox for manipulating the files if we have it, since it's faster
-    if (SOXPATH and programExists('sox', SOXPATH)) or programExists('sox') or programExists('sox.exe'):
+    if (SOXPATH and programExists('sox', SOXPATH)) or (os.name == 'posix' and programExists('sox')) or (os.name == 'nt' and programExists('sox.exe')):
         soundEditor = 'sox'
-    elif (PRAATPATH and programExists('praat', PRAATPATH)) or programExists('praat') or programExists('praatcon.exe'):
+    elif (PRAATPATH and programExists('praat', PRAATPATH)) or (os.name == 'posix' and programExists('praat')) or (os.name == 'nt' and programExists('praatcon.exe')):
         soundEditor = 'praat'
     else:
         print "ERROR:  neither 'praat' ('praatcon' for Windows) nor 'sox' can be found in your path"
@@ -893,29 +890,20 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
             LPCs = []
             nFormants = 3
             while nFormants <= 6:
-                if not windowsPC:
-                    os.system(os.path.join(PRAATPATH, 'praat') + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
-                else:
-                    os.system(os.path.join(PRAATPATH, 'praatcon') + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
+                os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
                 lpc = praat.Formant()
                 lpc.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
                 LPCs.append(lpc)
                 nFormants +=1
         else:
-            if not windowsPC:
-                os.system(os.path.join(PRAATPATH, 'praat') + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
-            else:
-                os.system(os.path.join(PRAATPATH, 'praatcon') + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
+            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' + vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
             fmt = praat.Formant()
             fmt.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
         os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
         ## get Intensity object for intensity cutoff
         ## (only for those vowels where we need it)
         if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
-            if not windowsPC:
-                os.system(os.path.join(PRAATPATH, 'praat') + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
-            else:
-                os.system(os.path.join(PRAATPATH, 'praatcon') + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
+            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
             intensity = praat.Intensity()
             intensity.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
             os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
@@ -949,7 +937,7 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     along with their associated phones, and Plotnik codes for the vowels"""
 
     print ''
-    print 'Indentifying vowels in the TextGrid'
+    print 'Identifying vowels in the TextGrid'
 
     n_words = len(tg[speaker.tiernum+1])
     word_iter = 0
@@ -1607,10 +1595,13 @@ def programExists(program, path=''):
     """checks whether a given command line program exists (path can be specified optionally)"""
 
     if not path:
-        if not windowsPC:
+        if os.name == 'posix':
             pathDirs = os.environ['PATH'].split(':')
-        else:
+        elif os.name == 'nt':
             pathDirs = os.environ['PATH'].split(';')
+        else:
+            print "ERROR: did not recognize OS type '%s'. Paths to 'praat' and 'sox' must be specified manually" % os.name
+            sys.exit()
         for p in pathDirs:
             if os.path.isfile(os.path.join(p, program)):
                 return True
@@ -1674,7 +1665,6 @@ def setDefaultOptions():
     options['remeasurement'] = False
     options['candidates'] = False
     options['vowelSystem'] = 'NorthAmerican'
-    options['windowsPC'] = False
     
     return options
 
@@ -1801,7 +1791,6 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords):
     f.write("- covsFile:\t\t\t%s\n" % covsFile)
     f.write("- remeasurement:\t\t%s\n" % remeasurement)
     f.write("- vowelSystem:\t\t%s\n" % vowelSystem)
-    f.write("- windowsPC:\t\t%s\n" % windowsPC)
     if removeStopWords:
         f.write("- stopWords:\t\t\t%s\n" % stopWords)
     f.write("\n\n")
@@ -1856,6 +1845,16 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     SOXPATH = SPATH
     global PRAATPATH
     PRAATPATH = PPATH
+    
+    # set OS-specific variables
+    global PRAATNAME
+    if os.name == 'nt':
+        PRAATNAME = 'praatcon'
+    elif os.name == 'posix':
+        PRAATNAME = 'praat'
+    else:
+        print "WARNING: unknown OS type '%s' may not be supported" % os.name
+        PRAATNAME = 'praat'
 
     # by default, assume that these files are located in the current directory
     meansFile = 'means.txt'
@@ -1901,7 +1900,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
     # assign the options to individual variables and to type conversion if necessary
     global case, outputHeader, formantPredictionMethod, measurementMethod, measurementPointMethod, speechSoftware, nFormants, maxFormant
-    global nSmoothing, removeStopWords, measureUnstressed, minVowelDuration, windowSize, preEmphasis, multipleFiles, remeasurement, candidates, vowelSystem, windowsPC
+    global nSmoothing, removeStopWords, measureUnstressed, minVowelDuration, windowSize, preEmphasis, multipleFiles, remeasurement, candidates, vowelSystem
     case = options['case']
     outputFormat = options['outputFormat']
     outputHeader = options['outputHeader']
@@ -1920,7 +1919,6 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     remeasurement = options['remeasurement']
     candidates = options['candidates']
     vowelSystem = options['vowelSystem']
-    windowsPC = options['windowsPC']
     print "Processed options."
 
     ## read CMU phoneset ("cmu_phoneset.txt")

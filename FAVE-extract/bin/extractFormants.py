@@ -1984,8 +1984,26 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements = []
 
         markTime("prelim2")
-       
+
+        n_words = len(words)
+        word_iter = 0
+        old_percent = 0
+
+        progressbar_width = 100
+        sys.stdout.write("\nExtracting Formants\n")
+        sys.stdout.write("[%s]" % (" " * progressbar_width))
+        sys.stdout.flush()
+        sys.stdout.write("\b" * (progressbar_width+1)) # return to start of line, after '['
+
         for w in words:
+            word_iter = word_iter + 1
+            new_percent = math.floor((float(word_iter)/n_words)*100)
+
+            if new_percent != old_percent:
+                sys.stdout.write("-")
+                sys.stdout.flush()
+                old_percent = new_percent            
+
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
             numV = getNumVowels(w)
@@ -2036,11 +2054,12 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     count_too_short += 1
                     continue
   
+
                 vowelFileStem = fileStem + '_' + p.label  ## name of sound file - ".wav" + phone label
                 vowelWavFile = vowelFileStem + '.wav'
   
-                print ''
-                print "Extracting formants for vowel %s in word %s" % (p.label, w.transcription)
+                #print ''
+                #print "Extracting formants for vowel %s in word %s" % (p.label, w.transcription)
                 markTime(count_analyzed + 1, p.label + " in " + w.transcription)
 
                 ## get padding for vowel in question  

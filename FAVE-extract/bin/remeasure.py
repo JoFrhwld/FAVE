@@ -98,13 +98,16 @@ def excludeOutliers(vowels, vowelMeans, vowelCovs):
     """
     Finds outliers and excludes them.
     """
-    #sys.stderr.write("Excluding outlying vowels...")
+    sys.stderr.write("Excluding outlying vowels...")
     outvowels = {}
     for vowel in vowels:
-        ntokens = len(vowels[vowel])
-        if ntokens >= 10:
-            outlie = 4.75
-            outvowels[vowel] = pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie)
+        if vowel in vowelCovs:
+            ntokens = len(vowels[vowel])
+            if ntokens >= 10:
+                outlie = 4.75
+                outvowels[vowel] = pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie)
+            else:
+                outvowels[vowel] = vowels[vowel]
         else:
             outvowels[vowel] = vowels[vowel]
     #sys.stderr.write("excluded.\n")
@@ -121,7 +124,7 @@ def pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie):
         outtokens = [ ]
         for token in vowels[vowel]:
             x = np.array(token)
-            dist = mahalanobis(x, vowelMeans[vowel], linalg.inv(vowelCovs[vowel]))
+            dist = mahalanobis(x, vowelMeans[vowel], vowelCovs[vowel])
             if dist**2 <= outlie:
                 outtokens.append(token)
         if len(outtokens) >= 10:
@@ -141,7 +144,7 @@ def calculateVowelMeans(vowels):
     calculates [means] and [covariance matrices] for each vowel class.
     It returns these as R objects in dictionaries indexed by the vowel class.
     """
-    #sys.stderr.write("Calculating vowel means...")
+    sys.stderr.write("Calculating vowel means...")
     vowelMeans = {}
     vowelCovs = {}
     for vowel in vowels:
@@ -153,7 +156,9 @@ def calculateVowelMeans(vowels):
 
     
         vowelMeans[vowel] = np.array([vF1.mean(), vF2.mean(), vB1.mean(), vB2.mean(), vDur.mean()])
-        vowelCovs[vowel] = np.cov(np.vstack((vF1, vF2, vB1, vB2, vDur)))
+        vowel_cov = np.cov(np.vstack((vF1, vF2, vB1, vB2, vDur)))
+        if linalg.det(vowel_cov) != 0:
+            vowelCovs[vowel] = linalg.inv(vowel_cov)
     #sys.stderr.write("Vowel means calculated\n")
     return vowelMeans, vowelCovs
 
@@ -217,13 +222,9 @@ def repredictF1F2(measurements, vowelMeans, vowelCovs, vowels):
                         valuesList.append([float(vm.f1), float(vm.f2), vm.f3, math.log(float(vm.b1)), math.log(float(vm.b2)), vm.b3, lDur])
                         distanceList.append(0)
                         nFormantsList.append(vm.nFormants)
-                    elif linalg.det(vowelCovs[vowel]) == 0:  ## determinant of the covariance matrix is zero
-                        valuesList.append([float(vm.f1), float(vm.f2), vm.f3, math.log(float(vm.b1)), math.log(float(vm.b2)), vm.b3, lDur])
-                        distanceList.append(0)
-                        nFormantsList.append(vm.nFormants)
                     ## "real" re-measurement
                     else:
-                        dist = mahalanobis(x, vowelMeans[vowel], linalg.inv(vowelCovs[vowel]))   
+                        dist = mahalanobis(x, vowelMeans[vowel], vowelCovs[vowel])
                         valuesList.append(outvalues)
                         distanceList.append(dist)
                         nFormantsList.append(i + 3)  ## these are the formant setting used, not the actual number of formants returned

@@ -1054,7 +1054,7 @@ def loadCovs(inFile):
     for line in open(inFile, 'rU').readlines():
         vowel = line.strip().split('\t')[0]
         values = np.array([float(x) for x in line.strip().split('\t')[1:]])
-        covs[vowel] = np.reshape(values, (4,-1))        
+        covs[vowel] = linalg.inv(np.reshape(values, (4,-1)))
 
     return covs
 
@@ -1540,7 +1540,7 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
                     ## vector with current pole combination and associated bandwidths
                     x = np.array([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
                     ## calculate Mahalanobis distance between x and ANAE mean
-                    dist = mahalanobis(x, means[vowel], linalg.inv(covs[vowel]))
+                    dist = mahalanobis(x, means[vowel], covs[vowel])
                     ## append poles and bandwidths to list of values
                     ## (if F3 and bandwidth measurements exist, add to list of appended values)
                     if len(poles) > 2:

@@ -71,7 +71,9 @@ import sys, os, getopt, math, re, time
 import praat, esps, plotnik, cmu, vowel
 
 FAVE_WD = os.getcwd()
-import rpy2.robjects as robjects
+import numpy as np
+from scipy import linalg
+from scipy.spatial.distance import mahalanobis as mahalanobis
 import remeasure
 os.chdir(FAVE_WD)
 
@@ -1051,9 +1053,9 @@ def loadCovs(inFile):
     covs = {}
     for line in open(inFile, 'rU').readlines():
         vowel = line.strip().split('\t')[0]
-        values = robjects.FloatVector(line.strip().split('\t')[1:])
-        covs[vowel] = robjects.r['matrix'](values, nrow=4)
-        
+        values = np.array([float(x) for x in line.strip().split('\t')[1:]])
+        covs[vowel] = linalg.inv(np.reshape(values, (4,-1)))
+
     return covs
 
 
@@ -1063,8 +1065,8 @@ def loadMeans(inFile):
     means = {}
     for line in open(inFile, 'rU').readlines():
         vowel = line.strip().split('\t')[0]
-        means[vowel] = robjects.FloatVector(line.strip().split('\t')[1:])
-        
+        means[vowel] = np.array([float(x) for x in line.strip().split('\t')[1:]])
+
     return means
 
 
@@ -1536,9 +1538,9 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
                     i = 0
                     j = 1
                     ## vector with current pole combination and associated bandwidths
-                    x = robjects.FloatVector([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
+                    x = np.array([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
                     ## calculate Mahalanobis distance between x and ANAE mean
-                    dist = robjects.r['mahalanobis'](x, means[vowel], covs[vowel])[0]
+                    dist = mahalanobis(x, means[vowel], covs[vowel])
                     ## append poles and bandwidths to list of values
                     ## (if F3 and bandwidth measurements exist, add to list of appended values)
                     if len(poles) > 2:
@@ -1984,8 +1986,26 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements = []
 
         markTime("prelim2")
-       
+
+        n_words = len(words)
+        word_iter = 0
+        old_percent = 0
+
+        progressbar_width = 100
+        sys.stdout.write("\nExtracting Formants\n")
+        sys.stdout.write("[%s]" % (" " * progressbar_width))
+        sys.stdout.flush()
+        sys.stdout.write("\b" * (progressbar_width+1)) # return to start of line, after '['
+
         for w in words:
+            word_iter = word_iter + 1
+            new_percent = math.floor((float(word_iter)/n_words)*100)
+
+            if new_percent != old_percent:
+                sys.stdout.write("-")
+                sys.stdout.flush()
+                old_percent = new_percent            
+
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
             numV = getNumVowels(w)
@@ -2036,11 +2056,12 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     count_too_short += 1
                     continue
   
+
                 vowelFileStem = fileStem + '_' + p.label  ## name of sound file - ".wav" + phone label
                 vowelWavFile = vowelFileStem + '.wav'
   
-                print ''
-                print "Extracting formants for vowel %s in word %s" % (p.label, w.transcription)
+                #print ''
+                #print "Extracting formants for vowel %s in word %s" % (p.label, w.transcription)
                 markTime(count_analyzed + 1, p.label + " in " + w.transcription)
 
                 ## get padding for vowel in question  

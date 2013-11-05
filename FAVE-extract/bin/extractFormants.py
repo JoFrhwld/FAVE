@@ -957,7 +957,7 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
         word_iter = word_iter + 1
         new_percent = math.floor((float(word_iter)/n_words)*100)
 
-        if new_percent != old_percent:
+        for p in range(int(old_percent), int(new_percent)):
             sys.stdout.write("-")
             sys.stdout.flush()
             old_percent = new_percent
@@ -2001,7 +2001,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
             word_iter = word_iter + 1
             new_percent = math.floor((float(word_iter)/n_words)*100)
 
-            if new_percent != old_percent:
+            for p in range(int(old_percent), int(new_percent)):
                 sys.stdout.write("-")
                 sys.stdout.flush()
                 old_percent = new_percent            

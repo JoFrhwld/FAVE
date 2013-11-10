@@ -1,7 +1,8 @@
 #import ast
 import math
-import rpy2.robjects as robjects
-import rpy2.rinterface as rinterface
+import numpy as np
+from scipy import linalg
+from scipy.spatial.distance import mahalanobis as mahalanobis
 import sys
 import string
 
@@ -97,13 +98,16 @@ def excludeOutliers(vowels, vowelMeans, vowelCovs):
     """
     Finds outliers and excludes them.
     """
-    #sys.stderr.write("Excluding outlying vowels...")
+    # sys.stderr.write("Excluding outlying vowels...")
     outvowels = {}
     for vowel in vowels:
-        ntokens = len(vowels[vowel])
-        if ntokens >= 10:
-            outlie = 4.75
-            outvowels[vowel] = pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie)
+        if vowel in vowelCovs:
+            ntokens = len(vowels[vowel])
+            if ntokens >= 10:
+                outlie = 4.75
+                outvowels[vowel] = pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie)
+            else:
+                outvowels[vowel] = vowels[vowel]
         else:
             outvowels[vowel] = vowels[vowel]
     #sys.stderr.write("excluded.\n")
@@ -119,9 +123,9 @@ def pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie):
     while not enough:
         outtokens = [ ]
         for token in vowels[vowel]:
-            x = robjects.FloatVector(token)
-            dist = robjects.r['mahalanobis'](x, vowelMeans[vowel], vowelCovs[vowel])[0]
-            if dist <= outlie:
+            x = np.array(token)
+            dist = mahalanobis(x, vowelMeans[vowel], vowelCovs[vowel])
+            if dist**2 <= outlie:
                 outtokens.append(token)
         if len(outtokens) >= 10:
             enough = True
@@ -138,25 +142,24 @@ def pruneVowels(vowels, vowel, vowelMeans, vowelCovs, outlie):
 def calculateVowelMeans(vowels):
     """
     calculates [means] and [covariance matrices] for each vowel class.
-    It returns these as R objects in dictionaries indexed by the vowel class.
+    It returns these as numpy arrays in dictionaries indexed by the vowel class.
     """
     #sys.stderr.write("Calculating vowel means...")
     vowelMeans = {}
     vowelCovs = {}
     for vowel in vowels:
-        vF1 = robjects.FloatVector([F1 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
-        vF2 = robjects.FloatVector([F2 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
-        vB1 = robjects.FloatVector([B1 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
-        vB2 = robjects.FloatVector([B2 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
-        vDur = robjects.FloatVector([Dur for [F1,F2,B1,B2,Dur] in vowels[vowel]])
+        vF1 = np.array([F1 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
+        vF2 = np.array([F2 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
+        vB1 = np.array([B1 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
+        vB2 = np.array([B2 for [F1,F2,B1,B2,Dur] in vowels[vowel]])
+        vDur = np.array([Dur for [F1,F2,B1,B2,Dur] in vowels[vowel]])
 
-        rcolMeans = robjects.r["colMeans"]
-        rcov = robjects.r["cov"]
-
-        measureMatrix = robjects.r["matrix"](vF1 + vF2 + vB1 + vB2 + vDur, ncol = 5)
     
-        vowelMeans[vowel] = rcolMeans(measureMatrix)
-        vowelCovs[vowel] = rcov(measureMatrix)
+        vowelMeans[vowel] = np.array([vF1.mean(), vF2.mean(), vB1.mean(), vB2.mean(), vDur.mean()])
+        if vF1.shape[0] >= 7:
+            vowel_cov = np.cov(np.vstack((vF1, vF2, vB1, vB2, vDur)))
+            if linalg.det(vowel_cov) != 0:
+                vowelCovs[vowel] = linalg.inv(vowel_cov)
     #sys.stderr.write("Vowel means calculated\n")
     return vowelMeans, vowelCovs
 
@@ -170,7 +173,7 @@ def repredictF1F2(measurements, vowelMeans, vowelCovs, vowels):
     """
     Predicts F1 and F2 from the speaker's own vowel distributions based on the mahalanobis distance.
     """
-    print "\nREMEASURING..."
+    #print "\nREMEASURING..."
     remeasurements = []
     for vm in measurements:
 
@@ -203,7 +206,7 @@ def repredictF1F2(measurements, vowelMeans, vowelCovs, vowels):
                 values = [F1, F2, B1, B2, lDur]
                 outvalues = [F1, F2, F3, B1, B2, B3, lDur]
     
-                x = robjects.FloatVector(values)
+                x = np.array(values)
 
                 ##If there is only one member of a vowel category,
                 ##the covariance matrix will be filled with NAs
@@ -212,7 +215,7 @@ def repredictF1F2(measurements, vowelMeans, vowelCovs, vowels):
                     ## if no re-measurement is to take place for one of the three reasons below, the list of candidate measurements and nFormants
                     ## will be filled with four identical copies of the original measurement, all with a distance of zero
                     ## so that the original measurement is guaranteed to be re-selected
-                    if vowelCovs[vowel][0] is rinterface.NA_Real:
+                    if np.isnan(vowelCovs[vowel][0,0]):
                         valuesList.append([float(vm.f1), float(vm.f2), vm.f3, math.log(float(vm.b1)), math.log(float(vm.b2)), vm.b3, lDur])
                         distanceList.append(0)
                         nFormantsList.append(vm.nFormants)
@@ -220,13 +223,9 @@ def repredictF1F2(measurements, vowelMeans, vowelCovs, vowels):
                         valuesList.append([float(vm.f1), float(vm.f2), vm.f3, math.log(float(vm.b1)), math.log(float(vm.b2)), vm.b3, lDur])
                         distanceList.append(0)
                         nFormantsList.append(vm.nFormants)
-                    elif robjects.r['det'](vowelCovs[vowel])[0] == 0:  ## determinant of the covariance matrix is zero
-                        valuesList.append([float(vm.f1), float(vm.f2), vm.f3, math.log(float(vm.b1)), math.log(float(vm.b2)), vm.b3, lDur])
-                        distanceList.append(0)
-                        nFormantsList.append(vm.nFormants)
                     ## "real" re-measurement
                     else:
-                        dist = robjects.r['mahalanobis' ](x, vowelMeans[vowel], vowelCovs[vowel])[0]   
+                        dist = mahalanobis(x, vowelMeans[vowel], vowelCovs[vowel])
                         valuesList.append(outvalues)
                         distanceList.append(dist)
                         nFormantsList.append(i + 3)  ## these are the formant setting used, not the actual number of formants returned

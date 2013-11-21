@@ -882,6 +882,7 @@ def getSpeakerBackground(speakername, speakernum):
     speaker.ethnicity = raw_input("Ethnicity:\t\t")
     speaker.location = raw_input("Location:\t\t")
     speaker.year = raw_input("Year of recording:\t")
+    speaker.years_of_schooling = raw_input("Years of schooling:\t")
     speaker.tiernum = speakernum * \
         2  # tiernum points to phone tier = first tier for given speaker
 

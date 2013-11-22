@@ -26,8 +26,8 @@ extractFormants relies on an external speech analysis program for the LPC analys
 Praat:  http://www.praat.org/
 ESPS:  
 
-### 3) Python libraries (scipy and numpy)
-This version of FAVE-extract requires the python libraries `numpy` and `scipy` to be installed.
+### 3) numpy
+This version of FAVE-extract requires the python library `numpy` to be installed.
 They should be available through your favorite python package manager, or you can [download installers for your system here](http://www.scipy.org/install.html#individual-binary-and-source-packages).
 
 ### 4) Using FAVE-extract on Windows

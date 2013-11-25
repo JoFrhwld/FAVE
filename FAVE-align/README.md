@@ -1,5 +1,8 @@
 # FAVE-align
 
+For more information on the installation and use of FAVE-align, see the associated GitHub wiki pages: 
+https://github.com/JoFrhwld/FAVE/wiki/FAVE-align
+
 ## Installation
 
 ### Dependencies

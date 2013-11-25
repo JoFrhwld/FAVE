@@ -1,3 +1,6 @@
+For more information on the installation and use of FAVE-extract, see the associated pages on the GitHub wiki:
+https://github.com/JoFrhwld/FAVE/wiki/FAVE-extract
+
 # Contents
 
 I. [System Requirements](#i-system-requirements)

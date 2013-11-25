@@ -43,10 +43,10 @@ file, plus ".TextGrid" extension.)
 
 Short | Long | Description
 ------ | -----| ------
-| `--version`  | Prints the program's version string and exits.
+ | `--version`  | Prints the program's version string and exits.
 `-h` | `--help`  | Shows the help message and exits.
 `-c [filename]` | `--check=[filename]`  | Checks whether phonetic transcriptions for all words in the transcription file can be found in the CMU Pronouncing Dictionary (file `dict`).  Returns a list of unknown words.
-`-i [filename]` | `--import=[filename]`  Adds a list of unknown words and their corresponding phonetic transcriptions to the CMU Pronouncing Dictionary prior to alignment.  User will be prompted interactively for the transcriptions of any remaining unknown words.  File must be tab-separated plain text file.
+`-i [filename]` | `--import=[filename]`  | Adds a list of unknown words and their corresponding phonetic transcriptions to the CMU Pronouncing Dictionary prior to alignment.  User will be prompted interactively for the transcriptions of any remaining unknown words.  File must be tab-separated plain text file.
 `-v` | `--verbose` | Detailed output on status of dictionary check and alignment progress.
 `-d [filename]` | `--dict=[filename]` | Specifies the name of the file containing the pronunciation dictionary.  Default file is `/model/dict`.
 `-n` | `--noprompt` | User is not prompted for the transcription of words not in the dictionary, or truncated words.  Unknown words are ignored by the aligner.

@@ -1,7 +1,5 @@
 # FAVE-align
 
-* [Installation](#installation)
-
 ## Installation
 
 ### Dependencies
@@ -43,6 +41,8 @@ file, plus ".TextGrid" extension.)
 
 ### Options:
 
+Option | Description
+-------| ------------
 `--version` "version" | Prints the program's version string and exits.
 `-h`, `--help` "help  | Shows the help message and exits.
 `-c [filename]`, `--check=[filename]` "check transcription" | Checks whether phonetic transcriptions for all words in the transcription file can be found in the CMU Pronouncing Dictionary (file "dict").  Returns a list of unknown words.

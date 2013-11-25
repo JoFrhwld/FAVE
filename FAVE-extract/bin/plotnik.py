@@ -563,66 +563,64 @@ def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
         phones)  # separate Arpabet coding from stress digit for vowels
 
     # 1. /aeh/ and /aey/:  tense and variable short-a
-    if pc == '3' and phones[i].label == "AE1" and trans.upper() not in ['AND', "AN'", 'AM', 'AN', 'THAN'] and fm != '0':
-
-        # /aeh/:  tense short-a
-
-        # following front nasals, voiceless fricatives
-        if phones[i + 1].arpa in ['M', 'N', 'S', 'TH', 'F']:
-            # tensing consonants word-finally
-            if len(phones) == i + 2:
-                if trans.upper() in ['MATH']:
-                    pc = '39'
-                else:
-                    pc = '33'  # e.g. "man", "ham"
-            # tensing consonants NOT word-finally
-            elif len(phones) > i + 2:
-                # AE1 ['M', 'N', 'S', 'TH', 'F'] followed by another consonant
-                # (e.g. "hand", "classroom")
-                if (phoneset[phones[i + 2].arpa].cvox != '0') and trans.upper() not in ['CATHOLIC', 'CATHOLICS', 'CAMERA']:
-                    pc = '33'
+   # if pc == '3' and phones[i].label == "AE1" and trans.upper() not in ['AND', "AN'", 'AM', 'AN', 'THAN'] and fm != '0':
+        ## /aeh/:  tense short-a
+        ## following front nasals, voiceless fricatives
+        #if phones[i + 1].arpa in ['M', 'N', 'S', 'TH', 'F']:
+            ## tensing consonants word-finally
+            #if len(phones) == i + 2:
+                #if trans.upper() in ['MATH']:
+                #    pc = '39'
+                #else:
+                #    pc = '33'  # e.g. "man", "ham"
+            ## tensing consonants NOT word-finally
+            #elif len(phones) > i + 2:
+                ## AE1 ['M', 'N', 'S', 'TH', 'F'] followed by another consonant
+                ## (e.g. "hand", "classroom")
+                #if (phoneset[phones[i + 2].arpa].cvox != '0') and trans.upper() not in ['CATHOLIC', 'CATHOLICS', 'CAMERA']:
+                #    pc = '33'
                 # AE1 ['M', 'N', 'S', 'TH', 'F'] followed by a vowel
-                else:
-# following suffix -er
-# if phones[i+2] == 'ER0':
-##            pc = '33'
-                    # following suffixes -ing, -in', -es ("manning")
-                    if len(phones) > i + 3:
-                        a = phones[i + 2].label
-                        b = phones[i + 3].label
-                        ab = [a, b]
-                        # print "Suffix for word %s is %s." % (trans, ab)
-                        if len(phones) == i + 4 and ab in [['IH0', 'NG'], ['AH0', 'NG'], ['AH0', 'N'], ['AH0', 'Z']]:
-                            pc = '33'
-                        # all other vowels
-                        else:
-                            pc = '39'
+                #else:
+            ## following suffix -er
+            ## if phones[i+2] == 'ER0':
+            ##            pc = '33'
+                    ## following suffixes -ing, -in', -es ("manning")
+                    #if len(phones) > i + 3:
+                    #    a = phones[i + 2].label
+                    #    b = phones[i + 3].label
+                    #    ab = [a, b]
+                        ## print "Suffix for word %s is %s." % (trans, ab)
+                        #if len(phones) == i + 4 and ab in [['IH0', 'NG'], ['AH0', 'NG'], ['AH0', 'N'], ['AH0', 'Z']]:
+                        #    pc = '33'
+                        ## all other vowels
+                        #else:
+                        #    pc = '39'
 
         # mad, bad, glad and derived forms
-        if trans.upper(
-        ) in ['MAD', 'BAD', 'GLAD', 'MADLY', 'BADLY', 'GLADLY', 'MADDER', 'BADDER', 'GLADDER',
-              'MADDEST', 'BADDEST', 'GLADDEST', 'MADNESS', 'GLADNESS', 'BADNESS', 'MADHOUSE']:
-            pc = '33'
+        #if trans.upper(
+        #) in ['MAD', 'BAD', 'GLAD', 'MADLY', 'BADLY', 'GLADLY', 'MADDER', 'BADDER', 'GLADDER',
+        #      'MADDEST', 'BADDEST', 'GLADDEST', 'MADNESS', 'GLADNESS', 'BADNESS', 'MADHOUSE']:
+        #    pc = '33'
 
-        # /aey/:  variable short-a
+        ## /aey/:  variable short-a
+        #if trans.upper(
+        #) in ['RAN', 'SWAM', 'BEGAN', 'CAN', 'FAMILY', 'FAMILIES', "FAMILY'S", 'JANUARY', 'ANNUAL',
+        #      'ANNE', "ANNE'S", 'ANNIE', "ANNIE'S", 'JOANNE', 'GAS', 'GASES', 'EXAM', 'EXAMS', "EXAM'S", 'ALAS', 'ASPIRIN']:
+        #    pc = '39'
 
-        if trans.upper(
-        ) in ['RAN', 'SWAM', 'BEGAN', 'CAN', 'FAMILY', 'FAMILIES', "FAMILY'S", 'JANUARY', 'ANNUAL',
-              'ANNE', "ANNE'S", 'ANNIE', "ANNIE'S", 'JOANNE', 'GAS', 'GASES', 'EXAM', 'EXAMS', "EXAM'S", 'ALAS', 'ASPIRIN']:
-            pc = '39'
+        ## following /l/
+        #if phones[i + 1].arpa == 'L':
+        #    pc = '39'
 
-        # following /l/
-        if phones[i + 1].arpa == 'L':
-            pc = '39'
-
-        # -SKV- words, e.g. "master", "rascal", "asterisk"
-        if len(phones) > i + 3 and phones[i + 1].arpa == 'S' and phones[i + 2].arpa in ['P', 'T', 'K'] and phoneset[phones[i + 3].arpa].cvox == '0':
-            if trans[-3:] not in ["ING", "IN'"]:  # exclude final "-ing"/"-in'" words, e.g. "asking"
-                pc = '39'
-# -NV- words, e.g. "planet", "Janet", "hammer", and "-arry" words, e.g. "marry", "carry", "Harold"
-# if len(phones) > i + 2 and phones[i+1].arpa in ['N' 'M', 'R'] and phoneset[phones[i+2].arpa].cvox == '0':
-# if trans[-3:] not in ["ING", "IN'"]:  ## exclude final "-ing"/"-in'" words, e.g. "planning"
-##        pc = '39'
+        ## -SKV- words, e.g. "master", "rascal", "asterisk"
+        #if len(phones) > i + 3 and phones[i + 1].arpa == 'S' and phones[i + 2].arpa in ['P', 'T', 'K'] and phoneset[phones[i + 3].arpa].cvox == '0':
+        #    if trans[-3:] not in ["ING", "IN'"]:  # exclude final "-ing"/"-in'" words, e.g. "asking"
+        #        pc = '39'
+        
+	## -NV- words, e.g. "planet", "Janet", "hammer", and "-arry" words, e.g. "marry", "carry", "Harold"
+        ## if len(phones) > i + 2 and phones[i+1].arpa in ['N' 'M', 'R'] and phoneset[phones[i+2].arpa].cvox == '0':
+        ## if trans[-3:] not in ["ING", "IN'"]:  ## exclude final "-ing"/"-in'" words, e.g. "planning"
+        ##        pc = '39'
 
     # convert dictionary entries to short-a for "-arry" words
     if pc == '2' and 'ARRY' in trans.upper():
@@ -699,6 +697,94 @@ def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
 
     return pc
 
+def is_penultimate_syllable_resyllabified(trans):
+    """
+    Use a Porter stemmer to decompose words into "stem" and "suffix", and 
+    return True iff last syllable is a candidate for resyllabification
+    opacifying tensing
+    """
+    # initialize stemmer
+    from decorators import Memoize
+    from nltk.stem.snowball import EnglishStemmer
+    STEM = Memoize(EnglishStemmer().stem)
+
+    stem = STEM(trans)
+    # find the rightmost point where wordform and its stem don't match
+    sp = len(stem) - 1
+    while sp >= 0 and trans[sp] != stem[sp]:
+        sp -= 1
+    # define the suffix to be the residue
+    suffix = trans[sp + 1:].upper()
+    # check for /-z/, /-iŋ/, or /-iŋ-z/ therein
+    if suffix != '' and suffix.endswith(('S', 'ING', 'INGS')):
+        return True
+    return False
+
+
+def shorta_recoding(pc, phones, trans):
+    from syllabify import syllabify
+
+    orig_pc = pc  # Plotnik code returned by arpabet2plotnik
+    phones = split_stress_digit(
+        phones)  # separate Arpabet coding from stress digit for vowels
+
+    TENSERS = {'M', 'N', 'S', 'TH', 'F'}
+    NEGATIVE_EXCEPTIONS = {'AM', 'RAN', 'BEGAN', 'SWAM', 'MATH'}
+    POSITIVE_EXCEPTIONS = {'BAD', 'BADLY', 'BADDER', 'BADDEST', 'BADNESS', 'BADMINTON', 'BADMINTONS', 'MAD', 'MADLY', 'MADDEN', 'MADDENING', 'MADDENINGLY', 'MADDER', 'MADNESS' 'GLAD', 'GLADLY', 'GLADDER', 'GLADDEST', 'GLADDEN', 'GLADDENING', 'GLADNESS'}
+    UNCLASSIFIABLE = {'CAN'}
+
+    if pc == '3' and phones[i].label == "AE1" and trans.upper() not in ['AND', "AN'", 'AM', 'AN', 'THAN'] and fm != '0': 
+    
+    ##True iff word `word` with pronuciation `pron` (represented as a list of
+    ##ARPABET characters) has a tense short-a in the first syllable in the 
+    ##"classic" Philadelphia pattern. The algorithm (for lack of a better
+    ##term) is as follows:
+		        
+    ##* Check whether the word is a positive exception to tensing: if so
+    ##  return True
+    ##* Check whether the word is a negative exception to tensing: if so
+    ##  return False
+    ##* Check whether the word is an indeterminate word (at the moment, just
+    ##  "CAN"): if so return None
+    ##* Syllabify and extract the onset, nucleus, and coda of the first 
+    ##  syllable
+    ##* Check whether the first-syllable nucleus is r-colored: if so return 
+    ##  False
+    ##* Check whether the first coda consonant of the first syllable is 
+    ##  a tensing segment: if so return True
+    ##* Check whether the word is two syllables, has an empty penultimate
+    ##  coda, but has an ultimate onset consisting of a tensing segment
+    ##  and ends in a suffix that triggers resyllabification in the classic
+    ##  system: so return True
+    ##* Return False
+
+    # check lexical exceptions
+    if trans in UNCLASSIFIABLE:
+        pc = '39'
+    if trans in POSITIVE_EXCEPTIONS:
+	pc = '33'
+    if trans in NEGATIVE_EXCEPTIONS:
+	pc = '3'
+    # parse syllables
+    syls = syllabify(phones)
+    (onset, nucleus, coda) = syls[0]
+    # in my syllable-parsing scheme, 'r' is parsed into the nucleus in 
+    # certain contexts; in this case the vowel is lax regardless of the 
+    # coda's contents
+    if len(nucleus) > 1 and nucleus[1] == 'R':
+	pc = '3'
+    # check for tautosyllabic tensing segment at the start of the coda
+    if len(coda) > 0:
+        if coda[0] in TENSERS:
+	    pc = '33'
+    # check for the possibility of resyllabification opacifying tensing
+    if len(syls) == 2 and coda == []:
+        if is_penultimate_syllable_resyllabified(trans):
+            resyl_onset = syls[1][0]
+            if len(resyl_onset) == 1 and resyl_onset[0] in TENSERS:
+		    pc = '33'
+    else:
+	pc = '3'
 
 def process_measurement_line(line):
     """splits Plotnik measurement line into values for formants, vowel class, stress, token, glide, style, and comment"""

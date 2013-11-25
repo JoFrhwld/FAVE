@@ -1,18 +1,12 @@
 # Contents
 
-I. [Introduction](#i-introduction)
+I. [System Requirements](#i-system-requirements)
 
-II. [System Requirements](#ii-system-requirements)
+II. [Usage](#ii-usage)
 
-III. [Usage](#iii-usage)
+III. [Changing Configuration Parameters](#iii-changing-configuration-parameters)
 
-IV. [Changing Configuration Parameters](#iv-changing-configuration-parameters)
-
-V. Description of the Output File
-
-##I. Introduction##
-
-## II. System requirements ##
+## I. System requirements ##
 
 ### 1) Sound manipulation program
 In the course of formant extraction, extractFormants creates excerpts of the audio file corresponding to each vowel that is measured.  In order to do this, a supported sound manipulation program must be installed on the system.  Currently, the two supported programs are Praat and SoX.  One of these must be installed and in the user's search path for extractFormants to be run successfully.  For more information on downloading and installing either of these programs, see:
@@ -36,13 +30,13 @@ In Windows 7, this can be done through Control Panel -> System -> Advanced Syste
 Directories in the Windows PATH are separated by semi-colons.
 
 
-## III. Usage ##
+## II. Usage ##
 
 Currently, extractFormants is set up so that it must be run from the main directory of the extractFormants package.  To run extractFormants, three arguments are required:  the WAV file containing the speech data, the TextGrid file containing the alignments, and the name of an output file for the extracted formants.  So, in the directory extractFormants/, type:
 
 `$ python bin/extractFormants.py filename.wav filename.TextGrid outputFile`
 
-## IV Changing configuration parameters ##
+## III Changing configuration parameters ##
 
 There are many configuration parameters that can alter the behavior of extractFormants.  The user can modify their values by creating a config file; otherwise, default values will be set internally.  To use a config file, use the argument '--config=' followed by the name of the config file.  For example, to load a configuration file named 'config.txt' located in the current directory, type:
 

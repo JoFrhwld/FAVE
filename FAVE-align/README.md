@@ -1,148 +1,55 @@
 # FAVE-align
 
-* [Installation](#installation)
-  * [Dependencies](#dependencies)
-    * [HTK 3.4.1](#htk-341)
-      * [OS X](#os-x)
-        * [Command Line Tools](#command-line-tools)
-            * [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-            * [Mavericks (10.9)](#mavericks_109)
-        * [Intalling X11](#installing-x11)      
-        * [Download HTK](#download-htk)     
-        * [Fixing HTK Source](#fixing-htk-source)
-        * [Installing HTK](#installing-htk)
-    * [sox](#sox)
-* [Usage](#usage)
+For more information on the installation and use of FAVE-align, see the associated GitHub wiki pages: 
+https://github.com/JoFrhwld/FAVE/wiki/FAVE-align
 
 ## Installation
 
 ### Dependencies
 
-FAVE-align depends on **HTK** and **sox** to work. 
+FAVE-align depends on **[HTK](http://htk.eng.cam.ac.uk/)** and **[SoX](http://sox.sourceforge.net/)** to work. 
 As such, you'll need to have these installed.
 
-#### HTK 3.4.1
-* [OS X](#os-x)
-* Windows
-* Linux
+As HTK requires modification of its source code to work properly, it is *strongly encouraged* that you refer to the GitHub wiki page on the topic (https://github.com/JoFrhwld/FAVE/wiki/HTK-3.4.1) even if you feel confident in what you're doing.
 
-##### OS X
-From OS X 10.7 onwards (Lion, Mountain Lion and Mavericks), you'll need to install Command Line Tools and X11 before moving forward in the rest of the installation.
-Then you'll have to download the HTK code, and fix a bug in its source code. These steps are documented here.
-
-* [Command Line Tools](#command-line-tools)
-    * [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-    * [Mavericks (10.9)](#mavericks_109)
-* [Intalling X11](#installing-x11)           
-* [Fixing HTK Source](#fixing-htk-source)
-* [Installing HTK](#installing-htk)
-
-###### Command line tools
-* [Lion & Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108)
-* [Mavericks (10.9)](#mavericks_109)
-
-
-It is necessary to install a C compiler. 
-If you already know how to do this, skip down to [Fixing HTK Source][#fixing-htk-source]. 
-If you are not sure whether you have a C compiler installed, open the Terminal application and type
-
-    gcc -v
-
-If you see `-bash: gcc: command not found`, then you need to install the C compiler. 
-Directions for that follow, but depend on your version of OS X.
-
-* ([Directions for OS X Lion and Mountain Lion (10.7 & 10.8)](#lion--mountain-lion-107--108))
-* ([Directions for OS X Mavericks 10.9](#mavericks_109))
-
-###### *Lion & Mountain Lion (10.7 & 10.8)*
-
-You need to install command line tools and X11.
-The here are the steps involved:
-
-1. Go to the [Mac Dev Center](https://developer.apple.com/devcenter/mac/index.action), register (for free) and log in.
-2. Go to Downloads, and and then View All Downloads.
-3. Search for "command line tools."
-4. Download and install the version appropriate for your operating system.
-
-A graphical representation:
-
-*1. Register and login*
-
-![login](readme_img/developer_login.png)
-
-*2. Downloads*
-
-![download1](readme_img/developer_downloads1.png)
-
-
-*2. View All Downloads*
-
-![download2](readme_img/developer_downloads2.png)
-
-*3 & 4. Search for "command line tools" and download*
-
-![download3](readme_img/developer_downloads3.png)
-
-
-
-
-###### *Mavericks (10.9)*
-
-To install Command Line Tools in OS X Mavericks (10.9), just open the Terminal Application, and type
-
-`xcode-select --install`
-
-Just select "Install" in the window which pops open.
-
-###### Installing X11
-
-Go to http://xquartz.macosforge.org/, download XQuartz from there and install it using the installer.
-
-###### Download HTK
-
-You'll need to register (free) with HTK to download it.
-Visit http://htk.eng.cam.ac.uk/register.shtml to register, and they will e-mail you a password.
-
-After that, visit http://htk.eng.cam.ac.uk/download.shtml, and download the HTK source code under Linux/Unix downloads.
-
-![htk download](readme_img/htk_download.png)
-
-After downloading HTK, unpack the `.tar.gz` file, which will unpack into a directory called "htk".
-
-###### Fixing HTK Source
-
-In the htk directory, navigate to htk>HTKLib, and open the file HRec.c in a plain text editor.
-
-![hrec](readme_img/HTKLib-3.png)
-
-Find the line 1626 which reads
-
-    if (dur<=0 && labid != splabid) HError(8522,"LatFromPaths: Align  have dur<=0");
-
-![htk edit](readme_img/htk_edit.png)
-
-`labid` in this line should be changed to `labpr`.
-It should look like this:
-
-    if (dur<=0 && labpr != splabid) HError(8522,"LatFromPaths: Align  have dur<=0");
-
-###### Installing HTK
-
-Nearly there!
-Now, open the Terminal application, and navigate to the htk, folder, which is probably in your Downloads.
-
-    cd ~/Downloads/htk
-
-Now run the following lines of code
-
-    export CPPFLAGS=-I/opt/X11/include
-    ./configure
-    make all
-    sudo make install
-
-You'll be asked to enter your administrative password after that last line of code.
-
-
-#### sox
+Otherwise [the FAVE GitHub wiki](https://github.com/JoFrhwld/FAVE/wiki) contains the relevant documentation for the installation and configuration of HTK and SoX.
 
 ## Usage
+
+Usage:  
+
+    python FAAValign.py [options] soundfile.wav [transcription.txt] [output.TextGrid]
+
+Aligns a sound file with the corresponding transcription text. 
+The transcription text is split into annotation breath groups, which are fed individually as "chunks" to the forced aligner. 
+All output is concatenated into a single Praat TextGrid file.
+
+### INPUT:
+
+- sound file
+- tab-delimited text file with the following columns:
+    * first column:   speaker ID
+    * second column:  speaker name
+    * third column:   beginning of breath group (in seconds)
+    * fourth column:  end of breath group (in seconds)
+    * fifth column:   transcribed text
+
+(If no name is specified for the transcription file, it will be assumed to have the same name as the sound file, plus ".txt" extension.)
+
+### OUTPUT:
+- Praat TextGrid file with orthographic and phonemic transcription tiers for
+each speaker (If no name is specified, it will be given same name as the sound
+file, plus ".TextGrid" extension.)
+
+
+### Options:
+
+Short | Long | Description
+------ | -----| ------
+ | `--version`  | Prints the program's version string and exits.
+`-h` | `--help`  | Shows the help message and exits.
+`-c [filename]` | `--check=[filename]`  | Checks whether phonetic transcriptions for all words in the transcription file can be found in the CMU Pronouncing Dictionary (file `dict`).  Returns a list of unknown words.
+`-i [filename]` | `--import=[filename]`  | Adds a list of unknown words and their corresponding phonetic transcriptions to the CMU Pronouncing Dictionary prior to alignment.  User will be prompted interactively for the transcriptions of any remaining unknown words.  File must be tab-separated plain text file.
+`-v` | `--verbose` | Detailed output on status of dictionary check and alignment progress.
+`-d [filename]` | `--dict=[filename]` | Specifies the name of the file containing the pronunciation dictionary.  Default file is `/model/dict`.
+`-n` | `--noprompt` | User is not prompted for the transcription of words not in the dictionary, or truncated words.  Unknown words are ignored by the aligner.

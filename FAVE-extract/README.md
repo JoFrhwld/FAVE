@@ -1,50 +1,43 @@
+For more information on the installation and use of FAVE-extract, see the associated pages on the GitHub wiki:
+https://github.com/JoFrhwld/FAVE/wiki/FAVE-extract
+
 # Contents
 
-I. [Introduction](#i-introduction)
+I. [System Requirements](#i-system-requirements)
 
-II. [System Requirements](#ii-system-requirements)
+II. [Usage](#ii-usage)
 
-III. [Usage](#iii-usage)
+III. [Changing Configuration Parameters](#iii-changing-configuration-parameters)
 
-IV. [Changing Configuration Parameters](#iv-changing-configuration-parameters)
+## I. System requirements ##
 
-V. Description of the Output File
+FAVE-extract has a number of dependencies which must be installed before it will will be usable. These are
 
-##I. Introduction##
+* SoX http://sox.sourceforge.net/
+* Praat http://www.praat.org/
+* numpy http://www.scipy.org/install.html#individual-binary-and-source-packages
 
-## II. System requirements ##
-
-### 1) Sound manipulation program
-In the course of formant extraction, extractFormants creates excerpts of the audio file corresponding to each vowel that is measured.  In order to do this, a supported sound manipulation program must be installed on the system.  Currently, the two supported programs are Praat and SoX.  One of these must be installed and in the user's search path for extractFormants to be run successfully.  For more information on downloading and installing either of these programs, see:
-
-Praat:  http://www.praat.org/
-SoX:  http://sox.sourceforge.net/
-
-### 2) Speech analysis program
-extractFormants relies on an external speech analysis program for the LPC analysis that it uses in formant extraction.  Currently, the two supported programs are Praat and ESPS.  One of these must be installed and in the user's search path for extractFormants to be run successfully.  For more information on downloading and installing either of these programs, see:
-
-Praat:  http://www.praat.org/
-ESPS:  
-
-### 3) Python libraries (scipy and numpy)
-This version of FAVE-extract requires the python libraries `numpy` and `scipy` to be installed.
-They should be available through your favorite python package manager, or you can [download installers for your system here](http://www.scipy.org/install.html#individual-binary-and-source-packages).
-
-### 4) Using FAVE-extract on Windows
-On Windows, you need to edit your PATH variable to include a directory with sox.exe (for example: C:\Program Files (x86)\sox-14-4-1 ) and a directory with praatcon.exe. 
-In Windows 7, this can be done through Control Panel -> System -> Advanced System Settings, then select the Advanced tab, then click on Environment Variables in the bottom right. 
-Directories in the Windows PATH are separated by semi-colons.
+See the GitHub wikipage on installing FAVE-extract for more information on installing these dependencies. 
+https://github.com/JoFrhwld/FAVE/wiki/Installing-FAVE-extract
 
 
-## III. Usage ##
+## II. Usage ##
 
-Currently, extractFormants is set up so that it must be run from the main directory of the extractFormants package.  To run extractFormants, three arguments are required:  the WAV file containing the speech data, the TextGrid file containing the alignments, and the name of an output file for the extracted formants.  So, in the directory extractFormants/, type:
+Currently, FAVE-extract is set up so that it must be run from the main directory of the FAVE-extract package.  
+To run FAVE-extract, three arguments are required:  
+* the WAV file containing the speech data, 
+* the TextGrid file containing the alignments, 
+* and the name of an output file for the extracted formants.  
 
-`$ python bin/extractFormants.py filename.wav filename.TextGrid outputFile`
+So, in the directory `FAVE-extract`, type:
 
-## IV Changing configuration parameters ##
+    python bin/extractFormants.py filename.wav filename.TextGrid outputFile
 
-There are many configuration parameters that can alter the behavior of extractFormants.  The user can modify their values by creating a config file; otherwise, default values will be set internally.  To use a config file, use the argument '--config=' followed by the name of the config file.  For example, to load a configuration file named 'config.txt' located in the current directory, type:
+## III Changing configuration parameters ##
+
+There are many configuration parameters that can alter the behavior of extractFormants.  
+The user can modify their values by creating a config file; otherwise, default values will be set internally.  
+To use a config file, use the argument `--config=` followed by the name of the config file.  For example, to load a configuration file named 'config.txt' located in the current directory, type:
 
 `$ python bin/extractFormants.py --config=config.txt filename.wav filename.TextGrid outputFile`
 

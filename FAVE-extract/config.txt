@@ -1,4 +1,4 @@
-outputFormat=both
+outputFormat=text
 speechSoftware=Praat
 formantPredictionMethod=mahalanobis
 measurementPointMethod=faav

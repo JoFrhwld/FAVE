@@ -118,6 +118,9 @@ class Phone:
         self.arpa = ''  # Arpabet coding WITHOUT stress digit
         self.stress = None  # stress digit
 
+    def __repr__(self):
+        return '{}({})'.format(self.__class__.__name__, self.label)
+
 
 class Speaker:
 

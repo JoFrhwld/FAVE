@@ -28,6 +28,12 @@ import os
 import string
 import re
 
+from syllabify import syllabify
+from decorators import Memoize
+
+from nltk.stem.snowball import EnglishStemmer
+STEM = Memoize(EnglishStemmer().stem)
+
 glide_regex = re.compile('{[a-z0-9]*}')
                          # Plotnik glide coding: '{[f|b|i|m|s|d|br2|g}'
 style_regex = re.compile('-[0-9]-')  # Plotnik stylistic levels:  '-[1-7]-'
@@ -555,15 +561,101 @@ def outputPlotnikFile(Plt, f):
     print "Normalized vowel measurements output in .pll format to the file %s" % (os.path.splitext(f)[0] + ".pll")
 
 
+def is_penultimate_syllable_resyllabified(trans):
+    """
+    Use a Porter stemmer to decompose words into "stem" and "suffix", and 
+    return True iff last syllable is a candidate for resyllabification
+    opacifying tensing
+    """
+
+    stem = STEM(trans)
+    # find the rightmost point where wordform and its stem don't match
+    sp = len(stem) - 1
+    while sp >= 0 and trans[sp] != stem[sp]:
+        sp -= 1
+    # define the suffix to be the residue
+    suffix = trans[sp + 1:].upper()
+    # check for /-z/, /-ing/, or /-ing-z/ therein
+    if suffix != '' and suffix.endswith(('S', 'ING', 'INGS')):
+        return True
+    return False
+
+
+def is_tense(trans, phones):
+
+    TENSERS = {'M', 'N', 'S', 'TH', 'F'}
+    NEGATIVE_EXCEPTIONS = {'AM', 'RAN', 'BEGAN', 'SWAM', 'MATH'}
+    POSITIVE_EXCEPTIONS = {'BAD', 'BADLY', 'BADDER', 'BADDEST', 'BADNESS', 'BADMINTON', 'BADMINTONS', 'MAD', 'MADLY', 'MADDEN', 'MADDENING', 'MADDENINGLY', 'MADDER', 'MADNESS', 'GLAD', 'GLADLY', 'GLADDER', 'GLADDEST', 'GLADDEN', 'GLADDENING', 'GLADNESS'}
+    UNCLASSIFIABLE = {'CAN'}
+
+    ##True iff word `word` with pronuciation `pron` (represented as a list of
+    ##ARPABET characters) has a tense short-a in the first syllable in the 
+    ##"classic" Philadelphia pattern. The algorithm (for lack of a better
+    ##term) is as follows:
+		        
+    ##* Check whether the word is a positive exception to tensing: if so
+    ##  return True
+    ##* Check whether the word is a negative exception to tensing: if so
+    ##  return False
+    ##* Check whether the word is an indeterminate word (at the moment, just
+    ##  "CAN"): if so return None
+    ##* Syllabify and extract the onset, nucleus, and coda of the first 
+    ##  syllable
+    ##* Check whether the first-syllable nucleus is r-colored: if so return 
+    ##  False
+    ##* Check whether the first coda consonant of the first syllable is 
+    ##  a tensing segment: if so return True
+    ##* Check whether the word is two syllables, has an empty penultimate
+    ##  coda, but has an ultimate onset consisting of a tensing segment
+    ##  and ends in a suffix that triggers resyllabification in the classic
+    ##  system: so return True
+    ##* Return False
+
+    # check lexical exceptions
+    if trans in UNCLASSIFIABLE:
+        return None
+    if trans in POSITIVE_EXCEPTIONS:
+        return True
+    if trans in NEGATIVE_EXCEPTIONS:
+        return False
+    # parse syllables
+    syls = syllabify(phones)
+    (onset, nucleus, coda) = syls[0]
+    # in my syllable-parsing scheme, 'r' is parsed into the nucleus in 
+    # certain contexts; in this case the vowel is lax regardless of the 
+    # coda's contents
+    if len(nucleus) > 1 and nucleus[1] == 'R':
+        return False
+    # check for tautosyllabic tensing segment at the start of the coda
+    if len(coda) > 0:
+        if coda[0] in TENSERS:
+            return True
+    # check for the possibility of resyllabification opacifying tensing
+    if len(syls) == 2 and coda == []:
+        if is_penultimate_syllable_resyllabified(trans):
+            resyl_onset = syls[1][0]
+            if len(resyl_onset) == 1 and resyl_onset[0] in TENSERS:
+        	    return True
+    return False
+
 def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
     """redefines vowel classes for Philadelphia"""
 
     orig_pc = pc  # Plotnik code returned by arpabet2plotnik
-    phones = split_stress_digit(
-        phones)  # separate Arpabet coding from stress digit for vowels
+    phones = split_stress_digit(phones)  # separate Arpabet coding from stress digit for vowels
 
-    # 1. /aeh/ and /aey/:  tense and variable short-a
-   # if pc == '3' and phones[i].label == "AE1" and trans.upper() not in ['AND', "AN'", 'AM', 'AN', 'THAN'] and fm != '0':
+    # 1. New short-a coding using Kyle Gorman's syllabification & classification functions above 
+    if pc == '3' and phones[i].label == "AE1" and trans.upper() not in ['AND', "AN'", 'AM', 'AN', 'THAN'] and fm != '0':
+	tenseness = is_tense(trans, [ph.label for ph in phones[i:]])
+    # the second argument is a list of ARPABET phones for the word starting with the target vowel; this will not affect 
+    # correctness of syllabification. is_tense returns True if tense, False if lax, and None if variable/"unclassifiable"
+	if tenseness == True:
+		pc = '33'
+	elif tenseness == False:
+		pc = '3'
+	else:
+		pc = '39'	
+
         ## /aeh/:  tense short-a
         ## following front nasals, voiceless fricatives
         #if phones[i + 1].arpa in ['M', 'N', 'S', 'TH', 'F']:
@@ -697,94 +789,6 @@ def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
 
     return pc
 
-def is_penultimate_syllable_resyllabified(trans):
-    """
-    Use a Porter stemmer to decompose words into "stem" and "suffix", and 
-    return True iff last syllable is a candidate for resyllabification
-    opacifying tensing
-    """
-    # initialize stemmer
-    from decorators import Memoize
-    from nltk.stem.snowball import EnglishStemmer
-    STEM = Memoize(EnglishStemmer().stem)
-
-    stem = STEM(trans)
-    # find the rightmost point where wordform and its stem don't match
-    sp = len(stem) - 1
-    while sp >= 0 and trans[sp] != stem[sp]:
-        sp -= 1
-    # define the suffix to be the residue
-    suffix = trans[sp + 1:].upper()
-    # check for /-z/, /-iŋ/, or /-iŋ-z/ therein
-    if suffix != '' and suffix.endswith(('S', 'ING', 'INGS')):
-        return True
-    return False
-
-
-def shorta_recoding(pc, phones, trans):
-    from syllabify import syllabify
-
-    orig_pc = pc  # Plotnik code returned by arpabet2plotnik
-    phones = split_stress_digit(
-        phones)  # separate Arpabet coding from stress digit for vowels
-
-    TENSERS = {'M', 'N', 'S', 'TH', 'F'}
-    NEGATIVE_EXCEPTIONS = {'AM', 'RAN', 'BEGAN', 'SWAM', 'MATH'}
-    POSITIVE_EXCEPTIONS = {'BAD', 'BADLY', 'BADDER', 'BADDEST', 'BADNESS', 'BADMINTON', 'BADMINTONS', 'MAD', 'MADLY', 'MADDEN', 'MADDENING', 'MADDENINGLY', 'MADDER', 'MADNESS' 'GLAD', 'GLADLY', 'GLADDER', 'GLADDEST', 'GLADDEN', 'GLADDENING', 'GLADNESS'}
-    UNCLASSIFIABLE = {'CAN'}
-
-    if pc == '3' and phones[i].label == "AE1" and trans.upper() not in ['AND', "AN'", 'AM', 'AN', 'THAN'] and fm != '0': 
-    
-    ##True iff word `word` with pronuciation `pron` (represented as a list of
-    ##ARPABET characters) has a tense short-a in the first syllable in the 
-    ##"classic" Philadelphia pattern. The algorithm (for lack of a better
-    ##term) is as follows:
-		        
-    ##* Check whether the word is a positive exception to tensing: if so
-    ##  return True
-    ##* Check whether the word is a negative exception to tensing: if so
-    ##  return False
-    ##* Check whether the word is an indeterminate word (at the moment, just
-    ##  "CAN"): if so return None
-    ##* Syllabify and extract the onset, nucleus, and coda of the first 
-    ##  syllable
-    ##* Check whether the first-syllable nucleus is r-colored: if so return 
-    ##  False
-    ##* Check whether the first coda consonant of the first syllable is 
-    ##  a tensing segment: if so return True
-    ##* Check whether the word is two syllables, has an empty penultimate
-    ##  coda, but has an ultimate onset consisting of a tensing segment
-    ##  and ends in a suffix that triggers resyllabification in the classic
-    ##  system: so return True
-    ##* Return False
-
-    # check lexical exceptions
-    if trans in UNCLASSIFIABLE:
-        pc = '39'
-    if trans in POSITIVE_EXCEPTIONS:
-	pc = '33'
-    if trans in NEGATIVE_EXCEPTIONS:
-	pc = '3'
-    # parse syllables
-    syls = syllabify(phones)
-    (onset, nucleus, coda) = syls[0]
-    # in my syllable-parsing scheme, 'r' is parsed into the nucleus in 
-    # certain contexts; in this case the vowel is lax regardless of the 
-    # coda's contents
-    if len(nucleus) > 1 and nucleus[1] == 'R':
-	pc = '3'
-    # check for tautosyllabic tensing segment at the start of the coda
-    if len(coda) > 0:
-        if coda[0] in TENSERS:
-	    pc = '33'
-    # check for the possibility of resyllabification opacifying tensing
-    if len(syls) == 2 and coda == []:
-        if is_penultimate_syllable_resyllabified(trans):
-            resyl_onset = syls[1][0]
-            if len(resyl_onset) == 1 and resyl_onset[0] in TENSERS:
-		    pc = '33'
-    else:
-	pc = '3'
 
 def process_measurement_line(line):
     """splits Plotnik measurement line into values for formants, vowel class, stress, token, glide, style, and comment"""

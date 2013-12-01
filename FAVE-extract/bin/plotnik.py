@@ -165,7 +165,7 @@ def arpabet2plotnik(ac, trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs):
 
 
 def cmu2plotnik_code(i, phones, trans, phoneset, speaker, vowelSystem):
-    """converts Arpabet to Plotnik coding (for vowels) and adds Plotnik environmental codes (.xxxxx)"""
+    """uses `arpabet2plotnik` to convert Arpabet vowel transcription to Plotnik code; appends Plotnik environmental codes (.xxxxx)"""
     # i = index of vowel in token
     # phones = list of phones in whole token
     # trans = transcription (label) of token
@@ -254,16 +254,9 @@ def cmu2plotnik_code(i, phones, trans, phoneset, speaker, vowelSystem):
                            0], trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs)
 
     # adjust vowel class assignment for Philadelphia system
-#  try:
-# if (os.path.basename(filename)[:2].upper() == 'PH') or
-# (os.path.basename(filename).split('_')[2][:2].upper() == 'PH') or
-# (speaker.city in ['Philadelphia', 'Phila', 'PHILADELPHIA', 'Philly'] and
-# speaker.state in ['PA', 'pa']):
     if vowelSystem.upper() == 'PHILA':
         code = phila_system(
             i, phones, trans, fm, fp, fv, ps, fs, code, phoneset)
-# except IndexError:  ## if file is not uploaded via the web site and has identifier at beginning, the filename split will cause an error
-#    pass
 
     # add Plotnik environmental coding
     code += '.'
@@ -431,17 +424,6 @@ def get_ts(line):
         ts = ''
     return ts
 
-
-# this is a hack based on the fact that we know that the CMU transcriptions for vowels
-# all indicate the level of stress in their final character (0, 1, or 2);
-# will rewrite them later to be more portable...
-# this function sometimes causes index errors!
-# def is_v(p):
-##  """checks whether a given phone is a vowel (based on final code for stress from CMU dictionary)"""
-# if p[-1] in ['0', '1', '2']:
-# return True
-# else:
-# return False
 
 def is_v(label):
     """checks whether a phone is a vowel"""
@@ -638,6 +620,7 @@ def is_tense(trans, phones):
         	    return True
     return False
 
+
 def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
     """redefines vowel classes for Philadelphia"""
 
@@ -655,64 +638,6 @@ def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
 		pc = '3'
 	else:
 		pc = '39'	
-
-        ## /aeh/:  tense short-a
-        ## following front nasals, voiceless fricatives
-        #if phones[i + 1].arpa in ['M', 'N', 'S', 'TH', 'F']:
-            ## tensing consonants word-finally
-            #if len(phones) == i + 2:
-                #if trans.upper() in ['MATH']:
-                #    pc = '39'
-                #else:
-                #    pc = '33'  # e.g. "man", "ham"
-            ## tensing consonants NOT word-finally
-            #elif len(phones) > i + 2:
-                ## AE1 ['M', 'N', 'S', 'TH', 'F'] followed by another consonant
-                ## (e.g. "hand", "classroom")
-                #if (phoneset[phones[i + 2].arpa].cvox != '0') and trans.upper() not in ['CATHOLIC', 'CATHOLICS', 'CAMERA']:
-                #    pc = '33'
-                # AE1 ['M', 'N', 'S', 'TH', 'F'] followed by a vowel
-                #else:
-            ## following suffix -er
-            ## if phones[i+2] == 'ER0':
-            ##            pc = '33'
-                    ## following suffixes -ing, -in', -es ("manning")
-                    #if len(phones) > i + 3:
-                    #    a = phones[i + 2].label
-                    #    b = phones[i + 3].label
-                    #    ab = [a, b]
-                        ## print "Suffix for word %s is %s." % (trans, ab)
-                        #if len(phones) == i + 4 and ab in [['IH0', 'NG'], ['AH0', 'NG'], ['AH0', 'N'], ['AH0', 'Z']]:
-                        #    pc = '33'
-                        ## all other vowels
-                        #else:
-                        #    pc = '39'
-
-        # mad, bad, glad and derived forms
-        #if trans.upper(
-        #) in ['MAD', 'BAD', 'GLAD', 'MADLY', 'BADLY', 'GLADLY', 'MADDER', 'BADDER', 'GLADDER',
-        #      'MADDEST', 'BADDEST', 'GLADDEST', 'MADNESS', 'GLADNESS', 'BADNESS', 'MADHOUSE']:
-        #    pc = '33'
-
-        ## /aey/:  variable short-a
-        #if trans.upper(
-        #) in ['RAN', 'SWAM', 'BEGAN', 'CAN', 'FAMILY', 'FAMILIES', "FAMILY'S", 'JANUARY', 'ANNUAL',
-        #      'ANNE', "ANNE'S", 'ANNIE', "ANNIE'S", 'JOANNE', 'GAS', 'GASES', 'EXAM', 'EXAMS', "EXAM'S", 'ALAS', 'ASPIRIN']:
-        #    pc = '39'
-
-        ## following /l/
-        #if phones[i + 1].arpa == 'L':
-        #    pc = '39'
-
-        ## -SKV- words, e.g. "master", "rascal", "asterisk"
-        #if len(phones) > i + 3 and phones[i + 1].arpa == 'S' and phones[i + 2].arpa in ['P', 'T', 'K'] and phoneset[phones[i + 3].arpa].cvox == '0':
-        #    if trans[-3:] not in ["ING", "IN'"]:  # exclude final "-ing"/"-in'" words, e.g. "asking"
-        #        pc = '39'
-        
-	## -NV- words, e.g. "planet", "Janet", "hammer", and "-arry" words, e.g. "marry", "carry", "Harold"
-        ## if len(phones) > i + 2 and phones[i+1].arpa in ['N' 'M', 'R'] and phoneset[phones[i+2].arpa].cvox == '0':
-        ## if trans[-3:] not in ["ING", "IN'"]:  ## exclude final "-ing"/"-in'" words, e.g. "planning"
-        ##        pc = '39'
 
     # convert dictionary entries to short-a for "-arry" words
     if pc == '2' and 'ARRY' in trans.upper():

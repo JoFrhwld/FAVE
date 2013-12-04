@@ -2118,7 +2118,7 @@ if __name__ == '__main__':
                         help="Interpret positional arguments as files of listed .wav, .txt and output files.")        
     parser.add_argument("--nFormants", type=int, default=5,
                         help="Specify the order of the LPC analysis to be conducted")
-    parser.add_argument("--noOutputHeader", action="store_false",
+    parser.add_argument("--noOutputHeader", action="store_true",
                         help="Don't include output header in text output.")
     parser.add_argument("--nSmoothing", type=int, default=12,
                         help="Specifies the number of samples to be used for the smoothing of the formant tracks.")

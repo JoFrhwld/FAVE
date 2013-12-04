@@ -57,9 +57,6 @@
 
 
 """
-Usage:
-python extractFormants.py [options] filename.wav filename.TextGrid outputFile
-
 Takes as input a sound file and a Praat .TextGrid file (with word and phone tiers)
 and outputs automatically extracted F1 and F2 measurements for each vowel
 (either as a tab-delimited text file or as a Plotnik file).
@@ -69,7 +66,7 @@ SCRIPTS_HOME = 'bin'
 
 import sys
 import os
-import getopt
+import argparse
 import math
 import re
 import time
@@ -2059,12 +2056,13 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         PRAATNAME = 'Praat'
 
     # by default, assume that these files are located in the current directory
-    meansFile = 'means.txt'
-    covsFile = 'covs.txt'
-    phonesetFile = 'cmu_phoneset.txt'
+    meansFile = opts.means
+    covsFile = opts.covariances
+    phonesetFile = opts.phoneset
     configFile = ''
     stopWordsFile = ''
     speakerFile = ''
+
 
     # process program options
     for o, a in opts:
@@ -2316,15 +2314,37 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 # MAIN PROGRAM STARTS HERE                         ##
 #
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="Takes as input a sound file and a Praat .TextGrid file (with word and phone tiers) and outputs automatically extracted F1 and F2 measurements for each vowel (either as a tab-delimited text file or as a Plotnik file).",
+                                     usage='python %(prog)s [options] filename.wav filename.TextGrid outputFile',
+                                     fromfile_prefix_chars="+")
+    parser.add_argument("--means",          "-m", nargs=1, default="means.txt",
+                        help="mean values, required for mahalanobis method")
+    parser.add_argument("--covariances",    "-r", nargs=1, default="covs.txt",
+                        help="covariances, required for mahalanobis method")
+    parser.add_argument("--phoneset",       "-p", nargs=1, default = "cmu_phoneset.txt")
+    parser.add_argument("--outputFormat",   "-o", nargs=1, choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
+                        help = "Output format. Tab delimited file, plotnik file, or both.")
+    parser.add_argument("--config",         "-c", nargs=1, help="config file")
+    parser.add_argument("--stopWords",      "-t", nargs=1,
+                        help = "file containing words to exclude from analysis")
+    parser.add_argument("--speaker",        "-s", nargs=1,
+                        help = "*.speaker file, if used")
+    parser.add_argument("--verbose",        "-v", action="store_true",
+                        help = "verbose output. useful for debugging")
+    parser.add_argument("wavInput",
+                        help = "*.wav audio file")
+    parser.add_argument("tgInput",
+                        help = "*.TextGrid alignment")
+    parser.add_argument("output")
+
     try:
         # parse program arguments and options
-        opts, args = getopt.getopt(
-            sys.argv[1:], '', ["means=", "covariances=", "phoneset=", "outputFormat=", "config=", "stopWords=", "speaker="])
-        wavInput, tgInput, output = args
+        opts = parser.parse_args()        
+        wavInput = args.wavInput
+        tgInput = args.tgInput
+        output = args.output
     except:
         (type, value, traceback) = sys.exc_info()
-        print value
-        print __doc__
         sys.exit(0)
 
     extractFormants(wavInput, tgInput, output, opts)

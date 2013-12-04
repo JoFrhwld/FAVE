@@ -1535,35 +1535,43 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write(
                 '\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.f1)]))
                      # vowel (ARPABET coding), stress, word, F1
+
             fw.write('\t')
             if vm.f2:
                 fw.write(str(vm.f2))  # F2 (if present)
+
             fw.write('\t')
             if vm.f3:
                 fw.write(str(vm.f3))  # F3 (if present)
+
             fw.write('\t')
             fw.write(str(vm.b1))  # B1
+
             fw.write('\t')
             if vm.b2:
                 fw.write(str(vm.b2))  # B2
+
             fw.write('\t')
             if vm.b3:
                 fw.write(str(vm.b3))  # B3 (if present)
+
             fw.write('\t')
             fw.write(
                 '\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
+
             fw.write('\t')
                      # time of measurement, beginning and end of phone,
                      # duration, Plotnik environment codes, style coding, glide
                      # coding
             fw.write(
                 '\t'.join([str(round(t, 1)) if t else '' for t in vm.tracks]))  # formant tracks
-            fw.write('\t')
+
             if vm.nFormants:
+                fw.write('\t')
                 fw.write(str(vm.nFormants))
                          # nFormants selected (if Mahalanobis method)
-                fw.write('\t')
             if candidates:
+                fw.write('\t')
                 fw.write(
                     '\t'.join([','.join([str(p) for p in vm.poles]), ','.join([str(b) for b in vm.bandwidths])]))
                          # candidate poles and bandwidths (at point of

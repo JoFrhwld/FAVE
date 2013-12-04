@@ -258,7 +258,7 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
 
     for w in words:
         n = getNumVowels(w)
-        if n == 0:z
+        if n == 0:
             continue
         for i in range(len(w.phones)):
             if isVowel(w.phones[i].label):

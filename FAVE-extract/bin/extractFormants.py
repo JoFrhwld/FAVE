@@ -2324,13 +2324,34 @@ if __name__ == '__main__':
     parser.add_argument("--phoneset",       "-p", nargs=1, default = "cmu_phoneset.txt")
     parser.add_argument("--outputFormat",   "-o", nargs=1, choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
                         help = "Output format. Tab delimited file, plotnik file, or both.")
-    parser.add_argument("--config",         "-c", nargs=1, help="config file")
-    parser.add_argument("--stopWords",      "-t", nargs=1,
+    parser.add_argument("--stopWordsFile",      "-t", nargs=1,
                         help = "file containing words to exclude from analysis")
     parser.add_argument("--speaker",        "-s", nargs=1,
                         help = "*.speaker file, if used")
     parser.add_argument("--verbose",        "-v", action="store_true",
                         help = "verbose output. useful for debugging")
+    parser.add_argument("--case", choices=["lower","upper"], default="upper")
+    parser.add_argument("--formantPredictionMethod", choices = ["default","mahalanobis"], default = "mahalanobis")
+    parser.add_argument("--measurementPointMethod", choices = ['fourth', 'third', 'mid', 'lennig', 'anae', 'faav', 'maxint'],
+                        default="faav")
+    parser.add_argument("--speechSoftware", choices = ['praat', 'Praat', 'esps', 'ESPS'], default = "Praat")
+    parser.add_argument("--vowelSystem", choices = ['phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET'],
+                        default="NorthAmerican")
+    parser.add_argument("--removeStopWords", action="store_true")
+    parser.add_argument("--nFormants", type=int, default=5)
+    parser.add_argument("--maxFormant", type=int, default=5000)
+    parser.add_argument("--nSmothing", type=int, default=12)
+    parser.add_argument("--minVowelDuration", type=float, default=0.025)
+    parser.add_argument("--windowSize", type=float, default=0.025)
+    parser.add_argument("--preEmphasis", type=float, default=50)
+    parser.add_argument("--stopWords", nargs="+", default=["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
+                        "SHE", "SHE'S", "THAT", "THE", "THEM", "THEN", "THERE", "THEY", "THIS", "UH", "UM", "UP", "WAS", "WE", "WERE", "WHAT", "YOU"])
+    parser.add_argument()
+    parser.add_argument("--remeasurement", action="store_true")
+    parser.add_argument("--candidates", action="store_true")
+    parser.add_argument("--removeStopWords", action="store_true")
+    parser.add_argument("--onlyMeasureStressed", action="store_false")
+    parser.add_argument("--noOutputHeader", action="store_false")    
     parser.add_argument("wavInput",
                         help = "*.wav audio file")
     parser.add_argument("tgInput",

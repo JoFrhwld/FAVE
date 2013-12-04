@@ -2336,7 +2336,6 @@ if __name__ == '__main__':
     parser.add_argument("--speechSoftware", choices = ['praat', 'Praat', 'esps', 'ESPS'], default = "Praat")
     parser.add_argument("--vowelSystem", choices = ['phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET'],
                         default="NorthAmerican")
-    parser.add_argument("--removeStopWords", action="store_true")
     parser.add_argument("--nFormants", type=int, default=5)
     parser.add_argument("--maxFormant", type=int, default=5000)
     parser.add_argument("--nSmothing", type=int, default=12)
@@ -2345,7 +2344,6 @@ if __name__ == '__main__':
     parser.add_argument("--preEmphasis", type=float, default=50)
     parser.add_argument("--stopWords", nargs="+", default=["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
                         "SHE", "SHE'S", "THAT", "THE", "THEM", "THEN", "THERE", "THEY", "THIS", "UH", "UM", "UP", "WAS", "WE", "WERE", "WHAT", "YOU"])
-    parser.add_argument()
     parser.add_argument("--remeasurement", action="store_true")
     parser.add_argument("--candidates", action="store_true")
     parser.add_argument("--removeStopWords", action="store_true")

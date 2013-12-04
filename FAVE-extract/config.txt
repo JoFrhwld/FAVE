@@ -1,7 +1,7 @@
-outputFormat=text
-speechSoftware=Praat
-formantPredictionMethod=mahalanobis
-measurementPointMethod=faav
-nSmoothing=12
-remeasurement=T
-vowelSystem=phila
+--outputFormat text
+--speechSoftware Praat
+--formantPredictionMethod mahalanobis
+--measurementPointMethod faav
+--nSmoothing 12
+--remeasurement
+--vowelSystem phila

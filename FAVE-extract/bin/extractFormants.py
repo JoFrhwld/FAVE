@@ -2158,7 +2158,7 @@ if __name__ == '__main__':
                                      fromfile_prefix_chars="+")
     parser.add_argument("--candidates", action="store_true", 
                         help="Return all candidate measurements in output")
-    parser.add_argument("--case", choices=["lower","upper"], default="upper"
+    parser.add_argument("--case", choices=["lower","upper"], default="upper",
                         help="Return word transcriptions in specified case.")
     parser.add_argument("--covariances", "-r",  default="covs.txt",
                         help="covariances, required for mahalanobis method")
@@ -2172,13 +2172,13 @@ if __name__ == '__main__':
     parser.add_argument("--minVowelDuration", type=float, default=0.05,
                         help = "Minimum duration in seconds, below which vowels won't be analyzed.")
     parser.add_argument("--multipleFiles", action="store_true",
-                        "Interpret positional arguments as files of listed .wav, .txt and output files.")        
+                        help="Interpret positional arguments as files of listed .wav, .txt and output files.")        
     parser.add_argument("--nFormants", type=int, default=5,
-                        "Specify the order of the LPC analysis to be conducted")
-    parser.add_argument("--noOutputHeader", action="store_false"
-                        "Don't include output header in text output.")
+                        help="Specify the order of the LPC analysis to be conducted")
+    parser.add_argument("--noOutputHeader", action="store_false",
+                        help="Don't include output header in text output.")
     parser.add_argument("--nSmoothing", type=int, default=12,
-                        "Specifies the number of samples to be used for the smoothing of the formant tracks.")
+                        help="Specifies the number of samples to be used for the smoothing of the formant tracks.")
     parser.add_argument("--onlyMeasureStressed", action="store_false")
     parser.add_argument("--outputFormat",   "-o",  choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
                         help = "Output format. Tab delimited file, plotnik file, or both.")    

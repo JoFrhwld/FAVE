@@ -1128,7 +1128,7 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
             measurementPoints.append((measurementPoint, i))
             selectedpoles.append(poles[j][i])
             selectedbandwidths.append(bandwidths[j][i])
-            all_tracks.append(getFormantTracks(poles[j], times[j], phone.xmin, phone.xmax))
+            all_tracks.append(getFormantTracks(poles[j], times[j], phone.xmin-padBeg, phone.xmax+padEnd))
 
         f1, f2, f3, b1, b2, b3, winnerIndex = predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs)
         # check that we actually do have a measurement (this may not be the

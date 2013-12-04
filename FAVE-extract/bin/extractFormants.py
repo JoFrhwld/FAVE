@@ -258,12 +258,11 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
 
     for w in words:
         n = getNumVowels(w)
-        if n == 0:
+        if n == 0:z
             continue
         for i in range(len(w.phones)):
             if isVowel(w.phones[i].label):
-                code, prec_p = plotnik.cmu2plotnik_code(
-                    i, w.phones, w.transcription, phoneset, speaker, vowelSystem)
+                code, prec_p = plotnik.cmu2plotnik_code(i, w.phones, w.transcription, phoneset, speaker, vowelSystem)
                 if code:  # no code returned if it's a consonant
                     w.phones[i].code = code  # whole code
                     w.phones[i].cd = code.split('.')[0]  # vowel class code
@@ -274,8 +273,7 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
                     w.phones[i].fv = code.split('.')[
                         1][2]  # following segment - voice
                     w.phones[i].ps = code.split('.')[1][3]  # preceding segment
-                    w.phones[i].fs = code.split(
-                        '.')[1][4]  # following sequences
+                    w.phones[i].fs = code.split('.')[1][4]  # following sequences
                 if (prec_p and prec_p != '') or prec_p == '':  # phone is a vowel and has or has not preceding segment
                     w.phones[i].pp = prec_p
 
@@ -356,8 +354,7 @@ def calculateMeans(measurements):
         if m.glide == 'g':
             continue
         # exclude function words
-        if m.word.upper(
-        ) in ['A', 'AH', 'AM', "AN'", 'AN', 'AND', 'ARE', "AREN'T", 'AS', 'AT', 'AW', 'BECAUSE', 'BUT', 'COULD',
+        if m.word.upper() in ['A', 'AH', 'AM', "AN'", 'AN', 'AND', 'ARE', "AREN'T", 'AS', 'AT', 'AW', 'BECAUSE', 'BUT', 'COULD',
               'EH', 'FOR', 'FROM', 'GET', 'GONNA', 'GOT', 'GOTTA', 'GOTTEN',
               'HAD', 'HAS', 'HAVE', 'HE', "HE'S", 'HIGH', 'HUH',
               'I', "I'LL", "I'M", "I'VE", "I'D", 'IN', 'IS', 'IT', "IT'S", 'ITS', 'JUST', 'MEAN', 'MY',
@@ -403,8 +400,7 @@ def calculateMeans(measurements):
 
         # formant tracks
         for j in range(10):
-            t_mean, t_stdv = mean_stdv(
-                [t[j] for t in means[p].trackvalues if t[j]])
+            t_mean, t_stdv = mean_stdv([t[j] for t in means[p].trackvalues if t[j]])
             if t_mean and t_stdv != None:
                 means[p].trackmeans.append((t_mean, t_stdv))
             else:  # can't leave empty values in the tracks
@@ -486,8 +482,7 @@ def checkTiers(tg):
                        # "ns":  number of speakers (well, "noise" is not a speaker...)
     # style tier
     if style and tg[-1].name().strip().upper() not in ["STYLE", "FOCUS"]:
-        sys.exit(
-            "ERROR!  Odd number of tiers in TextGrid, but last tier is not style tier.")
+        sys.exit("ERROR!  Odd number of tiers in TextGrid, but last tier is not style tier.")
     else:
         # to make this compatible with output from the FA online interface
         # (where there are just two tiers)
@@ -576,8 +571,7 @@ def faav(phone, formants, times, intensity):
     # vowel
     if (phone.label[:-1] in ["AY", "EY", "OW", "AW"]) or (phone.label[:-1] == "UW" and phone.cd == "73"):
         # get intensity cutoff at 10% below maximum intensity
-        beg_cutoff, end_cutoff = getIntensityCutoff(
-            intensity.intensities(), intensity.times())
+        beg_cutoff, end_cutoff = getIntensityCutoff(intensity.intensities(), intensity.times())
         # make sure we do have an intensity contour (i.e. several measurement point, and not just one)
         # if there is only one measurement point in the intensity object, the cutoffs will be identical
         # in that case, reset the cutoffs to include the whole vowel
@@ -586,25 +580,21 @@ def faav(phone, formants, times, intensity):
             end_cutoff = times[-1]
         # modify cutoffs to make sure we are measuring in the first half of the
         # vowel
-        beg_cutoff, end_cutoff = modifyIntensityCutoff(
-            beg_cutoff, end_cutoff, phone, intensity.intensities(), intensity.times())
+        beg_cutoff, end_cutoff = modifyIntensityCutoff(beg_cutoff, end_cutoff, phone, intensity.intensities(), intensity.times())
 
         # measure "AY" and "EY" at F1 maximum
         # (NOTE:  While "AY" receives extra padding at the beginning to possible go before the segment boundary in the search for an F1 maximum, "EY" does not)
         if phone.label[:-1] in ["AY", "EY"]:
-            measurementPoint = getTimeOfF1Maximum(
-                formants, times, beg_cutoff, end_cutoff)
+            measurementPoint = getTimeOfF1Maximum(formants, times, beg_cutoff, end_cutoff)
         # measure Tuw at the beginning of the segment
         elif phone.label[:-1] == "UW" and phone.cd == "73":
             measurementPoint = max([phone.xmin, beg_cutoff])
         # measure "OW" and "AW" halfway between beginning of segment and F1
         # maximum
         elif phone.label[:-1] in ["OW", "AW"]:
-            maxF1time = getTimeOfF1Maximum(
-                formants, times, beg_cutoff, end_cutoff)
+            maxF1time = getTimeOfF1Maximum(formants, times, beg_cutoff, end_cutoff)
             if maxF1time > phone.xmin:
-                measurementPoint = max(
-                    [beg_cutoff, phone.xmin + (maxF1time - phone.xmin) / 2])
+                measurementPoint = max([beg_cutoff, phone.xmin + (maxF1time - phone.xmin) / 2])
             else:
                 measurementPoint = max([beg_cutoff, phone.xmin])
     # measure all other vowels at 1/3 of the way into the vowel's duration
@@ -681,21 +671,18 @@ def getMeasurementPoint(phone, formants, times, intensity, measurementPointMetho
         # measure according to Lennig (1978)
         transition = getTransitionLength(phone.xmin, phone.xmax)
         # remove vowel transitions
-        trimmedFormants, trimmedTimes = trimFormants(
-            formants, times, phone.xmin + transition, phone.xmax - transition)
+        trimmedFormants, trimmedTimes = trimFormants(formants, times, phone.xmin + transition, phone.xmax - transition)
         measurementPoint = lennig(trimmedFormants, trimmedTimes)
     elif measurementPointMethod == 'anae':
         # measure according to the ANAE (2006) guidelines
         transition = getTransitionLength(phone.xmin, phone.xmax)
         # remove vowel transitions
-        trimmedFormants, trimmedTimes = trimFormants(
-            formants, times, phone.xmin + transition, phone.xmax - transition)
+        trimmedFormants, trimmedTimes = trimFormants(formants, times, phone.xmin + transition, phone.xmax - transition)
         measurementPoint = anae(phone.label, trimmedFormants, trimmedTimes)
     elif measurementPointMethod == 'faav':
         measurementPoint = faav(phone, formants, times, intensity)
     elif measurementPointMethod == 'maxint':
-        measurementPoint = maximumIntensity(
-            intensity.intensities(), intensity.times())
+        measurementPoint = maximumIntensity(intensity.intensities(), intensity.times())
     else:
         print "ERROR: Unsupported measurement point selection method %s" % measurementPointMethod
         print __doc__
@@ -767,16 +754,14 @@ def getSpeakerBackground(speakername, speakernum):
     if not speaker.name:
         speaker.name = speakername.strip()
     try:
-        speaker.first_name = raw_input(
-            "First name:\t\t%s\t" % speaker.name.strip().split()[0])
+        speaker.first_name = raw_input("First name:\t\t%s\t" % speaker.name.strip().split()[0])
         if not speaker.first_name:
             speaker.first_name = speaker.name.strip().split()[0]
         # some speakers' last names are not known!
         try:
             # NOTE:  only initial letter of speaker's last name is
             # automatically taken over from tier name
-            speaker.last_name = raw_input(
-                "Last name:\t\t%s\t" % speaker.name.strip().split()[1][0])
+            speaker.last_name = raw_input("Last name:\t\t%s\t" % speaker.name.strip().split()[1][0])
             if not speaker.last_name:
                 speaker.last_name = speaker.name.strip().split()[1][0]
         except IndexError:
@@ -840,8 +825,7 @@ def getTimeOfF1Maximum(formants, times, beg_cutoff, end_cutoff):
     """returns the time at which F1 reaches it maximum (within the cutoff limits)"""
 
     # get search interval for F1 maximum
-    trimmedFormants, trimmedTimes = trimFormants(
-        formants, times, beg_cutoff, end_cutoff)
+    trimmedFormants, trimmedTimes = trimFormants(formants, times, beg_cutoff, end_cutoff)
     # get F1 maximum
     F1 = [f[0] if f else 0 for f in trimmedFormants]
         # 'else' for those weird cases where there is a hole in the formant tracks...
@@ -891,8 +875,7 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
                 os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' +
                           vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
                 lpc = praat.Formant()
-                lpc.read(
-                    os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
+                lpc.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
                 LPCs.append(lpc)
                 nFormants += 1
         else:
@@ -904,11 +887,9 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
         # get Intensity object for intensity cutoff
         # (only for those vowels where we need it)
         if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
-            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(
-                SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
+            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
             intensity = praat.Intensity()
-            intensity.read(
-                os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
+            intensity.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
             os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
             intensity.change_offset(p.xmin - padBeg)
         else:
@@ -925,16 +906,14 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
                                   # file
             poles.append(lpc.formants())
             bandwidths.append(lpc.bandwidths())
-        vm = measureVowel(
-            p, w, poles, bandwidths, convertedTimes, intensity, measurementPointMethod,
+        vm = measureVowel(p, w, poles, bandwidths, convertedTimes, intensity, measurementPointMethod,
             formantPredictionMethod, padBeg, padEnd, means, covs)
     # default:
     else:   # assume 'default' here
         convertedTimes = [convertTimes(fmt.times(), p.xmin - padBeg)]
         formants = [fmt.formants()]
         bandwidths = [fmt.bandwidths()]
-        vm = measureVowel(
-            p, w, formants, bandwidths, convertedTimes, intensity, measurementPointMethod,
+        vm = measureVowel(p, w, formants, bandwidths, convertedTimes, intensity, measurementPointMethod,
             formantPredictionMethod, padBeg, padEnd, '', '')
 
     os.remove(os.path.join(SCRIPTS_HOME, vowelWavFile))
@@ -1042,8 +1021,7 @@ def lennig(formants, times):
     min_i = -1
     for i in range(1, len(formants) - 1):
         c = (abs(formants[i][0] - formants[i - 1][0]) + abs(formants[i][0] - formants[i + 1][0])) / \
-            formants[i][0] + (abs(formants[i][1] - formants[i - 1][1]) + abs(
-                formants[i][1] - formants[i + 1][1])) / formants[i][1]
+            formants[i][0] + (abs(formants[i][1] - formants[i - 1][1]) + abs(formants[i][1] - formants[i + 1][1])) / formants[i][1]
         if c < prev:
             min_i = i
             prev = c
@@ -1145,16 +1123,14 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
             # For "lennig", "anae" and "faav", which depend on the shape of the
             # formant tracks, different results will be obtained for different
             # nFormants settings.
-            measurementPoint = getMeasurementPoint(
-                phone, poles[j], times[j], intensity, measurementPointMethod)
+            measurementPoint = getMeasurementPoint(phone, poles[j], times[j], intensity, measurementPointMethod)
             i = getTimeIndex(measurementPoint, times[j])
             measurementPoints.append((measurementPoint, i))
             selectedpoles.append(poles[j][i])
             selectedbandwidths.append(bandwidths[j][i])
-            all_tracks.append(
-                getFormantTracks(poles[j], times[j], phone.xmin, phone.xmax))
-        f1, f2, f3, b1, b2, b3, winnerIndex = predictF1F2(
-            phone, selectedpoles, selectedbandwidths, means, covs)
+            all_tracks.append(getFormantTracks(poles[j], times[j], phone.xmin, phone.xmax))
+
+        f1, f2, f3, b1, b2, b3, winnerIndex = predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs)
         # check that we actually do have a measurement (this may not be the
         # case for gaps in the wave form)
         if not f1 and not f2 and not f3 and not b1 and not b2 and not b3:
@@ -1164,8 +1140,7 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
         tracks = all_tracks[winnerIndex]
 
     else:  # formantPredictionMethod == 'default'
-        measurementPoint = getMeasurementPoint(
-            phone, poles[0], times[0], intensity, measurementPointMethod)
+        measurementPoint = getMeasurementPoint(phone, poles[0], times[0], intensity, measurementPointMethod)
         i = getTimeIndex(measurementPoint, times[0])
         # (changed this so that "poles"/"bandwidths" only reflects measurements made at measurement point -
         # same as for Mahalanobis distance method)
@@ -1253,10 +1228,8 @@ def modifyIntensityCutoff(beg_cutoff, end_cutoff, phone, intensities, times):
     if beg_cutoff > midpoint:
         # in this case, look for new intensity maximum and cutoffs in the first
         # half of the vowel
-        trimmedIntensities, trimmedTimes = trimFormants(
-            intensities, times, phone.xmin, midpoint)
-        beg_cutoff, end_cutoff = getIntensityCutoff(
-            trimmedIntensities, trimmedTimes)
+        trimmedIntensities, trimmedTimes = trimFormants(intensities, times, phone.xmin, midpoint)
+        beg_cutoff, end_cutoff = getIntensityCutoff(trimmedIntensities, trimmedTimes)
 
     return beg_cutoff, end_cutoff
 
@@ -1282,13 +1255,11 @@ def normalize(measurements, m_means):
     # normalize individual measurements
     for m in measurements:
         try:
-            m.norm_f1 = round(
-                650 + 150 * (lobanov(m.f1, grand_means[0], grand_stdvs[0])), 0)
+            m.norm_f1 = round(650 + 150 * (lobanov(m.f1, grand_means[0], grand_stdvs[0])), 0)
         except TypeError:
             m.norm_f1 = ''
         try:
-            m.norm_f2 = round(
-                1700 + 420 * (lobanov(m.f2, grand_means[1], grand_stdvs[1])), 0)
+            m.norm_f2 = round(1700 + 420 * (lobanov(m.f2, grand_means[1], grand_stdvs[1])), 0)
         except TypeError:
             m.norm_f2 = ''
 # try:
@@ -1300,10 +1271,8 @@ def normalize(measurements, m_means):
         # normalize formant tracks for individual measurements
         for i in range(5):
             if m.tracks[2 * i] and m.tracks[2 * i + 1]:
-                m.norm_tracks.append(
-                    round(650 + 150 * (lobanov(m.tracks[2 * i], grand_means[0], grand_stdvs[0])), 0))  # F1
-                m.norm_tracks.append(
-                    round(1700 + 420 * (lobanov(m.tracks[2 * i + 1], grand_means[1], grand_stdvs[1])), 0))  # F2
+                m.norm_tracks.append(round(650 + 150 * (lobanov(m.tracks[2 * i], grand_means[0], grand_stdvs[0])), 0))  # F1
+                m.norm_tracks.append(round(1700 + 420 * (lobanov(m.tracks[2 * i + 1], grand_means[1], grand_stdvs[1])), 0))  # F2
             else:
                 m.norm_tracks.append('')  # F1
                 m.norm_tracks.append('')  # F2
@@ -1312,32 +1281,28 @@ def normalize(measurements, m_means):
     for p in plotnik.PLOTNIKCODES:
         # F1 mean
         try:
-            m_means[p].norm_means[0] = round(
-                650 + 150 * (lobanov(m_means[p].means[0], grand_means[0], grand_stdvs[0])), 0)
+            m_means[p].norm_means[0] = round(650 + 150 * (lobanov(m_means[p].means[0], grand_means[0], grand_stdvs[0])), 0)
         except TypeError:
 # print "No F1 normalized mean for vowel class %s:  value = %s, mean = %s,
 # stdv = %s." % (p, m_means[p].means[0], grand_means[0], grand_stdvs[0])
             m_means[p].norm_means[0] = ''
         # F1 standard deviation
         try:
-            m_means[p].norm_stdvs[0] = round(
-                150 * (m_means[p].stdvs[0] / grand_stdvs[0]), 0)
+            m_means[p].norm_stdvs[0] = round(150 * (m_means[p].stdvs[0] / grand_stdvs[0]), 0)
         except TypeError:
 # print "No F1 normalized standard deviation for vowel class %s:  value =
 # %s, stdv = %s." % (p, m_means[p].stdvs[0], grand_stdvs[0])
             m_means[p].norm_stdvs[0] = ''
         # F2 mean
         try:
-            m_means[p].norm_means[1] = round(
-                1700 + 420 * (lobanov(m_means[p].means[1], grand_means[1], grand_stdvs[1])), 0)
+            m_means[p].norm_means[1] = round(1700 + 420 * (lobanov(m_means[p].means[1], grand_means[1], grand_stdvs[1])), 0)
         except TypeError:
 # print "No F2 normalized mean for vowel class %s:  value = %s, mean = %s,
 # stdv = %s." % (p, m_means[p].means[1], grand_means[1], grand_stdvs[1])
             m_means[p].norm_means[1] = ''
         # F2 standard deviation
         try:
-            m_means[p].norm_stdvs[1] = round(
-                420 * (m_means[p].stdvs[1] / grand_stdvs[1]), 0)
+            m_means[p].norm_stdvs[1] = round(420 * (m_means[p].stdvs[1] / grand_stdvs[1]), 0)
         except TypeError:
 # print "No F2 normalized standard deviation for vowel class %s:  value =
 # %s, stdv = %s." % (p, m_means[p].stdvs[1], grand_stdvs[1])
@@ -1346,16 +1311,14 @@ def normalize(measurements, m_means):
         # normalize mean formant tracks
         for i in range(5):
             try:
-                m_means[p].trackmeans_norm.append(
-                    (round(650 + 150 * (lobanov(m_means[
+                m_means[p].trackmeans_norm.append((round(650 + 150 * (lobanov(m_means[
                         p].trackmeans[
                         2 * i][0], grand_means[0], grand_stdvs[0])), 0),
                      round(150 * (m_means[p].trackmeans[2 * i][1] / grand_stdvs[0]), 0)))  # mean and stdv for F1
             except TypeError:
                 m_means[p].trackmeans_norm.append(('', ''))
             try:
-                m_means[p].trackmeans_norm.append(
-                    (round(1700 + 420 * (lobanov(m_means[
+                m_means[p].trackmeans_norm.append((round(1700 + 420 * (lobanov(m_means[
                         p].trackmeans[
                         2 * i + 1][0], grand_means[1], grand_stdvs[1])), 0),
                      round(420 * (m_means[p].trackmeans[2 * i + 1][1] / grand_stdvs[1]), 0)))
@@ -1393,8 +1356,7 @@ def outputFormantSettings(measurements, speaker, outputFile):
     outfilename = os.path.splitext(outputFile)[0] + ".nFormants"
     f = open(outfilename, 'w')
     f.write("Formant settings for %s:\n\n" % outputFile)
-    f.write(
-        ', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
+    f.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
     f.write('\n\n')
     f.write('\t'.join(['vowel', '3', '4', '5', '6']))
     f.write('\n')
@@ -1418,12 +1380,10 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         if outputHeader:
             # speaker information
             #fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
-            fw.write(
-                ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
+            fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
             fw.write('\n\n')
             # header
-            fw.write(
-                '\t'.join(['vowel', 'stress', 'word', 'F1', 'F2', 'F3', 'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
+            fw.write('\t'.join(['vowel', 'stress', 'word', 'F1', 'F2', 'F3', 'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
                            'cd', 'fm', 'fp', 'fv', 'ps', 'fs', 'style', 'glide',
                            'F1@20%', 'F2@20%', 'F1@35%', 'F2@35%', 'F1@50%', 'F2@50%', 'F1@65%', 'F2@65%', 'F1@80%', 'F2@80%']))
             if formantPredictionMethod == 'mahalanobis':
@@ -1435,8 +1395,7 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         # individual measurements
         for vm in measurements:
-            fw.write(
-                '\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.f1)]))
+            fw.write('\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.f1)]))
                      # vowel (ARPABET coding), stress, word, F1
 
             fw.write('\t')
@@ -1459,15 +1418,13 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
                 fw.write(str(vm.b3))  # B3 (if present)
 
             fw.write('\t')
-            fw.write(
-                '\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
+            fw.write('\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
 
             fw.write('\t')
                      # time of measurement, beginning and end of phone,
                      # duration, Plotnik environment codes, style coding, glide
                      # coding
-            fw.write(
-                '\t'.join([str(round(t, 1)) if t else '' for t in vm.tracks]))  # formant tracks
+            fw.write('\t'.join([str(round(t, 1)) if t else '' for t in vm.tracks]))  # formant tracks
 
             if vm.nFormants:
                 fw.write('\t')
@@ -1475,8 +1432,7 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
                          # nFormants selected (if Mahalanobis method)
             if candidates:
                 fw.write('\t')
-                fw.write(
-                    '\t'.join([','.join([str(p) for p in vm.poles]), ','.join([str(b) for b in vm.bandwidths])]))
+                fw.write('\t'.join([','.join([str(p) for p in vm.poles]), ','.join([str(b) for b in vm.bandwidths])]))
                          # candidate poles and bandwidths (at point of
                          # measurement)
             fw.write('\n')
@@ -1488,12 +1444,10 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         # print header, if applicable
         if outputHeader:
             # speaker information
-            fw.write(
-                ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
+            fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
             fw.write('\n\n')
             # header
-            fw.write(
-                '\t'.join(['vowel', 'stress', 'word', 'norm_F1', 'norm_F2', 't', 'beg', 'end', 'dur',
+            fw.write('\t'.join(['vowel', 'stress', 'word', 'norm_F1', 'norm_F2', 't', 'beg', 'end', 'dur',
                            'cd', 'fm', 'fp', 'fv', 'ps', 'fs', 'style', 'glide',
                            'norm_F1@20%', 'norm_F2@20%', 'norm_F1@35%', 'norm_F2@35%', 'norm_F1@50%', 'norm_F2@50%',
                            'norm_F1@65%', 'norm_F2@65%', 'norm_F1@80%', 'norm_F2@80%']))
@@ -1503,18 +1457,15 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         # individual measurements
         for vm in measurements:
-            fw.write(
-                '\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.norm_f1), str(vm.norm_f2)]))
+            fw.write('\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.norm_f1), str(vm.norm_f2)]))
                      # vowel (ARPABET coding), stress, word, F1, F2
             fw.write('\t')
-            fw.write(
-                '\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
+            fw.write('\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
             fw.write('\t')
                      # time of measurement, beginning and end of phone,
                      # duration, Plotnik environment codes, style coding, glide
                      # coding
-            fw.write(
-                '\t'.join([str(round(t, 1)) if t else '' for t in vm.norm_tracks]))  # formant tracks
+            fw.write('\t'.join([str(round(t, 1)) if t else '' for t in vm.norm_tracks]))  # formant tracks
             fw.write('\t')
             if vm.nFormants:
                 fw.write(str(vm.nFormants))
@@ -1591,15 +1542,13 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
                     j = 1
                     # vector with current pole combination and associated
                     # bandwidths
-                    x = np.array(
-                        [poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
+                    x = np.array([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
                     # calculate Mahalanobis distance between x and ANAE mean
                     dist = mahalanobis(x, means[vowel], covs[vowel])
                     # append poles and bandwidths to list of values
                     # (if F3 and bandwidth measurements exist, add to list of appended values)
                     if len(poles) > 2:
-                        values.append(
-                            [x[0], x[1], x[2], x[3], poles[2], bandwidths[2]])
+                        values.append([x[0], x[1], x[2], x[3], poles[2], bandwidths[2]])
                     else:
                         values.append([x[0], x[1], x[2], x[3], '', ''])
                     # append corresponding Mahalanobis distance to list of
@@ -1768,8 +1717,7 @@ def whichSpeaker(speakers):
         print "%i.\t%s" % (i + 1, s)
     # user input is from 1 to number of speakers; index in speaker list one
     # less!
-    speaknum = int(
-        raw_input("Which speaker should be analyzed (number)?  ")) - 1
+    speaknum = int(raw_input("Which speaker should be analyzed (number)?  ")) - 1
     if speaknum not in range(len(speakers)):
         print "ERROR!  Please select a speaker number from 1 - %i.  " % (len(speakers) + 1)
         speaker = whichSpeaker(speakers)
@@ -1848,8 +1796,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
     f.write("count\ttime\td(time)\ttoken\n")
     for i in range(len(logtimes)):
         # chunk number and time stamp
-        f.write(str(logtimes[i][0]) + "\t" + str(
-            round(logtimes[i][1], 3)) + "\t")
+        f.write(str(logtimes[i][0]) + "\t" + str(round(logtimes[i][1], 3)) + "\t")
         # delta time
         if i > 0:
             f.write(str(round(logtimes[i][1] - logtimes[i - 1][1], 3)) + "\t")
@@ -1973,8 +1920,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
     # for "multipleFiles" option:  read lists of files into (internal) lists
     if multipleFiles:
-        wavFiles, tgFiles, outputFiles = processInput(
-            wavInput, tgInput, output)
+        wavFiles, tgFiles, outputFiles = processInput(wavInput, tgInput, output)
     else:
         wavFiles = [wavInput]
         tgFiles = [tgInput]
@@ -2110,8 +2056,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print ''
                     print "Extracting formants for vowel %s in word %s at %.3f" % (p.label, w.transcription, w.xmin)
-                markTime(
-                    count_analyzed + 1, p.label + " in " + w.transcription)
+                markTime(count_analyzed + 1, p.label + " in " + w.transcription)
 
                 # get padding for vowel in question
                 padBeg, padEnd = getPadding(p, windowSize, maxTime)
@@ -2119,8 +2064,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 # windowSize:  from config file or default settings
                 # maxTime = duration of sound file/TextGrid
 
-                extractPortion(
-                    wavFile, vowelWavFile, p.xmin - padBeg, p.xmax + padEnd, soundEditor)
+                extractPortion(wavFile, vowelWavFile, p.xmin - padBeg, p.xmax + padEnd, soundEditor)
 
                 vm = getVowelMeasurement(vowelFileStem, p, w, opts.speechSoftware,
                                          formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker)
@@ -2139,8 +2083,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # normalize measurements
         measurements, m_means = normalize(measurements, m_means)
         print ''
-        outputMeasurements(
-            outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
 
         markTime("end")
 

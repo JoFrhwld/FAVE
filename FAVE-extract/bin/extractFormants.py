@@ -2025,25 +2025,27 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         markTime("prelim2")
 
-        n_words = len(words)
-        word_iter = 0
-        old_percent = 0
+        if not opts.verbose:
+            n_words = len(words)
+            word_iter = 0
+            old_percent = 0
 
-        progressbar_width = 100
-        sys.stdout.write("\nExtracting Formants\n")
-        sys.stdout.write("[%s]" % (" " * progressbar_width))
-        sys.stdout.flush()
-        sys.stdout.write("\b" * (progressbar_width + 1))
-                         # return to start of line, after '['
+            progressbar_width = 100
+            sys.stdout.write("\nExtracting Formants\n")
+            sys.stdout.write("[%s]" % (" " * progressbar_width))
+            sys.stdout.flush()
+            sys.stdout.write("\b" * (progressbar_width + 1))
+                             # return to start of line, after '['
 
         for w in words:
-            word_iter = word_iter + 1
-            new_percent = math.floor((float(word_iter) / n_words) * 100)
+            if not opts.verbose:
+                word_iter = word_iter + 1
+                new_percent = math.floor((float(word_iter) / n_words) * 100)
 
-            for p in range(int(old_percent), int(new_percent)):
-                sys.stdout.write("-")
-                sys.stdout.flush()
-                old_percent = new_percent
+                for p in range(int(old_percent), int(new_percent)):
+                    sys.stdout.write("-")
+                    sys.stdout.flush()
+                    old_percent = new_percent
 
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
@@ -2051,20 +2053,25 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
             # if the word doesn't contain any vowels, then we won't analyze it
             if numV == 0:
-                # print "\t\t\t...no vowels in word %s." % w.transcription
+                if opts.verbose:
+                    print ''
+                    print "\t\t\t...no vowels in word %s at %.3f." % (w.transcription, w.xmin)
                 continue
 
             # don't process this word if it's in the list of stop words
             if removeStopWords and w.transcription in stopWords:
                 count_stopwords += numV
-                # print "\t\t\t...word %s is stop word." % w.transcription
+                if opts.verbose:
+                    print ''
+                    print "\t\t\t...word %s at %.3f is stop word." % (w.transcription, w.xmin)
                 continue
 
             # exclude uncertain transcriptions
             if uncertain.search(w.transcription):
                 count_uncertain += numV
-                # print "\t\t\t...word %s is uncertain transcription." %
-                # w.transcription
+                if opts.verbose:
+                    print ''
+                    print "\t\t\t...word %s at %.3f is uncertain transcription." % (w.transcription, w.xmin)
                 continue
 
             for p in w.phones:
@@ -2100,9 +2107,9 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     p.label  # name of sound file - ".wav" + phone label
                 vowelWavFile = vowelFileStem + '.wav'
 
-                # print ''
-                # print "Extracting formants for vowel %s in word %s" %
-                # (p.label, w.transcription)
+                if opts.verbose:
+                    print ''
+                    print "Extracting formants for vowel %s in word %s at %.3f" % (p.label, w.transcription, w.xmin)
                 markTime(
                     count_analyzed + 1, p.label + " in " + w.transcription)
 

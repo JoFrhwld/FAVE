@@ -462,55 +462,55 @@ def checkAllowedValues(f, option, value, allowedValues):
         sys.exit()
 
 
-def checkConfigLine(f, line):
-    """checks that a line in the config file has the correct format"""
+#def checkConfigLine(f, line):
+#    """checks that a line in the config file has the correct format"""
+#
+#    if '=' not in line:
+#        print "ERROR:  malformed line in config file %s" % f
+#        print line
+#        sys.exit()
 
-    if '=' not in line:
-        print "ERROR:  malformed line in config file %s" % f
-        print line
-        sys.exit()
 
-
-def checkConfigOption(f, option):
-    """checks that the option specified in the config file is among the allowed options"""
-
-    allowedOptions = [
-        'case', 'outputFormat', 'outputHeader', 'formantPredictionMethod', 'measurementPointMethod', 'speechSoftware', 'nFormants', 'maxFormant',
-        'removeStopWords', 'measureUnstressed', 'minVowelDuration', 'windowSize', 'preEmphasis', 'multipleFiles', 'nSmoothing', 'remeasurement',
-        'candidates', 'vowelSystem']
-    if option not in allowedOptions:
-        print "ERROR:  unrecognized option '%s' in config file %s" % (option, f)
-        print "The following options are recognized:  ", ", ".join(allowedOptions)
-        sys.exit()
+#def checkConfigOption(f, option):
+#    """checks that the option specified in the config file is among the allowed options"""
+#
+#    allowedOptions = [
+#        'case', 'outputFormat', 'outputHeader', 'formantPredictionMethod', 'measurementPointMethod', 'speechSoftware', 'nFormants', 'maxFormant',
+#        'removeStopWords', 'measureUnstressed', 'minVowelDuration', 'windowSize', 'preEmphasis', 'multipleFiles', 'nSmoothing', 'remeasurement',
+#        'candidates', 'vowelSystem']
+#    if option not in allowedOptions:
+#        print "ERROR:  unrecognized option '%s' in config file %s" % (option, f)
+#        print "The following options are recognized:  ", ", ".join(allowedOptions)
+#        sys.exit()
 
 
 # need to add checks also for options that take numeric values...
-def checkConfigValue(f, option, value):
-    """checks that an option specified in the config file has an allowed value"""
-    # f = config file
-    if option == 'case':
-        allowedValues = ['lower', 'upper']
-        checkAllowedValues(f, option, value, allowedValues)
-    if option == 'outputFormat':
-        allowedValues = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both']
-        checkAllowedValues(f, option, value, allowedValues)
-    if option == 'formantPredictionMethod':
-        allowedValues = ['default', 'mahalanobis']
-        checkAllowedValues(f, option, value, allowedValues)
-    if option == 'measurementPointMethod':
-        allowedValues = [
-            'fourth', 'third', 'mid', 'lennig', 'anae', 'faav', 'maxint']
-        checkAllowedValues(f, option, value, allowedValues)
-    if option == 'speechSoftware':
-        allowedValues = ['praat', 'Praat', 'esps', 'ESPS']
-        checkAllowedValues(f, option, value, allowedValues)
-    if option in ['removeStopWords', 'measureUnstressed', 'outputHeader', 'multipleFiles', 'remeasurement', 'candidates']:
-        allowedValues = ['T', 'F', 'True', 'False']
-        checkAllowedValues(f, option, value, allowedValues)
-    if option == 'vowelSystem':
-        allowedValues = [
-            'phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET']
-        checkAllowedValues(f, option, value, allowedValues)
+#def checkConfigValue(f, option, value):
+#    """checks that an option specified in the config file has an allowed value"""
+#    # f = config file
+#    if option == 'case':
+#        allowedValues = ['lower', 'upper']
+#        checkAllowedValues(f, option, value, allowedValues)
+#    if option == 'outputFormat':
+#        allowedValues = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both']
+#        checkAllowedValues(f, option, value, allowedValues)
+#    if option == 'formantPredictionMethod':
+#        allowedValues = ['default', 'mahalanobis']
+#        checkAllowedValues(f, option, value, allowedValues)
+#    if option == 'measurementPointMethod':
+#        allowedValues = [
+#            'fourth', 'third', 'mid', 'lennig', 'anae', 'faav', 'maxint']
+#        checkAllowedValues(f, option, value, allowedValues)
+#    if option == 'speechSoftware':
+#        allowedValues = ['praat', 'Praat', 'esps', 'ESPS']
+#        checkAllowedValues(f, option, value, allowedValues)
+#    if option in ['removeStopWords', 'measureUnstressed', 'outputHeader', 'multipleFiles', 'remeasurement', 'candidates']:
+#        allowedValues = ['T', 'F', 'True', 'False']
+#        checkAllowedValues(f, option, value, allowedValues)
+#    if option == 'vowelSystem':
+#        allowedValues = [
+#            'phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET']
+#        checkAllowedValues(f, option, value, allowedValues)
 
 
 def checkLocation(file):
@@ -1648,26 +1648,26 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         outputFormantSettings(measurements, speaker, outputFile)
 
 
-def parseConfig(options, f):
-    """processes the config file, checking all options and their values"""
-
-    for line in open(f, 'rU').readlines():
-        # check format of line
-        checkConfigLine(f, line)
-        # check option
-        option = line.split('=')[0].strip()
-        checkConfigOption(f, option)
-        # check value for option
-        value = line.split('=')[1].strip()
-        checkConfigValue(f, option, value)
-        # set option value
-        if value in ["T", "True"]:
-            options[option] = True
-        elif value in ["F", "False"]:
-            options[option] = False
-        else:
-            options[option] = value
-    return options
+#def parseConfig(options, f):
+#    """processes the config file, checking all options and their values"""
+#
+#    for line in open(f, 'rU').readlines():
+#        # check format of line
+#        checkConfigLine(f, line)
+#        # check option
+#        option = line.split('=')[0].strip()
+#        checkConfigOption(f, option)
+#        # check value for option
+#        value = line.split('=')[1].strip()
+#        checkConfigValue(f, option, value)
+#        # set option value
+#        if value in ["T", "True"]:
+#            options[option] = True
+#        elif value in ["F", "False"]:
+#            options[option] = False
+#        else:
+#            options[option] = value
+#    return options
 
 
 def parseStopWordsFile(f):
@@ -1820,33 +1820,33 @@ def readSpeakerFile(speakerFile):
     return speaker
 
 
-def setDefaultOptions():
-    """specifies the default options for the program"""
-
-    options = {}
-    options['case'] = 'upper'
-    options['outputFormat'] = 'text'
-    options['outputHeader'] = True
-    options['formantPredictionMethod'] = 'mahalanobis'
-    options['measurementPointMethod'] = 'faav'
-    options['speechSoftware'] = 'Praat'
-    options['nFormants'] = 5
-    options['maxFormant'] = 5000
-    options['nSmoothing'] = 12
-    options['removeStopWords'] = False
-    options['measureUnstressed'] = True
-    options['minVowelDuration'] = 0.05
-    options['windowSize'] = 0.025
-    options['preEmphasis'] = 50
-    options['multipleFiles'] = False
-    options[
-        'stopWords'] = ["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
-                        "SHE", "SHE'S", "THAT", "THE", "THEM", "THEN", "THERE", "THEY", "THIS", "UH", "UM", "UP", "WAS", "WE", "WERE", "WHAT", "YOU"]
-    options['remeasurement'] = False
-    options['candidates'] = False
-    options['vowelSystem'] = 'NorthAmerican'
-
-    return options
+#def setDefaultOptions():
+#    """specifies the default options for the program"""
+#
+#    options = {}
+#    options['case'] = 'upper'
+#    options['outputFormat'] = 'text'
+#    options['outputHeader'] = True
+#    options['formantPredictionMethod'] = 'mahalanobis'
+#    options['measurementPointMethod'] = 'faav'
+#    options['speechSoftware'] = 'Praat'
+#    options['nFormants'] = 5
+#    options['maxFormant'] = 5000
+#    options['nSmoothing'] = 12
+#    options['removeStopWords'] = False
+#    options['measureUnstressed'] = True
+#    options['minVowelDuration'] = 0.05
+#    options['windowSize'] = 0.025
+#    options['preEmphasis'] = 50
+#    options['multipleFiles'] = False
+#    options[
+#        'stopWords'] = ["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
+#                        "SHE", "SHE'S", "THAT", "THE", "THEM", "THEN", "THERE", "THEY", "THIS", "UH", "UM", "UP", "WAS", "WE", "WERE", "WHAT", "YOU"]
+#    options['remeasurement'] = False
+#    options['candidates'] = False
+#    options['vowelSystem'] = 'NorthAmerican'
+#
+#    return options
 
 
 def smoothTracks(poles, s):
@@ -2059,68 +2059,67 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     meansFile = opts.means
     covsFile = opts.covariances
     phonesetFile = opts.phoneset
-    configFile = ''
-    stopWordsFile = ''
-    speakerFile = ''
+    stopWordsFile = opts.stopWordsFile
+    speakerFile = opts.speakerFile
 
 
     # process program options
-    for o, a in opts:
-        if o == "--means":
-            meansFile = a
-        elif o == "--covariances":
-            covsFile = a
-        elif o == "--phoneset":
-            phonesetFile = a
-        elif o == "--outputFormat":
-            global outputFormat
-            outputFormat = a
-        elif o == "--config":
-            configFile = a
-        elif o == "--stopWords":
-            stopWordsFile = a
-        elif o == "--speaker":
-            speakerFile = a
-        else:
-            print "ERROR:  unrecognized option %s" % o
-            print __doc__
-            sys.exit(0)
+    #for o, a in opts:
+    #    if o == "--means":
+    #        meansFile = a
+    #    elif o == "--covariances":
+    #        covsFile = a
+    #    elif o == "--phoneset":
+    #       phonesetFile = a
+    #    elif o == "--outputFormat":
+    #        global outputFormat
+    #        outputFormat = a
+    #    elif o == "--config":
+    #        configFile = a
+    #    elif o == "--stopWords":
+    #        stopWordsFile = a
+    #    elif o == "--speaker":
+    #        speakerFile = a
+    #    else:
+    #        print "ERROR:  unrecognized option %s" % o
+    #        print __doc__
+    #        sys.exit(0)
 
     # set the default options that will be used if no config file is specified
-    options = setDefaultOptions()
+    # options = setDefaultOptions()
 
     # if the user specifies a config file, get the values for the options
     # contained in it
-    if configFile != '':
-        options = parseConfig(options, configFile)
+    #if configFile != '':
+    #    options = parseConfig(options, configFile)
 
-    if stopWordsFile != '':
+    if stopWordsFile:
         stopWords = parseStopWordsFile(stopWordsFile)
     else:
-        stopWords = options['stopWords']
+        stopWords = opts.stopwords
 
     # assign the options to individual variables and to type conversion if
     # necessary
     global case, outputHeader, formantPredictionMethod, measurementMethod, measurementPointMethod, speechSoftware, nFormants, maxFormant
     global nSmoothing, removeStopWords, measureUnstressed, minVowelDuration, windowSize, preEmphasis, multipleFiles, remeasurement, candidates, vowelSystem
-    case = options['case']
-    outputFormat = options['outputFormat']
-    outputHeader = options['outputHeader']
-    formantPredictionMethod = options['formantPredictionMethod']
-    measurementPointMethod = options['measurementPointMethod']
-    speechSoftware = options['speechSoftware']
-    nFormants = int(options['nFormants'])
-    maxFormant = int(options['maxFormant'])
-    nSmoothing = int(options['nSmoothing'])
-    removeStopWords = options['removeStopWords']
-    measureUnstressed = options['measureUnstressed']
-    minVowelDuration = float(options['minVowelDuration'])
-    windowSize = float(options['windowSize'])
-    preEmphasis = float(options['preEmphasis'])
-    multipleFiles = options['multipleFiles']
-    remeasurement = options['remeasurement']
-    candidates = options['candidates']
-    vowelSystem = options['vowelSystem']
+    case = opts.case
+    outputFormat = opts.outputFormat
+    outputHeader = not opts.noOutputHeader
+    formantPredictionMethod = opts.formantPredictionMethod
+    measurementPointMethod = opts.measurementPointMethod
+    speechSoftware = options.speechSoftware
+    nFormants = opts.nFormants
+    maxFormant = opts.maxFormant
+    nSmoothing = opts.nSmoothing
+    removeStopWords = opts.removeStopWords
+    measureUnstressed = not opts.onlyMeasureUnstressed
+    minVowelDuration = opts.minVowelDuration
+    windowSize = opts.windowSize
+    preEmphasis = opts.preEmphasis
+    multipleFiles = opts.multipleFiles
+    remeasurement = opts.remeasurement
+    candidates = opts.candidates
+    vowelSystem = opts.vowelSystem
     print "Processed options."
 
     # read CMU phoneset ("cmu_phoneset.txt")

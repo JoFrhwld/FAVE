@@ -77,6 +77,7 @@ import cmu
 import vowel
 
 import numpy as np
+from itertools import tee, islice, izip
 
 from remeasure import remeasure
 from mahalanobis import mahalanobis
@@ -1702,6 +1703,17 @@ def trimFormants(formants, times, minimum, maximum):
 
     return trimmedFormants, trimmedTimes
 
+def window(iterable, window_len=2, window_step=1):
+    """returns a tuple from an iterator"""
+    iterators = tee(iterable, window_len)
+    for skip_steps, itr in enumerate(iterators):
+        for ignored in islice(itr, skip_steps):
+            pass
+    window_itr = izip(*iterators)
+    if window_step != 1:
+        window_itr = islice(window_itr, step=window_step)
+    return window_itr    
+
 
 def whichSpeaker(speakers):
     """prompts the user for input on the speaker to be analyzed"""
@@ -1983,7 +1995,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
             sys.stdout.write("\b" * (progressbar_width + 1))
                              # return to start of line, after '['
 
-        for w in words:
+        for pre_w, w, fol_w in window(words, window_len = 3):
             if not opts.verbose:
                 word_iter = word_iter + 1
                 new_percent = math.floor((float(word_iter) / n_words) * 100)
@@ -2020,7 +2032,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     print "\t\t\t...word %s at %.3f is uncertain transcription." % (w.transcription, w.xmin)
                 continue
 
-            for p in w.phones:
+            for p_index, p in enumerate(w.phones):
                 # skip this phone if it's not a vowel
                 if not isVowel(p.label):
                     continue

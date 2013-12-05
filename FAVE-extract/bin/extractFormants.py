@@ -275,12 +275,9 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
                 if code:  # no code returned if it's a consonant
                     w.phones[i].code = code  # whole code
                     w.phones[i].cd = code.split('.')[0]  # vowel class code
-                    w.phones[i].fm = code.split('.')[
-                        1][0]  # following segment - manner
-                    w.phones[i].fp = code.split('.')[
-                        1][1]  # following segment - place
-                    w.phones[i].fv = code.split('.')[
-                        1][2]  # following segment - voice
+                    w.phones[i].fm = code.split('.')[1][0]  # following segment - manner
+                    w.phones[i].fp = code.split('.')[1][1]  # following segment - place
+                    w.phones[i].fv = code.split('.')[1][2]  # following segment - voice
                     w.phones[i].ps = code.split('.')[1][3]  # preceding segment
                     w.phones[i].fs = code.split('.')[1][4]  # following sequences
                 if (prec_p and prec_p != '') or prec_p == '':  # phone is a vowel and has or has not preceding segment
@@ -975,9 +972,8 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
                 global count_vowels
                 count_vowels += 1
             i += 1
-        # skip unclear transcriptions and silences
-        if w.mark() != '' and w.mark() != "((xxxx))" and w.mark().upper() != "SP":
-            words.append(word)
+        
+        words.append(word)
 
     # add Plotnik-style codes for the preceding and following segments for all
     # vowels
@@ -2005,6 +2001,11 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                              # return to start of line, after '['
 
         for pre_w, w, fol_w in window(words, window_len = 3):
+            
+            # skip unclear transcriptions and silences
+            if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
+                continue
+
             if not opts.verbose:
                 word_iter = word_iter + 1
                 new_percent = math.floor((float(word_iter) / n_words) * 100)

@@ -431,15 +431,6 @@ def changeCase(word, case):
         w = word.upper()
     return w
 
-
-def checkAllowedValues(f, option, value, allowedValues):
-    """checks whether a given value is among the allowed values for a specific option"""
-
-    if value not in allowedValues:
-        print "ERROR:  unrecognized value '%s' for option '%s' in config file %s" % (value, option, f)
-        print "The following values are recognized for option '%s'" % option, ", ".join(allowedValues)
-        sys.exit()
-
 def checkLocation(file):
     """checks whether a given file exists at a given location"""
 

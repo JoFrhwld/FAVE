@@ -1375,10 +1375,11 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         # print header, if applicable
         if outputHeader:
             # speaker information
-            #fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
-            fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
-            fw.write('\n\n')
-            # header
+            s_dict = speaker.__dict__
+            s_keys = s_dict.keys()
+
+            fw.write('\t'.join(s_keys))
+            fw.write('\t')
             fw.write('\t'.join(['vowel', 'stress', 'pre_word', 'word', 'fol_word', 
                                 'F1', 'F2', 'F3', 
                                 'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
@@ -1398,6 +1399,10 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         # individual measurements
         for vm in measurements:
+            for speaker_attr in s_keys:
+                fw.write(str(s_dict[speaker_attr]))
+                fw.write('\t')
+            fw.write('\t')
             fw.write('\t'.join([vm.phone, str(vm.stress), vm.pre_word, vm.word, vm.fol_word, str(vm.f1)]))
                      # vowel (ARPABET coding), stress, word, F1
 
@@ -2009,9 +2014,6 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         for pre_w, w, fol_w in window(words, window_len = 3):
             
-            # skip unclear transcriptions and silences
-            if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
-                continue
 
             if not opts.verbose:
                 word_iter = word_iter + 1
@@ -2021,6 +2023,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     sys.stdout.write("-")
                     sys.stdout.flush()
                     old_percent = new_percent
+
+            # skip unclear transcriptions and silences
+            if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
+                continue
 
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)

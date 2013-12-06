@@ -699,7 +699,7 @@ def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
 
     return pc
 
-def plt_manner(fs):
+def plt_folseq(fs):
     """translates numerical following sequence code to a readable code."""
     trans_dict = {'1':"one_fol_syll",
                   '2':"two_fol_syl",
@@ -772,7 +772,7 @@ def plt_vowels(cd):
                   '5':"o",
                   '6':"uh",
                   '7':"u",
-                  "*":"*",
+                  '*':"*",
                   '11':"iy",
                   '12':"iyF",
                   '21':"ey",
@@ -792,6 +792,7 @@ def plt_vowels(cd):
                   '53':"oh",
                   '14':"iyr",
                   '24':"eyr",
+                  '44':"ahr",
                   '54':"ohr",
                   '64':"owr",
                   '74':"uwr",

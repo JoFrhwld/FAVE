@@ -279,7 +279,7 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
                         1][1]  # following segment - place
                     w.phones[i].fv = code.split('.')[
                         1][2]  # following segment - voice
-     f               w.phones[i].ps = code.split('.')[1][3]  # preceding segment
+                    w.phones[i].ps = code.split('.')[1][3]  # preceding segment
                     w.phones[i].fs = code.split(
                         '.')[1][4]  # following sequences
                 if (prec_p and prec_p != '') or prec_p == '':  # phone is a vowel and has or has not preceding segment

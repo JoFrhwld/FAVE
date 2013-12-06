@@ -699,6 +699,108 @@ def phila_system(i, phones, trans, fm, fp, fv, ps, fs, pc, phoneset):
 
     return pc
 
+def plt_manner(fs):
+    """translates numerical following sequence code to a readable code."""
+    trans_dict = {'1':"one_fol_syll",
+                  '2':"two_fol_syl",
+                  '3':"complex_coda",
+                  '4':"complex_one_syl",
+                  '5':"complex_two_syl"}
+    try:
+        return trans_dict[str(fs)]
+    except:
+        return '' 
+
+def plt_manner(fm):
+    """translates numerical following manner code to a readable code."""
+    trans_dict = {'1':"stop",
+                  '2':"affricate",
+                  '3':"fricative",
+                  '4':"nasal",
+                  '5':"lateral",
+                  '6':"central"}
+    try:
+        return trans_dict[str(fm)]
+    except:
+        return ''    
+
+def plt_place(fp):
+    """translates numerical following place code to a readable code."""
+    trans_dict = {'1':"labial",
+                  '2':"labiodental",
+                  '3':"interdental",
+                  '4':"apical",
+                  '5':"palatal",
+                  '6':"velar"}
+    try:
+        return trans_dict[str(fp)]
+    except:
+        return ''    
+
+
+def plt_preseg(ps):
+    """translates numerical preceding segment code to a readable code."""
+    trans_dict = {'1':"oral_labial",
+                  '2':"nasal_labial",
+                  '3':"oral_apical",
+                  '4':"nasal_apical",
+                  '5':"palatal",
+                  '6':"velar",
+                  '7':"liquid",
+                  '8':"obstruent_liquid",
+                  '9':"w/y"}
+
+    try:
+        return trans_dict[str(ps)]
+    except:
+        return ''    
+
+def plt_voice(fv):
+    """translates numerical voicing code to a readable code."""
+    trans_dict = {'1':"voiceless",
+                  '2':"voiced"}
+    try:
+        return trans_dict[str(fv)]
+    except:
+        return ''    
+
+def plt_vowels(cd):
+    """translates numerical vowel class code to modified Labovian transcription."""
+    trans_dict = {'1':"i",
+                  '2':"e",
+                  '3':"ae",
+                  '5':"o",
+                  '6':"uh",
+                  '7':"u",
+                  "*":"*",
+                  '11':"iy",
+                  '12':"iyF",
+                  '21':"ey",
+                  '22':"eyF",
+                  '41':"ay",
+                  '47':"ay0",
+                  '61':"oy",
+                  '42':"aw",
+                  '62':"ow",
+                  '63':"owF",
+                  '72':"uw",
+                  '73':"Tuw",
+                  '82':"iw",
+                  '33':"aeh",
+                  '39':"aeBR",
+                  '43':"ah",
+                  '53':"oh",
+                  '14':"iyr",
+                  '24':"eyr",
+                  '54':"ohr",
+                  '64':"owr",
+                  '74':"uwr",
+                  '94':"*hr"}
+    try:
+        return trans_dict[str(cd)]
+    except:
+        return ''
+
 
 def process_measurement_line(line):
     """splits Plotnik measurement line into values for formants, vowel class, stress, token, glide, style, and comment"""

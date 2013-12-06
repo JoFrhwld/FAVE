@@ -1402,7 +1402,6 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             for speaker_attr in s_keys:
                 fw.write(str(s_dict[speaker_attr]))
                 fw.write('\t')
-            fw.write('\t')
             fw.write('\t'.join([vm.phone, str(vm.stress), vm.pre_word, vm.word, vm.fol_word, str(vm.f1)]))
                      # vowel (ARPABET coding), stress, word, F1
 

@@ -859,7 +859,7 @@ def readPNCdata(speakername, speakernum, fileStem):
 
     with open(datafile, 'rU') as source:
         for row in DictReader(source):
-            sub = row['Subject']
+            sub = row['SubjectID']
             PNC_dict[sub] = row
    
     if subject in PNC_dict:
@@ -872,10 +872,10 @@ def readPNCdata(speakername, speakernum, fileStem):
                 speaker.last_name = ''
             speaker.sex = PNC_dict[subject]['Sex']
             speaker.age = PNC_dict[subject]['Age']
-            speaker.ethnicity = PNC_dict[subject]['Eth']
+            speaker.ethnicity = PNC_dict[subject]['Ethnicity']
             speaker.location = PNC_dict[subject]['Nbrhood']
             speaker.year = PNC_dict[subject]['Year']
-            speaker.years_of_schooling = PNC_dict[subject]['EdYears']
+            speaker.years_of_schooling = PNC_dict[subject]['YearsOfSchool']
             speaker.tiernum = speakernum * \
                 2  # tiernum points to phone tier = first tier for given speaker
         else:

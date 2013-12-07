@@ -847,7 +847,7 @@ def getSoundEditor():
 def readPNCdata(speakername, speakernum, fileStem):
     """reads speaker demographics from a csv file"""
     speaker = Speaker()
-    datafile = 'PNC_data.csv'
+    datafile = 'bin/PNC_data.csv'
     SUBJECT = r'^\w\w\w?\d?\d?-\w?\d?\d?-\d?\d?\w?'
     name = {}
     age = {}

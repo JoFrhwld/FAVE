@@ -1377,6 +1377,7 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             # speaker information
             s_dict = speaker.__dict__
             s_keys = s_dict.keys()
+            s_keys.sort()
 
             fw.write('\t'.join(s_keys))
             fw.write('\t')

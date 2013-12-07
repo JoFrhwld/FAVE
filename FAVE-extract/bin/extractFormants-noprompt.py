@@ -1543,7 +1543,7 @@ def outputFormantSettings(measurements, speaker, outputFile):
     f.write("Formant settings for %s:\n\n" % outputFile)
     f.write(
         ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, 
-                   speaker.schooling, speaker.year]))
+                   speaker.years_of_schooling, speaker.year]))
     f.write('\n\n')
     f.write('\t'.join(['vowel', '3', '4', '5', '6']))
     f.write('\n')

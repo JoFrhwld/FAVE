@@ -86,6 +86,7 @@ from mahalanobis import mahalanobis
 from itertools import islice
 from re import match
 from os import path
+from csv import DictReader
 
 os.chdir(os.getcwd())
 
@@ -849,44 +850,32 @@ def readPNCdata(speakername, speakernum, fileStem):
     speaker = Speaker()
     datafile = 'bin/PNC_data.csv'
     SUBJECT = r'^\w\w\w?\d?\d?-\w?\d?\d?-\d?\d?\w?'
-    name = {}
-    age = {}
-    sex = {}
-    ethnicity = {}
-    location = {}
-    year = {}
-    schooling = {}
+    PNC_dict = {}
 
     m = match(SUBJECT, path.split(fileStem)[1])
     if m == None:
-            exit('Malformed argument: "' + fname + '"')
+            exit('Malformed argument: "' + fname + '"' + ' regex match failed.')
     subject = m.group(0)
 
-    with open(datafile, 'rU') as data:
-        for (i, line) in enumerate(islice(data, 1, None)):
-            (sub, n, a, s, eth, ed, loc, y) = line.rstrip().split(',')
-            name.update({sub:n})
-            age.update({sub:a})
-            sex.update({sub:s})
-            ethnicity.update({sub:eth})
-            location.update({sub:loc})
-            year.update({sub:y})
-            schooling.update({sub:ed})
-       
-    if subject in name:
-        speaker.name = name[subject]
+    with open(datafile, 'rU') as source:
+        for row in DictReader(source):
+            sub = row['Subject']
+            PNC_dict[sub] = row
+   
+    if subject in PNC_dict:
+        speaker.name = PNC_dict[subject]['Name']
         if speaker.name[0:3] == speakername[0:3]:
             speaker.first_name = speaker.name.strip().split()[0]
             try:
                 speaker.last_name = speaker.name.strip().split()[1][0]
             except IndexError:
                 speaker.last_name = ''
-            speaker.sex = sex[subject]
-            speaker.age = age[subject]
-            speaker.ethnicity = ethnicity[subject]
-            speaker.location = location[subject]
-            speaker.year = year[subject]
-            speaker.years_of_schooling = schooling[subject]
+            speaker.sex = PNC_dict[subject]['Sex']
+            speaker.age = PNC_dict[subject]['Age']
+            speaker.ethnicity = PNC_dict[subject]['Eth']
+            speaker.location = PNC_dict[subject]['Nbrhood']
+            speaker.year = PNC_dict[subject]['Year']
+            speaker.years_of_schooling = PNC_dict[subject]['EdYears']
             speaker.tiernum = speakernum * \
                 2  # tiernum points to phone tier = first tier for given speaker
         else:

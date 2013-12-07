@@ -57,6 +57,9 @@
 
 
 """
+Usage:
+python extractFormants.py [options] filename.wav filename.TextGrid outputFile
+
 Takes as input a sound file and a Praat .TextGrid file (with word and phone tiers)
 and outputs automatically extracted F1 and F2 measurements for each vowel
 (either as a tab-delimited text file or as a Plotnik file).
@@ -66,7 +69,7 @@ SCRIPTS_HOME = 'bin'
 
 import sys
 import os
-import argparse
+import getopt
 import math
 import re
 import time
@@ -77,10 +80,13 @@ import cmu
 #import vowel
 
 import numpy as np
-from itertools import tee, islice, izip
 
 from remeasure import remeasure
 from mahalanobis import mahalanobis
+from itertools import islice
+from re import match
+from os import path
+from csv import DictReader
 
 os.chdir(os.getcwd())
 
@@ -136,7 +142,7 @@ class Speaker:
         self.city = ''  # 'Philadelphia'
         self.state = ''  # 'PA'
         self.year = None  # year of recording
-        self.tiernum = None  # tiernum points to phone tier = first tier for given speaker
+        self.tiernum = 0  # tiernum points to phone tier = first tier for given speaker
 
 
 class VowelMeasurement:
@@ -182,15 +188,7 @@ class VowelMeasurement:
             # formant "tracks" for all possible formant settings (needed for
             # remeasurement)
         self.norm_tracks = []  # normalized formant "tracks"
-        self.pre_seg = ''
-        self.fol_seg = ''
-        self.context = ''
-        self.p_index = ''
-        self.word_trans = ''
-        self.pre_word_trans = ''
-        self.fol_word_trans = ''
-        self.pre_word = ''
-        self.fol_word = ''
+
 
 class VowelMean:
 
@@ -274,19 +272,50 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
             continue
         for i in range(len(w.phones)):
             if isVowel(w.phones[i].label):
-                code, prec_p = plotnik.cmu2plotnik_code(i, w.phones, w.transcription, phoneset, speaker, vowelSystem)
+                code, prec_p = plotnik.cmu2plotnik_code(
+                    i, w.phones, w.transcription, phoneset, speaker, vowelSystem)
                 if code:  # no code returned if it's a consonant
                     w.phones[i].code = code  # whole code
                     w.phones[i].cd = code.split('.')[0]  # vowel class code
-                    w.phones[i].fm = code.split('.')[1][0]  # following segment - manner
-                    w.phones[i].fp = code.split('.')[1][1]  # following segment - place
-                    w.phones[i].fv = code.split('.')[1][2]  # following segment - voice
+                    w.phones[i].fm = code.split('.')[
+                        1][0]  # following segment - manner
+                    w.phones[i].fp = code.split('.')[
+                        1][1]  # following segment - place
+                    w.phones[i].fv = code.split('.')[
+                        1][2]  # following segment - voice
                     w.phones[i].ps = code.split('.')[1][3]  # preceding segment
-                    w.phones[i].fs = code.split('.')[1][4]  # following sequences
+                    w.phones[i].fs = code.split(
+                        '.')[1][4]  # following sequences
                 if (prec_p and prec_p != '') or prec_p == '':  # phone is a vowel and has or has not preceding segment
                     w.phones[i].pp = prec_p
 
     return words
+
+# NOTE:  The old version of the addStyleCodes function was too dependent on the assumption that the boundaries on the style tier would always match the words.
+# Where this was not the case (esp. with semantic differential coding), it failed without notifying the user.
+# def addStyleCodes(words, tg):
+##    """copies coding from style tier to each word"""
+# assumes that style annotation groups always span entire words
+##    i = 0
+# print "\n\tADDING STYLE CODES..."
+# for s in tg[-1]:  ## iterate over style tier entries
+# if s.mark().upper() != "SP":  ## skip empty intervals on style tier
+# while i < len(words) and (words[i].xmin >= s.xmin() and words[i].xmax <= s.xmax()):
+# if s.mark().upper() in ["R", "N", "L", "G", "S", "K", "T", "C", "WL", "MP", "RP", "SD"]:
+##                words[i].style = s.mark().upper()
+# print "\t\tFAAV style code %s added to word %s." % (words[i].style, words[i].transcription)
+# elif s.mark().upper() == "SP":  ## empty intervals
+# print "\t\tNo style style code for word %s." % (words[i].transcription)
+# pass
+# else:  ## this should not happen, as correct format of style tier entries is already checked prior to forced alignment
+# print "ERROR!  Incorrect style tier entry %s for word %s." % (s.mark(), words[i].transcription)
+# sys.exit()
+# let people have whatever entries they want - they will just not be converted into Plotnik style codes
+##                words[i].style = s.mark().upper()
+# print "\t\tUnknown style code %s added to word %s." % (words[i].style, words[i].transcription)
+##            i += 1
+# return words
+
 
 def addStyleCodes(words, tg):
     """copies coding from style tier to each word"""
@@ -363,7 +392,8 @@ def calculateMeans(measurements):
         if m.glide == 'g':
             continue
         # exclude function words
-        if m.word.upper() in ['A', 'AH', 'AM', "AN'", 'AN', 'AND', 'ARE', "AREN'T", 'AS', 'AT', 'AW', 'BECAUSE', 'BUT', 'COULD',
+        if m.word.upper(
+        ) in ['A', 'AH', 'AM', "AN'", 'AN', 'AND', 'ARE', "AREN'T", 'AS', 'AT', 'AW', 'BECAUSE', 'BUT', 'COULD',
               'EH', 'FOR', 'FROM', 'GET', 'GONNA', 'GOT', 'GOTTA', 'GOTTEN',
               'HAD', 'HAS', 'HAVE', 'HE', "HE'S", 'HIGH', 'HUH',
               'I', "I'LL", "I'M", "I'VE", "I'D", 'IN', 'IS', 'IT', "IT'S", 'ITS', 'JUST', 'MEAN', 'MY',
@@ -409,7 +439,8 @@ def calculateMeans(measurements):
 
         # formant tracks
         for j in range(10):
-            t_mean, t_stdv = mean_stdv([t[j] for t in means[p].trackvalues if t[j]])
+            t_mean, t_stdv = mean_stdv(
+                [t[j] for t in means[p].trackvalues if t[j]])
             if t_mean and t_stdv != None:
                 means[p].trackmeans.append((t_mean, t_stdv))
             else:  # can't leave empty values in the tracks
@@ -430,6 +461,67 @@ def changeCase(word, case):
     else:
         w = word.upper()
     return w
+
+
+def checkAllowedValues(f, option, value, allowedValues):
+    """checks whether a given value is among the allowed values for a specific option"""
+
+    if value not in allowedValues:
+        print "ERROR:  unrecognized value '%s' for option '%s' in config file %s" % (value, option, f)
+        print "The following values are recognized for option '%s'" % option, ", ".join(allowedValues)
+        sys.exit()
+
+
+def checkConfigLine(f, line):
+    """checks that a line in the config file has the correct format"""
+
+    if '=' not in line:
+        print "ERROR:  malformed line in config file %s" % f
+        print line
+        sys.exit()
+
+
+def checkConfigOption(f, option):
+    """checks that the option specified in the config file is among the allowed options"""
+
+    allowedOptions = [
+        'case', 'outputFormat', 'outputHeader', 'formantPredictionMethod', 'measurementPointMethod', 'speechSoftware', 'nFormants', 'maxFormant',
+        'removeStopWords', 'measureUnstressed', 'minVowelDuration', 'windowSize', 'preEmphasis', 'multipleFiles', 'nSmoothing', 'remeasurement',
+        'candidates', 'vowelSystem']
+    if option not in allowedOptions:
+        print "ERROR:  unrecognized option '%s' in config file %s" % (option, f)
+        print "The following options are recognized:  ", ", ".join(allowedOptions)
+        sys.exit()
+
+
+# need to add checks also for options that take numeric values...
+def checkConfigValue(f, option, value):
+    """checks that an option specified in the config file has an allowed value"""
+    # f = config file
+    if option == 'case':
+        allowedValues = ['lower', 'upper']
+        checkAllowedValues(f, option, value, allowedValues)
+    if option == 'outputFormat':
+        allowedValues = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both']
+        checkAllowedValues(f, option, value, allowedValues)
+    if option == 'formantPredictionMethod':
+        allowedValues = ['default', 'mahalanobis']
+        checkAllowedValues(f, option, value, allowedValues)
+    if option == 'measurementPointMethod':
+        allowedValues = [
+            'fourth', 'third', 'mid', 'lennig', 'anae', 'faav', 'maxint']
+        checkAllowedValues(f, option, value, allowedValues)
+    if option == 'speechSoftware':
+        allowedValues = ['praat', 'Praat', 'esps', 'ESPS']
+        checkAllowedValues(f, option, value, allowedValues)
+    if option in ['removeStopWords', 'measureUnstressed', 'outputHeader', 'multipleFiles', 'remeasurement', 'candidates']:
+        allowedValues = ['T', 'F', 'True', 'False']
+        checkAllowedValues(f, option, value, allowedValues)
+    if option == 'vowelSystem':
+        allowedValues = [
+            'phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET']
+        checkAllowedValues(f, option, value, allowedValues)
+
 
 def checkLocation(file):
     """checks whether a given file exists at a given location"""
@@ -482,7 +574,8 @@ def checkTiers(tg):
                        # "ns":  number of speakers (well, "noise" is not a speaker...)
     # style tier
     if style and tg[-1].name().strip().upper() not in ["STYLE", "FOCUS"]:
-        sys.exit("ERROR!  Odd number of tiers in TextGrid, but last tier is not style tier.")
+        sys.exit(
+            "ERROR!  Odd number of tiers in TextGrid, but last tier is not style tier.")
     else:
         # to make this compatible with output from the FA online interface
         # (where there are just two tiers)
@@ -571,7 +664,8 @@ def faav(phone, formants, times, intensity):
     # vowel
     if (phone.label[:-1] in ["AY", "EY", "OW", "AW"]) or (phone.label[:-1] == "UW" and phone.cd == "73"):
         # get intensity cutoff at 10% below maximum intensity
-        beg_cutoff, end_cutoff = getIntensityCutoff(intensity.intensities(), intensity.times())
+        beg_cutoff, end_cutoff = getIntensityCutoff(
+            intensity.intensities(), intensity.times())
         # make sure we do have an intensity contour (i.e. several measurement point, and not just one)
         # if there is only one measurement point in the intensity object, the cutoffs will be identical
         # in that case, reset the cutoffs to include the whole vowel
@@ -580,21 +674,25 @@ def faav(phone, formants, times, intensity):
             end_cutoff = times[-1]
         # modify cutoffs to make sure we are measuring in the first half of the
         # vowel
-        beg_cutoff, end_cutoff = modifyIntensityCutoff(beg_cutoff, end_cutoff, phone, intensity.intensities(), intensity.times())
+        beg_cutoff, end_cutoff = modifyIntensityCutoff(
+            beg_cutoff, end_cutoff, phone, intensity.intensities(), intensity.times())
 
         # measure "AY" and "EY" at F1 maximum
         # (NOTE:  While "AY" receives extra padding at the beginning to possible go before the segment boundary in the search for an F1 maximum, "EY" does not)
         if phone.label[:-1] in ["AY", "EY"]:
-            measurementPoint = getTimeOfF1Maximum(formants, times, beg_cutoff, end_cutoff)
+            measurementPoint = getTimeOfF1Maximum(
+                formants, times, beg_cutoff, end_cutoff)
         # measure Tuw at the beginning of the segment
         elif phone.label[:-1] == "UW" and phone.cd == "73":
             measurementPoint = max([phone.xmin, beg_cutoff])
         # measure "OW" and "AW" halfway between beginning of segment and F1
         # maximum
         elif phone.label[:-1] in ["OW", "AW"]:
-            maxF1time = getTimeOfF1Maximum(formants, times, beg_cutoff, end_cutoff)
+            maxF1time = getTimeOfF1Maximum(
+                formants, times, beg_cutoff, end_cutoff)
             if maxF1time > phone.xmin:
-                measurementPoint = max([beg_cutoff, phone.xmin + (maxF1time - phone.xmin) / 2])
+                measurementPoint = max(
+                    [beg_cutoff, phone.xmin + (maxF1time - phone.xmin) / 2])
             else:
                 measurementPoint = max([beg_cutoff, phone.xmin])
     # measure all other vowels at 1/3 of the way into the vowel's duration
@@ -671,18 +769,21 @@ def getMeasurementPoint(phone, formants, times, intensity, measurementPointMetho
         # measure according to Lennig (1978)
         transition = getTransitionLength(phone.xmin, phone.xmax)
         # remove vowel transitions
-        trimmedFormants, trimmedTimes = trimFormants(formants, times, phone.xmin + transition, phone.xmax - transition)
+        trimmedFormants, trimmedTimes = trimFormants(
+            formants, times, phone.xmin + transition, phone.xmax - transition)
         measurementPoint = lennig(trimmedFormants, trimmedTimes)
     elif measurementPointMethod == 'anae':
         # measure according to the ANAE (2006) guidelines
         transition = getTransitionLength(phone.xmin, phone.xmax)
         # remove vowel transitions
-        trimmedFormants, trimmedTimes = trimFormants(formants, times, phone.xmin + transition, phone.xmax - transition)
+        trimmedFormants, trimmedTimes = trimFormants(
+            formants, times, phone.xmin + transition, phone.xmax - transition)
         measurementPoint = anae(phone.label, trimmedFormants, trimmedTimes)
     elif measurementPointMethod == 'faav':
         measurementPoint = faav(phone, formants, times, intensity)
     elif measurementPointMethod == 'maxint':
-        measurementPoint = maximumIntensity(intensity.intensities(), intensity.times())
+        measurementPoint = maximumIntensity(
+            intensity.intensities(), intensity.times())
     else:
         print "ERROR: Unsupported measurement point selection method %s" % measurementPointMethod
         print __doc__
@@ -744,53 +845,93 @@ def getSoundEditor():
     return soundEditor
 
 
-def getSpeakerBackground(speakername, speakernum):
-    """prompts the user to enter background information for a given speaker"""
-
+def readPNCdata(speakername, speakernum, fileStem):
+    """reads speaker demographics from a csv file"""
     speaker = Speaker()
-    print "Please enter background information for speaker %s:" % speakername
-    print "(Press [return] if correct; if not, simply enter new data (do not use [delete]).)"
-    speaker.name = raw_input("Name:\t\t\t%s\t" % speakername.strip())
-    if not speaker.name:
-        speaker.name = speakername.strip()
-    try:
-        speaker.first_name = raw_input("First name:\t\t%s\t" % speaker.name.strip().split()[0])
-        if not speaker.first_name:
+    datafile = 'bin/PNC_data.csv'
+    SUBJECT = r'^\w\w\w?\d?\d?-\w?\d?\d?-\d?\d?\w?'
+    PNC_dict = {}
+
+    m = match(SUBJECT, path.split(fileStem)[1])
+    if m == None:
+            exit('Malformed argument: "' + fname + '"' + ' regex match failed.')
+    subject = m.group(0)
+
+    with open(datafile, 'rU') as source:
+        for row in DictReader(source):
+            sub = row['SubjectID']
+            PNC_dict[sub] = row
+   
+    if subject in PNC_dict:
+        speaker.name = PNC_dict[subject]['Name']
+        if speaker.name[0:3] == speakername[0:3]:
             speaker.first_name = speaker.name.strip().split()[0]
+            try:
+                speaker.last_name = speaker.name.strip().split()[1][0]
+            except IndexError:
+                speaker.last_name = ''
+            speaker.sex = PNC_dict[subject]['Sex']
+            speaker.age = PNC_dict[subject]['Age']
+            speaker.ethnicity = PNC_dict[subject]['Ethnicity']
+            speaker.location = PNC_dict[subject]['Nbrhood']
+            speaker.year = PNC_dict[subject]['Year']
+            speaker.years_of_schooling = PNC_dict[subject]['YearsOfSchool']
+            speaker.tiernum = speakernum * \
+                2  # tiernum points to phone tier = first tier for given speaker
+        else:
+            exit("Names " + speaker.name + " and " + speakername + " do not match!!")
+    else:
+        exit("Speaker " + subject + " not in PNC_data.csv!")
+    return speaker
+
+#def getSpeakerBackground(speakername, speakernum, datafile, subject):
+    #"""prompts the user to enter background information for a given speaker"""
+    #speaker = Speaker()
+    #print "Please enter background information for speaker %s:" % speakername
+    #print "(Press [return] if correct; if not, simply enter new data (do not use [delete]).)"
+    #speaker.name = raw_input("Name:\t\t\t%s\t" % speakername.strip())
+    #if not speaker.name:
+    #    speaker.name = speakername.strip()
+    #try:
+    #    speaker.first_name = raw_input(
+    #        "First name:\t\t%s\t" % speaker.name.strip().split()[0])
+    #    if not speaker.first_name:
+    #        speaker.first_name = speaker.name.strip().split()[0]
         # some speakers' last names are not known!
-        try:
+    #    try:
             # NOTE:  only initial letter of speaker's last name is
             # automatically taken over from tier name
-            speaker.last_name = raw_input("Last name:\t\t%s\t" % speaker.name.strip().split()[1][0])
-            if not speaker.last_name:
-                speaker.last_name = speaker.name.strip().split()[1][0]
-        except IndexError:
-            speaker.last_name = raw_input("Last name:\t\t")
-    except:
-        speaker.first_name = ''
-        speaker.last_name = ''
-    speaker.sex = raw_input("Sex:\t\t\t")
+    #        speaker.last_name = raw_input(
+    #            "Last name:\t\t%s\t" % speaker.name.strip().split()[1][0])
+    #        if not speaker.last_name:
+    #            speaker.last_name = speaker.name.strip().split()[1][0]
+    #    except IndexError:
+    #        speaker.last_name = raw_input("Last name:\t\t")
+    #except:
+    #    speaker.first_name = ''
+    #    speaker.last_name = ''
+    #speaker.sex = raw_input("Sex:\t\t\t")
     # check that speaker sex is defined - this is required for the Mahalanobis
     # method!
-    if formantPredictionMethod == "mahalanobis":
-        if not speaker.sex:
-            print "ERROR!  Speaker sex must be defined for the 'mahalanobis' formantPredictionMethod!"
-            sys.exit()
-    speaker.age = raw_input("Age:\t\t\t")
+    #if formantPredictionMethod == "mahalanobis":
+    #    if not speaker.sex:
+    #        print "ERROR!  Speaker sex must be defined for the 'mahalanobis' formantPredictionMethod!"
+    #        sys.exit()
+    #speaker.age = raw_input("Age:\t\t\t")
 ##    speaker.city = raw_input("City:\t\tPhiladelphia")
 # if not speaker.city:
 ##        speaker.city = "Philadelphia"
 ##    speaker.state = raw_input("State:\t\tPA")
 # if not speaker.state:
 ##        speaker.state = "PA"
-    speaker.ethnicity = raw_input("Ethnicity:\t\t")
-    speaker.location = raw_input("Location:\t\t")
-    speaker.year = raw_input("Year of recording:\t")
-    speaker.years_of_schooling = raw_input("Years of schooling:\t")
-    speaker.tiernum = speakernum * \
-        2  # tiernum points to phone tier = first tier for given speaker
+    #speaker.ethnicity = raw_input("Ethnicity:\t\t")
+    #speaker.location = raw_input("Location:\t\t")
+    #speaker.year = raw_input("Year of recording:\t")
+    #speaker.years_of_schooling = raw_input("Years of schooling:\t")
+    #speaker.tiernum = speakernum * \
+    #    2  # tiernum points to phone tier = first tier for given speaker
 
-    return speaker
+    #return speaker
 
 
 def getTimeIndex(t, times):
@@ -825,7 +966,8 @@ def getTimeOfF1Maximum(formants, times, beg_cutoff, end_cutoff):
     """returns the time at which F1 reaches it maximum (within the cutoff limits)"""
 
     # get search interval for F1 maximum
-    trimmedFormants, trimmedTimes = trimFormants(formants, times, beg_cutoff, end_cutoff)
+    trimmedFormants, trimmedTimes = trimFormants(
+        formants, times, beg_cutoff, end_cutoff)
     # get F1 maximum
     F1 = [f[0] if f else 0 for f in trimmedFormants]
         # 'else' for those weird cases where there is a hole in the formant tracks...
@@ -868,6 +1010,13 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
     # via Praat:  ## NOTE:  all temp files are in the "/bin" directory!
     else:   # assume praat here
         if formantPredictionMethod == 'mahalanobis':
+            # adjust maximum formant frequency to speaker sex
+            if speaker.sex in ["m", "M", "male", "MALE"]:
+                maxFormant = 5000
+            elif speaker.sex in ["f", "F", "female", "FEMALE"]:
+                maxFormant = 5500
+            else:
+                sys.exit("ERROR!  Speaker sex undefined.")
             # get measurements for nFormants = 3, 4, 5, 6
             LPCs = []
             nFormants = 3
@@ -875,7 +1024,8 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
                 os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' +
                           vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
                 lpc = praat.Formant()
-                lpc.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
+                lpc.read(
+                    os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
                 LPCs.append(lpc)
                 nFormants += 1
         else:
@@ -887,9 +1037,11 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
         # get Intensity object for intensity cutoff
         # (only for those vowels where we need it)
         if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
-            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
+            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(
+                SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
             intensity = praat.Intensity()
-            intensity.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
+            intensity.read(
+                os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
             os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
             intensity.change_offset(p.xmin - padBeg)
         else:
@@ -906,14 +1058,16 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
                                   # file
             poles.append(lpc.formants())
             bandwidths.append(lpc.bandwidths())
-        vm = measureVowel(p, w, poles, bandwidths, convertedTimes, intensity, measurementPointMethod,
+        vm = measureVowel(
+            p, w, poles, bandwidths, convertedTimes, intensity, measurementPointMethod,
             formantPredictionMethod, padBeg, padEnd, means, covs)
     # default:
     else:   # assume 'default' here
         convertedTimes = [convertTimes(fmt.times(), p.xmin - padBeg)]
         formants = [fmt.formants()]
         bandwidths = [fmt.bandwidths()]
-        vm = measureVowel(p, w, formants, bandwidths, convertedTimes, intensity, measurementPointMethod,
+        vm = measureVowel(
+            p, w, formants, bandwidths, convertedTimes, intensity, measurementPointMethod,
             formantPredictionMethod, padBeg, padEnd, '', '')
 
     os.remove(os.path.join(SCRIPTS_HOME, vowelWavFile))
@@ -975,8 +1129,9 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
                 global count_vowels
                 count_vowels += 1
             i += 1
-        
-        words.append(word)
+        # skip unclear transcriptions and silences
+        if w.mark() != '' and w.mark() != "((xxxx))" and w.mark().upper() != "SP":
+            words.append(word)
 
     # add Plotnik-style codes for the preceding and following segments for all
     # vowels
@@ -1010,6 +1165,15 @@ def isVowel(label):
     else:
         return False
 
+# OLD VERSION
+# def isVowel(label):
+##    """checks whether a phone is a vowel"""
+# all vowel phone labels will end in either '0', '1', or '2'
+# if label[-1] in ['0', '1', '2']:  ## NOTE:  this assumes that there are no empty intervals on the phone tier!
+# return True
+# else:
+# return False
+
 
 def lennig(formants, times):
     """returns time of measurement according to Lennig's (1987) algorithm"""
@@ -1020,7 +1184,8 @@ def lennig(formants, times):
     min_i = -1
     for i in range(1, len(formants) - 1):
         c = (abs(formants[i][0] - formants[i - 1][0]) + abs(formants[i][0] - formants[i + 1][0])) / \
-            formants[i][0] + (abs(formants[i][1] - formants[i - 1][1]) + abs(formants[i][1] - formants[i + 1][1])) / formants[i][1]
+            formants[i][0] + (abs(formants[i][1] - formants[i - 1][1]) + abs(
+                formants[i][1] - formants[i + 1][1])) / formants[i][1]
         if c < prev:
             min_i = i
             prev = c
@@ -1122,14 +1287,16 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
             # For "lennig", "anae" and "faav", which depend on the shape of the
             # formant tracks, different results will be obtained for different
             # nFormants settings.
-            measurementPoint = getMeasurementPoint(phone, poles[j], times[j], intensity, measurementPointMethod)
+            measurementPoint = getMeasurementPoint(
+                phone, poles[j], times[j], intensity, measurementPointMethod)
             i = getTimeIndex(measurementPoint, times[j])
             measurementPoints.append((measurementPoint, i))
             selectedpoles.append(poles[j][i])
             selectedbandwidths.append(bandwidths[j][i])
-            all_tracks.append(getFormantTracks(poles[j], times[j], phone.xmin-padBeg, phone.xmax+padEnd))
-
-        f1, f2, f3, b1, b2, b3, winnerIndex = predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs)
+            all_tracks.append(
+                getFormantTracks(poles[j], times[j], phone.xmin, phone.xmax))
+        f1, f2, f3, b1, b2, b3, winnerIndex = predictF1F2(
+            phone, selectedpoles, selectedbandwidths, means, covs)
         # check that we actually do have a measurement (this may not be the
         # case for gaps in the wave form)
         if not f1 and not f2 and not f3 and not b1 and not b2 and not b3:
@@ -1139,7 +1306,8 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
         tracks = all_tracks[winnerIndex]
 
     else:  # formantPredictionMethod == 'default'
-        measurementPoint = getMeasurementPoint(phone, poles[0], times[0], intensity, measurementPointMethod)
+        measurementPoint = getMeasurementPoint(
+            phone, poles[0], times[0], intensity, measurementPointMethod)
         i = getTimeIndex(measurementPoint, times[0])
         # (changed this so that "poles"/"bandwidths" only reflects measurements made at measurement point -
         # same as for Mahalanobis distance method)
@@ -1227,8 +1395,10 @@ def modifyIntensityCutoff(beg_cutoff, end_cutoff, phone, intensities, times):
     if beg_cutoff > midpoint:
         # in this case, look for new intensity maximum and cutoffs in the first
         # half of the vowel
-        trimmedIntensities, trimmedTimes = trimFormants(intensities, times, phone.xmin, midpoint)
-        beg_cutoff, end_cutoff = getIntensityCutoff(trimmedIntensities, trimmedTimes)
+        trimmedIntensities, trimmedTimes = trimFormants(
+            intensities, times, phone.xmin, midpoint)
+        beg_cutoff, end_cutoff = getIntensityCutoff(
+            trimmedIntensities, trimmedTimes)
 
     return beg_cutoff, end_cutoff
 
@@ -1254,11 +1424,13 @@ def normalize(measurements, m_means):
     # normalize individual measurements
     for m in measurements:
         try:
-            m.norm_f1 = round(650 + 150 * (lobanov(m.f1, grand_means[0], grand_stdvs[0])), 0)
+            m.norm_f1 = round(
+                650 + 150 * (lobanov(m.f1, grand_means[0], grand_stdvs[0])), 0)
         except TypeError:
             m.norm_f1 = ''
         try:
-            m.norm_f2 = round(1700 + 420 * (lobanov(m.f2, grand_means[1], grand_stdvs[1])), 0)
+            m.norm_f2 = round(
+                1700 + 420 * (lobanov(m.f2, grand_means[1], grand_stdvs[1])), 0)
         except TypeError:
             m.norm_f2 = ''
 # try:
@@ -1270,8 +1442,10 @@ def normalize(measurements, m_means):
         # normalize formant tracks for individual measurements
         for i in range(5):
             if m.tracks[2 * i] and m.tracks[2 * i + 1]:
-                m.norm_tracks.append(round(650 + 150 * (lobanov(m.tracks[2 * i], grand_means[0], grand_stdvs[0])), 0))  # F1
-                m.norm_tracks.append(round(1700 + 420 * (lobanov(m.tracks[2 * i + 1], grand_means[1], grand_stdvs[1])), 0))  # F2
+                m.norm_tracks.append(
+                    round(650 + 150 * (lobanov(m.tracks[2 * i], grand_means[0], grand_stdvs[0])), 0))  # F1
+                m.norm_tracks.append(
+                    round(1700 + 420 * (lobanov(m.tracks[2 * i + 1], grand_means[1], grand_stdvs[1])), 0))  # F2
             else:
                 m.norm_tracks.append('')  # F1
                 m.norm_tracks.append('')  # F2
@@ -1280,28 +1454,32 @@ def normalize(measurements, m_means):
     for p in plotnik.PLOTNIKCODES:
         # F1 mean
         try:
-            m_means[p].norm_means[0] = round(650 + 150 * (lobanov(m_means[p].means[0], grand_means[0], grand_stdvs[0])), 0)
+            m_means[p].norm_means[0] = round(
+                650 + 150 * (lobanov(m_means[p].means[0], grand_means[0], grand_stdvs[0])), 0)
         except TypeError:
 # print "No F1 normalized mean for vowel class %s:  value = %s, mean = %s,
 # stdv = %s." % (p, m_means[p].means[0], grand_means[0], grand_stdvs[0])
             m_means[p].norm_means[0] = ''
         # F1 standard deviation
         try:
-            m_means[p].norm_stdvs[0] = round(150 * (m_means[p].stdvs[0] / grand_stdvs[0]), 0)
+            m_means[p].norm_stdvs[0] = round(
+                150 * (m_means[p].stdvs[0] / grand_stdvs[0]), 0)
         except TypeError:
 # print "No F1 normalized standard deviation for vowel class %s:  value =
 # %s, stdv = %s." % (p, m_means[p].stdvs[0], grand_stdvs[0])
             m_means[p].norm_stdvs[0] = ''
         # F2 mean
         try:
-            m_means[p].norm_means[1] = round(1700 + 420 * (lobanov(m_means[p].means[1], grand_means[1], grand_stdvs[1])), 0)
+            m_means[p].norm_means[1] = round(
+                1700 + 420 * (lobanov(m_means[p].means[1], grand_means[1], grand_stdvs[1])), 0)
         except TypeError:
 # print "No F2 normalized mean for vowel class %s:  value = %s, mean = %s,
 # stdv = %s." % (p, m_means[p].means[1], grand_means[1], grand_stdvs[1])
             m_means[p].norm_means[1] = ''
         # F2 standard deviation
         try:
-            m_means[p].norm_stdvs[1] = round(420 * (m_means[p].stdvs[1] / grand_stdvs[1]), 0)
+            m_means[p].norm_stdvs[1] = round(
+                420 * (m_means[p].stdvs[1] / grand_stdvs[1]), 0)
         except TypeError:
 # print "No F2 normalized standard deviation for vowel class %s:  value =
 # %s, stdv = %s." % (p, m_means[p].stdvs[1], grand_stdvs[1])
@@ -1310,14 +1488,16 @@ def normalize(measurements, m_means):
         # normalize mean formant tracks
         for i in range(5):
             try:
-                m_means[p].trackmeans_norm.append((round(650 + 150 * (lobanov(m_means[
+                m_means[p].trackmeans_norm.append(
+                    (round(650 + 150 * (lobanov(m_means[
                         p].trackmeans[
                         2 * i][0], grand_means[0], grand_stdvs[0])), 0),
                      round(150 * (m_means[p].trackmeans[2 * i][1] / grand_stdvs[0]), 0)))  # mean and stdv for F1
             except TypeError:
                 m_means[p].trackmeans_norm.append(('', ''))
             try:
-                m_means[p].trackmeans_norm.append((round(1700 + 420 * (lobanov(m_means[
+                m_means[p].trackmeans_norm.append(
+                    (round(1700 + 420 * (lobanov(m_means[
                         p].trackmeans[
                         2 * i + 1][0], grand_means[1], grand_stdvs[1])), 0),
                      round(420 * (m_means[p].trackmeans[2 * i + 1][1] / grand_stdvs[1]), 0)))
@@ -1355,7 +1535,9 @@ def outputFormantSettings(measurements, speaker, outputFile):
     outfilename = os.path.splitext(outputFile)[0] + ".nFormants"
     f = open(outfilename, 'w')
     f.write("Formant settings for %s:\n\n" % outputFile)
-    f.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
+    f.write(
+        ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, 
+                   speaker.years_of_schooling, speaker.year]))
     f.write('\n\n')
     f.write('\t'.join(['vowel', '3', '4', '5', '6']))
     f.write('\n')
@@ -1378,22 +1560,15 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         # print header, if applicable
         if outputHeader:
             # speaker information
-            s_dict = speaker.__dict__
-            s_keys = s_dict.keys()
-            s_keys.sort()
-
-            fw.write('\t'.join(s_keys))
-            fw.write('\t')
-            fw.write('\t'.join(['vowel', 'stress', 'pre_word', 'word', 'fol_word', 
-                                'F1', 'F2', 'F3', 
-                                'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
-                                'plt_vclass', 'plt_manner', 'plt_place', 
-                                'plt_voice', 'plt_preseg', 'plt_folseq', 'style', 
-                                'glide', 'pre_seg', 'fol_seg', 'context', 
-                                'vowel_index', 'pre_word_trans', 'word_trans', 
-                                'fol_word_trans', 'F1@20%', 'F2@20%',
-                                'F1@35%','F2@35%', 'F1@50%', 'F2@50%', 
-                                'F1@65%','F2@65%', 'F1@80%', 'F2@80%']))
+            #fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
+            fw.write(
+                ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
+            fw.write('\n\n')
+            # header
+            fw.write(
+                '\t'.join(['vowel', 'stress', 'word', 'F1', 'F2', 'F3', 'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
+                           'cd', 'fm', 'fp', 'fv', 'ps', 'fs', 'style', 'glide',
+                           'F1@20%', 'F2@20%', 'F1@35%', 'F2@35%', 'F1@50%', 'F2@50%', 'F1@65%', 'F2@65%', 'F1@80%', 'F2@80%']))
             if formantPredictionMethod == 'mahalanobis':
                 fw.write('\t')
                 fw.write('nFormants')
@@ -1403,57 +1578,40 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         # individual measurements
         for vm in measurements:
-            for speaker_attr in s_keys:
-                fw.write(str(s_dict[speaker_attr]))
-                fw.write('\t')
-            fw.write('\t'.join([vm.phone, str(vm.stress), vm.pre_word, vm.word, vm.fol_word, str(vm.f1)]))
+            fw.write(
+                '\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.f1)]))
                      # vowel (ARPABET coding), stress, word, F1
-
             fw.write('\t')
             if vm.f2:
                 fw.write(str(vm.f2))  # F2 (if present)
-
             fw.write('\t')
             if vm.f3:
                 fw.write(str(vm.f3))  # F3 (if present)
-
             fw.write('\t')
             fw.write(str(vm.b1))  # B1
-
             fw.write('\t')
             if vm.b2:
                 fw.write(str(vm.b2))  # B2
-
             fw.write('\t')
             if vm.b3:
                 fw.write(str(vm.b3))  # B3 (if present)
-
             fw.write('\t')
-            fw.write('\t'.join( [str(vm.t), str(vm.beg), str(vm.end), 
-                                 str(vm.dur), 
-                                 plotnik.plt_vowels(vm.cd), 
-                                 plotnik.plt_manner(vm.fm), 
-                                 plotnik.plt_place(vm.fp), 
-                                 plotnik.plt_voice(vm.fv), 
-                                 plotnik.plt_preseg(vm.ps), 
-                                 plotnik.plt_folseq(vm.fs), vm.style, vm.glide, 
-                                 vm.pre_seg,
-                                 vm.fol_seg, vm.context, vm.p_index, 
-                                 vm.pre_word_trans, vm.word_trans, 
-                                 vm.fol_word_trans]))
+            fw.write(
+                '\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
             fw.write('\t')
                      # time of measurement, beginning and end of phone,
                      # duration, Plotnik environment codes, style coding, glide
                      # coding
-            fw.write('\t'.join([str(round(t, 1)) if t else '' for t in vm.tracks]))  # formant tracks
-
+            fw.write(
+                '\t'.join([str(round(t, 1)) if t else '' for t in vm.tracks]))  # formant tracks
+            fw.write('\t')
             if vm.nFormants:
-                fw.write('\t')
                 fw.write(str(vm.nFormants))
                          # nFormants selected (if Mahalanobis method)
-            if candidates:
                 fw.write('\t')
-                fw.write('\t'.join([','.join([str(p) for p in vm.poles]), ','.join([str(b) for b in vm.bandwidths])]))
+            if candidates:
+                fw.write(
+                    '\t'.join([','.join([str(p) for p in vm.poles]), ','.join([str(b) for b in vm.bandwidths])]))
                          # candidate poles and bandwidths (at point of
                          # measurement)
             fw.write('\n')
@@ -1465,10 +1623,12 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         # print header, if applicable
         if outputHeader:
             # speaker information
-            fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
+            fw.write(
+                ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
             fw.write('\n\n')
             # header
-            fw.write('\t'.join(['vowel', 'stress', 'word', 'norm_F1', 'norm_F2', 't', 'beg', 'end', 'dur',
+            fw.write(
+                '\t'.join(['vowel', 'stress', 'word', 'norm_F1', 'norm_F2', 't', 'beg', 'end', 'dur',
                            'cd', 'fm', 'fp', 'fv', 'ps', 'fs', 'style', 'glide',
                            'norm_F1@20%', 'norm_F2@20%', 'norm_F1@35%', 'norm_F2@35%', 'norm_F1@50%', 'norm_F2@50%',
                            'norm_F1@65%', 'norm_F2@65%', 'norm_F1@80%', 'norm_F2@80%']))
@@ -1478,15 +1638,18 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         # individual measurements
         for vm in measurements:
-            fw.write('\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.norm_f1), str(vm.norm_f2)]))
+            fw.write(
+                '\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.norm_f1), str(vm.norm_f2)]))
                      # vowel (ARPABET coding), stress, word, F1, F2
             fw.write('\t')
-            fw.write('\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
+            fw.write(
+                '\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
             fw.write('\t')
                      # time of measurement, beginning and end of phone,
                      # duration, Plotnik environment codes, style coding, glide
                      # coding
-            fw.write('\t'.join([str(round(t, 1)) if t else '' for t in vm.norm_tracks]))  # formant tracks
+            fw.write(
+                '\t'.join([str(round(t, 1)) if t else '' for t in vm.norm_tracks]))  # formant tracks
             fw.write('\t')
             if vm.nFormants:
                 fw.write(str(vm.nFormants))
@@ -1524,6 +1687,29 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
     # write summary of formant settings to file
     if formantPredictionMethod == 'mahalanobis':
         outputFormantSettings(measurements, speaker, outputFile)
+
+
+def parseConfig(options, f):
+    """processes the config file, checking all options and their values"""
+
+    for line in open(f, 'rU').readlines():
+        # check format of line
+        checkConfigLine(f, line)
+        # check option
+        option = line.split('=')[0].strip()
+        checkConfigOption(f, option)
+        # check value for option
+        value = line.split('=')[1].strip()
+        checkConfigValue(f, option, value)
+        # set option value
+        if value in ["T", "True"]:
+            options[option] = True
+        elif value in ["F", "False"]:
+            options[option] = False
+        else:
+            options[option] = value
+    return options
+
 
 def parseStopWordsFile(f):
     """reads a file of stop words into a list"""
@@ -1563,13 +1749,15 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
                     j = 1
                     # vector with current pole combination and associated
                     # bandwidths
-                    x = np.array([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
+                    x = np.array(
+                        [poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
                     # calculate Mahalanobis distance between x and ANAE mean
                     dist = mahalanobis(x, means[vowel], covs[vowel])
                     # append poles and bandwidths to list of values
                     # (if F3 and bandwidth measurements exist, add to list of appended values)
                     if len(poles) > 2:
-                        values.append([x[0], x[1], x[2], x[3], poles[2], bandwidths[2]])
+                        values.append(
+                            [x[0], x[1], x[2], x[3], poles[2], bandwidths[2]])
                     else:
                         values.append([x[0], x[1], x[2], x[3], '', ''])
                     # append corresponding Mahalanobis distance to list of
@@ -1672,6 +1860,36 @@ def readSpeakerFile(speakerFile):
         speaker.name = speaker.first_name + ' ' + speaker.last_name
     return speaker
 
+
+def setDefaultOptions():
+    """specifies the default options for the program"""
+
+    options = {}
+    options['case'] = 'upper'
+    options['outputFormat'] = 'text'
+    options['outputHeader'] = True
+    options['formantPredictionMethod'] = 'mahalanobis'
+    options['measurementPointMethod'] = 'faav'
+    options['speechSoftware'] = 'Praat'
+    options['nFormants'] = 5
+    options['maxFormant'] = 5000
+    options['nSmoothing'] = 12
+    options['removeStopWords'] = False
+    options['measureUnstressed'] = True
+    options['minVowelDuration'] = 0.05
+    options['windowSize'] = 0.025
+    options['preEmphasis'] = 50
+    options['multipleFiles'] = False
+    options[
+        'stopWords'] = ["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
+                        "SHE", "SHE'S", "THAT", "THE", "THEM", "THEN", "THERE", "THEY", "THIS", "UH", "UM", "UP", "WAS", "WE", "WERE", "WHAT", "YOU"]
+    options['remeasurement'] = False
+    options['candidates'] = False
+    options['vowelSystem'] = 'NorthAmerican'
+
+    return options
+
+
 def smoothTracks(poles, s):
     """smoothes formant/bandwidth tracks by averaging over a window of 2s+1 samples"""
 
@@ -1723,19 +1941,8 @@ def trimFormants(formants, times, minimum, maximum):
 
     return trimmedFormants, trimmedTimes
 
-def window(iterable, window_len=2, window_step=1):
-    """returns a tuple from an iterator"""
-    iterators = tee(iterable, window_len)
-    for skip_steps, itr in enumerate(iterators):
-        for ignored in islice(itr, skip_steps):
-            pass
-    window_itr = izip(*iterators)
-    if window_step != 1:
-        window_itr = islice(window_itr, step=window_step)
-    return window_itr    
 
-
-def whichSpeaker(speakers):
+def whichSpeaker(speakers, fileStem):
     """prompts the user for input on the speaker to be analyzed"""
 
     # if there are just two tiers in the input TextGrid, speakers will be an
@@ -1744,23 +1951,25 @@ def whichSpeaker(speakers):
         speaker = getSpeakerBackground("", 0)
         return speaker
     # get speaker from list of tiers
-    print "Speakers in TextGrid:"
-    for i, s in enumerate(speakers):
-        print "%i.\t%s" % (i + 1, s)
+    #print "Speakers in TextGrid:"
+    #for i, s in enumerate(speakers):
+    #    print "%i.\t%s" % (i + 1, s)
     # user input is from 1 to number of speakers; index in speaker list one
     # less!
-    speaknum = int(raw_input("Which speaker should be analyzed (number)?  ")) - 1
+    # speaknum = int(
+    #    raw_input("Which speaker should be analyzed (number)?  ")) - 1
+    speaknum = 0 # this may not always be true
     if speaknum not in range(len(speakers)):
         print "ERROR!  Please select a speaker number from 1 - %i.  " % (len(speakers) + 1)
         speaker = whichSpeaker(speakers)
         return speaker
     # plus, prompt for speaker background info and return speaker object
     else:
-        speaker = getSpeakerBackground(speakers[speaknum], speaknum)
+        speaker = readPNCdata(speakers[speaknum], speaknum, fileStem)
         return speaker
 
 
-def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
+def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords):
     """writes a log file"""
 
     f = open(filename, 'w')
@@ -1802,33 +2011,34 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
                 (count_unstressed, float(count_unstressed) / float(count_vowels) * 100))
     f.write("\n\n")
     f.write("extractFormant settings:\n")
-    f.write("- removeStopWords:\t\t%s\n" % opts.removeStopWords)
-    f.write("- measureUnstressed:\t\t%s\n" % (not opts.onlyMeasureStressed))
-    f.write("- minVowelDuration:\t\t%.3f\n" % opts.minVowelDuration)
-    f.write("- formantPredictionMethod:\t%s\n" % opts.formantPredictionMethod)
-    f.write("- measurementPointMethod:\t%s\n" % opts.measurementPointMethod)
-    f.write("- nFormants:\t\t\t%i\n" % opts.nFormants)
-    f.write("- maxFormant:\t\t\t%i\n" % opts.maxFormant)
-    f.write("- nSmoothing:\t\t\t%i\n" % opts.nSmoothing)
-    f.write("- windowSize:\t\t\t%.3f\n" % opts.windowSize)
-    f.write("- preEmphasis:\t\t\t%i\n" % opts.preEmphasis)
-    f.write("- speechSoftware:\t\t%s\n" % opts.speechSoftware)
-    f.write("- outputFormat:\t\t\t%s\n" % opts.outputFormat)
-    f.write("- outputHeader:\t\t\t%s\n" % (not opts.noOutputHeader))
-    f.write("- case:\t\t\t\t%s\n" % opts.case)
-    f.write("- multipleFiles:\t\t%s\n" % opts.multipleFiles)
-    f.write("- meansFile:\t\t\t%s\n" % opts.means)
-    f.write("- covsFile:\t\t\t%s\n" % opts.covariances)
-    f.write("- remeasurement:\t\t%s\n" % opts.remeasurement)
-    f.write("- vowelSystem:\t\t%s\n" % opts.vowelSystem)
-    if opts.removeStopWords:
-        f.write("- stopWords:\t\t\t%s\n" % opts.stopWords)
+    f.write("- removeStopWords:\t\t%s\n" % removeStopWords)
+    f.write("- measureUnstressed:\t\t%s\n" % measureUnstressed)
+    f.write("- minVowelDuration:\t\t%.3f\n" % minVowelDuration)
+    f.write("- formantPredictionMethod:\t%s\n" % formantPredictionMethod)
+    f.write("- measurementPointMethod:\t%s\n" % measurementPointMethod)
+    f.write("- nFormants:\t\t\t%i\n" % nFormants)
+    f.write("- maxFormant:\t\t\t%i\n" % maxFormant)
+    f.write("- nSmoothing:\t\t\t%i\n" % nSmoothing)
+    f.write("- windowSize:\t\t\t%.3f\n" % windowSize)
+    f.write("- preEmphasis:\t\t\t%i\n" % preEmphasis)
+    f.write("- speechSoftware:\t\t%s\n" % speechSoftware)
+    f.write("- outputFormat:\t\t\t%s\n" % outputFormat)
+    f.write("- outputHeader:\t\t\t%s\n" % outputHeader)
+    f.write("- case:\t\t\t\t%s\n" % case)
+    f.write("- multipleFiles:\t\t%s\n" % multipleFiles)
+    f.write("- meansFile:\t\t\t%s\n" % meansFile)
+    f.write("- covsFile:\t\t\t%s\n" % covsFile)
+    f.write("- remeasurement:\t\t%s\n" % remeasurement)
+    f.write("- vowelSystem:\t\t%s\n" % vowelSystem)
+    if removeStopWords:
+        f.write("- stopWords:\t\t\t%s\n" % stopWords)
     f.write("\n\n")
     f.write("Time statistics:\n\n")
     f.write("count\ttime\td(time)\ttoken\n")
     for i in range(len(logtimes)):
         # chunk number and time stamp
-        f.write(str(logtimes[i][0]) + "\t" + str(round(logtimes[i][1], 3)) + "\t")
+        f.write(str(logtimes[i][0]) + "\t" + str(
+            round(logtimes[i][1], 3)) + "\t")
         # delta time
         if i > 0:
             f.write(str(round(logtimes[i][1] - logtimes[i - 1][1], 3)) + "\t")
@@ -1888,46 +2098,78 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         PRAATNAME = 'Praat'
 
     # by default, assume that these files are located in the current directory
-    meansFile = opts.means
-    covsFile = opts.covariances
-    phonesetFile = opts.phoneset
-    stopWordsFile = opts.stopWordsFile
+    meansFile = 'means.txt'
+    covsFile = 'covs.txt'
+    phonesetFile = 'cmu_phoneset.txt'
+    configFile = ''
+    stopWordsFile = ''
+    speakerFile = ''
 
-    if stopWordsFile:
+    # process program options
+    for o, a in opts:
+        if o == "--means":
+            meansFile = a
+        elif o == "--covariances":
+            covsFile = a
+        elif o == "--phoneset":
+            phonesetFile = a
+        elif o == "--outputFormat":
+            global outputFormat
+            outputFormat = a
+        elif o == "--config":
+            configFile = a
+        elif o == "--stopWords":
+            stopWordsFile = a
+        elif o == "--speaker":
+            speakerFile = a
+        else:
+            print "ERROR:  unrecognized option %s" % o
+            print __doc__
+            sys.exit(0)
+
+    # set the default options that will be used if no config file is specified
+    options = setDefaultOptions()
+
+    # if the user specifies a config file, get the values for the options
+    # contained in it
+    if configFile != '':
+        options = parseConfig(options, configFile)
+
+    if stopWordsFile != '':
         stopWords = parseStopWordsFile(stopWordsFile)
     else:
-        stopWords = opts.stopWords
+        stopWords = options['stopWords']
 
     # assign the options to individual variables and to type conversion if
     # necessary
-    global case, outputHeader, outputFormat, formantPredictionMethod, measurementMethod, measurementPointMethod, nFormants#, maxFormant
+    global case, outputHeader, formantPredictionMethod, measurementMethod, measurementPointMethod, speechSoftware, nFormants, maxFormant
     global nSmoothing, removeStopWords, measureUnstressed, minVowelDuration, windowSize, preEmphasis, multipleFiles, remeasurement, candidates, vowelSystem
-    case = opts.case
-    outputFormat = opts.outputFormat
-    outputHeader = not opts.noOutputHeader
-    formantPredictionMethod = opts.formantPredictionMethod
-    measurementPointMethod = opts.measurementPointMethod
-    speechSoftware = opts.speechSoftware
-    nFormants = opts.nFormants
-    #maxFormant = opts.maxFormant
-    nSmoothing = opts.nSmoothing
-    removeStopWords = opts.removeStopWords
-    measureUnstressed = not opts.onlyMeasureStressed
-    minVowelDuration = opts.minVowelDuration
-    windowSize = opts.windowSize
-    preEmphasis = opts.preEmphasis
-    multipleFiles = opts.multipleFiles
-    remeasurement = opts.remeasurement
-    candidates = opts.candidates
-    vowelSystem = opts.vowelSystem
+    case = options['case']
+    outputFormat = options['outputFormat']
+    outputHeader = options['outputHeader']
+    formantPredictionMethod = options['formantPredictionMethod']
+    measurementPointMethod = options['measurementPointMethod']
+    speechSoftware = options['speechSoftware']
+    nFormants = int(options['nFormants'])
+    maxFormant = int(options['maxFormant'])
+    nSmoothing = int(options['nSmoothing'])
+    removeStopWords = options['removeStopWords']
+    measureUnstressed = options['measureUnstressed']
+    minVowelDuration = float(options['minVowelDuration'])
+    windowSize = float(options['windowSize'])
+    preEmphasis = float(options['preEmphasis'])
+    multipleFiles = options['multipleFiles']
+    remeasurement = options['remeasurement']
+    candidates = options['candidates']
+    vowelSystem = options['vowelSystem']
     print "Processed options."
 
     # read CMU phoneset ("cmu_phoneset.txt")
-    phoneset = cmu.read_phoneset(opts.phoneset)
+    phoneset = cmu.read_phoneset(phonesetFile)
     print "Read CMU phone set."
 
     # make sure the specified speech analysis program is in our path
-    speechSoftware = checkSpeechSoftware(opts.speechSoftware)
+    speechSoftware = checkSpeechSoftware(speechSoftware)
     print "Speech software to be used is %s." % speechSoftware
 
     # determine what program we'll use to extract portions of the audio file
@@ -1952,7 +2194,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
     # for "multipleFiles" option:  read lists of files into (internal) lists
     if multipleFiles:
-        wavFiles, tgFiles, outputFiles = processInput(wavInput, tgInput, output)
+        wavFiles, tgFiles, outputFiles = processInput(
+            wavInput, tgInput, output)
     else:
         wavFiles = [wavInput]
         tgFiles = [tgInput]
@@ -1972,26 +2215,14 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # alignments
         tg = praat.TextGrid()
         tg.read(tgFile)
-        if opts.speaker:
-            speaker = readSpeakerFile(opts.speaker)
+        if speakerFile:
+            speaker = readSpeakerFile(speakerFile)
             print "Read speaker background information from .speaker file."
         else:
             speakers = checkTiers(tg)  # -> returns list of speakers
             # prompt user to choose speaker to be analyzed, and for background
             # information on the speaker
-            speaker = whichSpeaker(speakers)  # -> returns Speaker object
-
-        # adjust maximum formant frequency to speaker sex
-        if speaker.sex in ["m", "M", "male", "MALE"]:
-            opts.maxFormant = 5000
-        elif speaker.sex in ["f", "F", "female", "FEMALE"]:
-            opts.maxFormant = 5500
-        else:
-            sys.exit("ERROR!  Speaker sex undefined.")
-        global maxFormant
-        maxFormant = opts.maxFormant
-
-
+            speaker = whichSpeaker(speakers, fileStem)  # -> returns Speaker object
         markTime("prelim1")
         # extract list of words and their corresponding phones (with all
         # coding) -> only for chosen speaker
@@ -2003,33 +2234,25 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         markTime("prelim2")
 
-        if not opts.verbose:
-            n_words = len(words)
-            word_iter = 0
-            old_percent = 0
+        n_words = len(words)
+        word_iter = 0
+        old_percent = 0
 
-            progressbar_width = 100
-            sys.stdout.write("\nExtracting Formants\n")
-            sys.stdout.write("[%s]" % (" " * progressbar_width))
-            sys.stdout.flush()
-            sys.stdout.write("\b" * (progressbar_width + 1))
-                             # return to start of line, after '['
+        progressbar_width = 100
+        sys.stdout.write("\nExtracting Formants\n")
+        sys.stdout.write("[%s]" % (" " * progressbar_width))
+        sys.stdout.flush()
+        sys.stdout.write("\b" * (progressbar_width + 1))
+                         # return to start of line, after '['
 
-        for pre_w, w, fol_w in window(words, window_len = 3):
-            
+        for w in words:
+            word_iter = word_iter + 1
+            new_percent = math.floor((float(word_iter) / n_words) * 100)
 
-            if not opts.verbose:
-                word_iter = word_iter + 1
-                new_percent = math.floor((float(word_iter) / n_words) * 100)
-
-                for p in range(int(old_percent), int(new_percent)):
-                    sys.stdout.write("-")
-                    sys.stdout.flush()
-                    old_percent = new_percent
-
-            # skip unclear transcriptions and silences
-            if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
-                continue
+            for p in range(int(old_percent), int(new_percent)):
+                sys.stdout.write("-")
+                sys.stdout.flush()
+                old_percent = new_percent
 
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
@@ -2037,28 +2260,23 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
             # if the word doesn't contain any vowels, then we won't analyze it
             if numV == 0:
-                if opts.verbose:
-                    print ''
-                    print "\t\t\t...no vowels in word %s at %.3f." % (w.transcription, w.xmin)
+                # print "\t\t\t...no vowels in word %s." % w.transcription
                 continue
 
             # don't process this word if it's in the list of stop words
             if removeStopWords and w.transcription in stopWords:
                 count_stopwords += numV
-                if opts.verbose:
-                    print ''
-                    print "\t\t\t...word %s at %.3f is stop word." % (w.transcription, w.xmin)
+                # print "\t\t\t...word %s is stop word." % w.transcription
                 continue
 
             # exclude uncertain transcriptions
             if uncertain.search(w.transcription):
                 count_uncertain += numV
-                if opts.verbose:
-                    print ''
-                    print "\t\t\t...word %s at %.3f is uncertain transcription." % (w.transcription, w.xmin)
+                # print "\t\t\t...word %s is uncertain transcription." %
+                # w.transcription
                 continue
 
-            for p_index, p in enumerate(w.phones):
+            for p in w.phones:
                 # skip this phone if it's not a vowel
                 if not isVowel(p.label):
                     continue
@@ -2087,41 +2305,15 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     count_too_short += 1
                     continue
 
-                word_trans = " ".join([x.label for x in w.phones])
-                pre_word_trans = " ".join([x.label for x in pre_w.phones])                
-                fol_word_trans = " ".join([x.label for x in fol_w.phones])
-                p_context = ''
-                pre_seg = ''
-                fol_seg = ''
-
-                if len(w.phones) is 1:
-                    p_context = "coextensive"
-                    pre_seg = pre_w.phones[-1].label
-                    fol_seg = fol_w.phones[0].label
-                elif p_index is 0:
-                    p_context = "initial"
-                    pre_seg = pre_w.phones[-1].label
-                    fol_seg = w.phones[p_index+1].label
-                elif p_index is (len(w.phones)-1):
-                    p_context = "final"
-                    pre_seg = w.phones[p_index-1].label
-                    fol_seg = fol_w.phones[0].label
-                else:
-                    p_context = "internal"                    
-                    pre_seg = w.phones[p_index-1].label
-                    fol_seg = w.phones[p_index+1].label
-
-
-
                 vowelFileStem = fileStem + '_' + \
                     p.label  # name of sound file - ".wav" + phone label
                 vowelWavFile = vowelFileStem + '.wav'
 
-                if opts.verbose:
-                    print ''
-                    print "Extracting formants for vowel %s in word %s at %.3f" % (p.label, w.transcription, w.xmin)
-
-                markTime(count_analyzed + 1, p.label + " in " + w.transcription)
+                # print ''
+                # print "Extracting formants for vowel %s in word %s" %
+                # (p.label, w.transcription)
+                markTime(
+                    count_analyzed + 1, p.label + " in " + w.transcription)
 
                 # get padding for vowel in question
                 padBeg, padEnd = getPadding(p, windowSize, maxTime)
@@ -2129,21 +2321,12 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 # windowSize:  from config file or default settings
                 # maxTime = duration of sound file/TextGrid
 
-                extractPortion(wavFile, vowelWavFile, p.xmin - padBeg, p.xmax + padEnd, soundEditor)
+                extractPortion(
+                    wavFile, vowelWavFile, p.xmin - padBeg, p.xmax + padEnd, soundEditor)
 
-                vm = getVowelMeasurement(vowelFileStem, p, w, opts.speechSoftware,
+                vm = getVowelMeasurement(vowelFileStem, p, w, speechSoftware,
                                          formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker)
-
                 if vm:  # if vowel is too short for smoothing, nothing will be returned
-                    vm.context = p_context
-                    vm.pre_seg = pre_seg
-                    vm.fol_seg = fol_seg
-                    vm.p_index = str(p_index+1)
-                    vm.word_trans = word_trans
-                    vm.pre_word_trans = pre_word_trans
-                    vm.fol_word_trans = fol_word_trans
-                    vm.pre_word = pre_w.transcription
-                    vm.fol_word = fol_w.transcription
                     measurements.append(vm)
                     count_analyzed += 1
 
@@ -2158,80 +2341,29 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # normalize measurements
         measurements, m_means = normalize(measurements, m_means)
         print ''
-        outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        outputMeasurements(
+            outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
 
         markTime("end")
 
         # write log file
         writeLog(os.path.splitext(outputFile)
-                 [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, stopWords, opts)
+                 [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, stopWords)
 
 
 #
 # MAIN PROGRAM STARTS HERE                         ##
 #
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Takes as input a sound file and a Praat .TextGrid file (with word and phone tiers) and outputs automatically extracted F1 and F2 measurements for each vowel (either as a tab-delimited text file or as a Plotnik file).",
-                                     usage='python %(prog)s [options] filename.wav filename.TextGrid outputFile [--stopWords ...]',
-                                     fromfile_prefix_chars="+")
-    parser.add_argument("--candidates", action="store_true", 
-                        help="Return all candidate measurements in output")
-    parser.add_argument("--case", choices=["lower","upper"], default="upper",
-                        help="Return word transcriptions in specified case.")
-    parser.add_argument("--covariances", "-r",  default="covs.txt",
-                        help="covariances, required for mahalanobis method")
-    parser.add_argument("--formantPredictionMethod", choices = ["default","mahalanobis"], default = "mahalanobis",
-                        help="Formant prediction method")
-    parser.add_argument("--maxFormant", type=int, default=5000)
-    parser.add_argument("--means", "-m",  default="means.txt",
-                        help="mean values, required for mahalanobis method")
-    parser.add_argument("--measurementPointMethod", choices = ['fourth', 'third', 'mid', 'lennig', 'anae', 'faav', 'maxint'],
-                        default="faav", help = "Method for determining measurement point")
-    parser.add_argument("--minVowelDuration", type=float, default=0.05,
-                        help = "Minimum duration in seconds, below which vowels won't be analyzed.")
-    parser.add_argument("--multipleFiles", action="store_true",
-                        help="Interpret positional arguments as files of listed .wav, .txt and output files.")        
-    parser.add_argument("--nFormants", type=int, default=5,
-                        help="Specify the order of the LPC analysis to be conducted")
-    parser.add_argument("--noOutputHeader", action="store_true",
-                        help="Don't include output header in text output.")
-    parser.add_argument("--nSmoothing", type=int, default=12,
-                        help="Specifies the number of samples to be used for the smoothing of the formant tracks.")
-    parser.add_argument("--onlyMeasureStressed", action="store_false")
-    parser.add_argument("--outputFormat",   "-o",  choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
-                        help = "Output format. Tab delimited file, plotnik file, or both.")    
-    parser.add_argument("--preEmphasis", type=float, default=50,
-                        help="The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.")
-    parser.add_argument("--phoneset", "-p",  default = "cmu_phoneset.txt")
-    parser.add_argument("--remeasurement", action="store_true",
-                        help="Do a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance")
-    parser.add_argument("--removeStopWords", action="store_true",
-                        help="Don't measure vowels in stop words." )
-    parser.add_argument("--speechSoftware", choices = ['praat', 'Praat', 'esps', 'ESPS'], default = "Praat",
-                        help="The speech software program to be used for LPC analysis.")
-    parser.add_argument("--speaker",  "-s", 
-                        help = "*.speaker file, if used")
-    parser.add_argument("--stopWords", nargs="+", default=["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
-                        "SHE", "SHE'S", "THAT", "THE", "THEM", "THEN", "THERE", "THEY", "THIS", "UH", "UM", "UP", "WAS", "WE", "WERE", "WHAT", "YOU"],
-                        help = "Words to be excluded from measurement")
-    parser.add_argument("--stopWordsFile",      "-t", 
-                        help = "file containing words to exclude from analysis")
-    parser.add_argument("--vowelSystem", choices = ['phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET'],
-                        default="NorthAmerican",help="If set to Phila, a number of vowels will be reclassified to reflect the phonemic distinctions of the Philadelphia vowel system.")
-    parser.add_argument("--verbose", "-v", action="store_true",
-                        help = "verbose output. useful for debugging")
-    parser.add_argument("--windowSize", type=float, default=0.025,
-                        help="In sec, the size of the Gaussian window to be used for LPC analysis.")
-    parser.add_argument("wavInput",
-                        help = "*.wav audio file")
-    parser.add_argument("tgInput",
-                        help = "*.TextGrid alignment")
-    parser.add_argument("output",
-                        help="File stem for output")
-
-    opts = parser.parse_args()        
-    wavInput = opts.wavInput
-    tgInput = opts.tgInput
-    output = opts.output
+    try:
+        # parse program arguments and options
+        opts, args = getopt.getopt(
+            sys.argv[1:], '', ["means=", "covariances=", "phoneset=", "outputFormat=", "config=", "stopWords=", "speaker="])
+        wavInput, tgInput, output = args
+    except:
+        (type, value, traceback) = sys.exc_info()
+        print value
+        print __doc__
+        sys.exit(0)
 
     extractFormants(wavInput, tgInput, output, opts)

@@ -876,6 +876,11 @@ def readPNCdata(speakername, speakernum, fileStem):
     if subject in name:
         speaker.name = name[subject]
         if speaker.name[0:3] == speakername[0:3]:
+            speaker.first_name = speaker.name.strip().split()[0]
+            try:
+                speaker.last_name = speaker.name.strip().split()[1][0]
+            except IndexError:
+                speaker.last_name = ''
             speaker.sex = sex[subject]
             speaker.age = age[subject]
             speaker.ethnicity = ethnicity[subject]

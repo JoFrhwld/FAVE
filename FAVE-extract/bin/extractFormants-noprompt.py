@@ -847,7 +847,7 @@ def getSoundEditor():
 def readPNCdata(speakername, speakernum, fileStem):
     """reads speaker demographics from a csv file"""
     speaker = Speaker()
-    datafile = '/Users/hilary/Desktop/PNC_tools/PNC_data.csv'
+    datafile = 'PNC_data.csv'
     SUBJECT = r'^\w\w\w?\d?\d?-\w?\d?\d?-\d?\d?\w?'
     name = {}
     age = {}
@@ -1542,7 +1542,8 @@ def outputFormantSettings(measurements, speaker, outputFile):
     f = open(outfilename, 'w')
     f.write("Formant settings for %s:\n\n" % outputFile)
     f.write(
-        ', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
+        ', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, 
+                   speaker.schooling, speaker.year]))
     f.write('\n\n')
     f.write('\t'.join(['vowel', '3', '4', '5', '6']))
     f.write('\n')

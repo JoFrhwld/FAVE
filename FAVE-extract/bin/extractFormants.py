@@ -77,6 +77,7 @@ import cmu
 import vowel
 
 import numpy as np
+from itertools import tee, islice, izip
 
 from remeasure import remeasure
 from mahalanobis import mahalanobis
@@ -178,7 +179,15 @@ class VowelMeasurement:
             # formant "tracks" for all possible formant settings (needed for
             # remeasurement)
         self.norm_tracks = []  # normalized formant "tracks"
-
+        self.pre_seg = ''
+        self.fol_seg = ''
+        self.context = ''
+        self.p_index = ''
+        self.word_trans = ''
+        self.pre_word_trans = ''
+        self.fol_word_trans = ''
+        self.pre_word = ''
+        self.fol_word = ''
 
 class VowelMean:
 
@@ -266,12 +275,9 @@ def addPlotnikCodes(words, phoneset, speaker, vowelSystem):
                 if code:  # no code returned if it's a consonant
                     w.phones[i].code = code  # whole code
                     w.phones[i].cd = code.split('.')[0]  # vowel class code
-                    w.phones[i].fm = code.split('.')[
-                        1][0]  # following segment - manner
-                    w.phones[i].fp = code.split('.')[
-                        1][1]  # following segment - place
-                    w.phones[i].fv = code.split('.')[
-                        1][2]  # following segment - voice
+                    w.phones[i].fm = code.split('.')[1][0]  # following segment - manner
+                    w.phones[i].fp = code.split('.')[1][1]  # following segment - place
+                    w.phones[i].fv = code.split('.')[1][2]  # following segment - voice
                     w.phones[i].ps = code.split('.')[1][3]  # preceding segment
                     w.phones[i].fs = code.split('.')[1][4]  # following sequences
                 if (prec_p and prec_p != '') or prec_p == '':  # phone is a vowel and has or has not preceding segment
@@ -966,9 +972,8 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
                 global count_vowels
                 count_vowels += 1
             i += 1
-        # skip unclear transcriptions and silences
-        if w.mark() != '' and w.mark() != "((xxxx))" and w.mark().upper() != "SP":
-            words.append(word)
+        
+        words.append(word)
 
     # add Plotnik-style codes for the preceding and following segments for all
     # vowels
@@ -1370,13 +1375,22 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         # print header, if applicable
         if outputHeader:
             # speaker information
-            #fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.city, speaker.state, speaker.year]))
-            fw.write(', '.join([speaker.name, speaker.age, speaker.sex, speaker.ethnicity, speaker.years_of_schooling, speaker.location, speaker.year]))
-            fw.write('\n\n')
-            # header
-            fw.write('\t'.join(['vowel', 'stress', 'word', 'F1', 'F2', 'F3', 'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
-                           'cd', 'fm', 'fp', 'fv', 'ps', 'fs', 'style', 'glide',
-                           'F1@20%', 'F2@20%', 'F1@35%', 'F2@35%', 'F1@50%', 'F2@50%', 'F1@65%', 'F2@65%', 'F1@80%', 'F2@80%']))
+            s_dict = speaker.__dict__
+            s_keys = s_dict.keys()
+            s_keys.sort()
+
+            fw.write('\t'.join(s_keys))
+            fw.write('\t')
+            fw.write('\t'.join(['vowel', 'stress', 'pre_word', 'word', 'fol_word', 
+                                'F1', 'F2', 'F3', 
+                                'B1', 'B2', 'B3', 't', 'beg', 'end', 'dur',
+                                'plt_vclass', 'plt_manner', 'plt_place', 
+                                'plt_voice', 'plt_preseg', 'plt_folseq', 'style', 
+                                'glide', 'pre_seg', 'fol_seg', 'context', 
+                                'vowel_index', 'pre_word_trans', 'word_trans', 
+                                'fol_word_trans', 'F1@20%', 'F2@20%',
+                                'F1@35%','F2@35%', 'F1@50%', 'F2@50%', 
+                                'F1@65%','F2@65%', 'F1@80%', 'F2@80%']))
             if formantPredictionMethod == 'mahalanobis':
                 fw.write('\t')
                 fw.write('nFormants')
@@ -1386,7 +1400,10 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         # individual measurements
         for vm in measurements:
-            fw.write('\t'.join([vm.phone, str(vm.stress), vm.word, str(vm.f1)]))
+            for speaker_attr in s_keys:
+                fw.write(str(s_dict[speaker_attr]))
+                fw.write('\t')
+            fw.write('\t'.join([vm.phone, str(vm.stress), vm.pre_word, vm.word, vm.fol_word, str(vm.f1)]))
                      # vowel (ARPABET coding), stress, word, F1
 
             fw.write('\t')
@@ -1409,8 +1426,18 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
                 fw.write(str(vm.b3))  # B3 (if present)
 
             fw.write('\t')
-            fw.write('\t'.join([str(vm.t), str(vm.beg), str(vm.end), str(vm.dur), vm.cd, vm.fm, vm.fp, vm.fv, vm.ps, vm.fs, vm.style, vm.glide]))
-
+            fw.write('\t'.join( [str(vm.t), str(vm.beg), str(vm.end), 
+                                 str(vm.dur), 
+                                 plotnik.plt_vowels(vm.cd), 
+                                 plotnik.plt_manner(vm.fm), 
+                                 plotnik.plt_place(vm.fp), 
+                                 plotnik.plt_voice(vm.fv), 
+                                 plotnik.plt_preseg(vm.ps), 
+                                 plotnik.plt_folseq(vm.fs), vm.style, vm.glide, 
+                                 vm.pre_seg,
+                                 vm.fol_seg, vm.context, vm.p_index, 
+                                 vm.pre_word_trans, vm.word_trans, 
+                                 vm.fol_word_trans]))
             fw.write('\t')
                      # time of measurement, beginning and end of phone,
                      # duration, Plotnik environment codes, style coding, glide
@@ -1693,6 +1720,17 @@ def trimFormants(formants, times, minimum, maximum):
 
     return trimmedFormants, trimmedTimes
 
+def window(iterable, window_len=2, window_step=1):
+    """returns a tuple from an iterator"""
+    iterators = tee(iterable, window_len)
+    for skip_steps, itr in enumerate(iterators):
+        for ignored in islice(itr, skip_steps):
+            pass
+    window_itr = izip(*iterators)
+    if window_step != 1:
+        window_itr = islice(window_itr, step=window_step)
+    return window_itr    
+
 
 def whichSpeaker(speakers):
     """prompts the user for input on the speaker to be analyzed"""
@@ -1974,7 +2012,9 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
             sys.stdout.write("\b" * (progressbar_width + 1))
                              # return to start of line, after '['
 
-        for w in words:
+        for pre_w, w, fol_w in window(words, window_len = 3):
+            
+
             if not opts.verbose:
                 word_iter = word_iter + 1
                 new_percent = math.floor((float(word_iter) / n_words) * 100)
@@ -1983,6 +2023,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     sys.stdout.write("-")
                     sys.stdout.flush()
                     old_percent = new_percent
+
+            # skip unclear transcriptions and silences
+            if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
+                continue
 
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
@@ -2011,7 +2055,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     print "\t\t\t...word %s at %.3f is uncertain transcription." % (w.transcription, w.xmin)
                 continue
 
-            for p in w.phones:
+            for p_index, p in enumerate(w.phones):
                 # skip this phone if it's not a vowel
                 if not isVowel(p.label):
                     continue
@@ -2040,6 +2084,32 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     count_too_short += 1
                     continue
 
+                word_trans = " ".join([x.label for x in w.phones])
+                pre_word_trans = " ".join([x.label for x in pre_w.phones])                
+                fol_word_trans = " ".join([x.label for x in fol_w.phones])
+                p_context = ''
+                pre_seg = ''
+                fol_seg = ''
+
+                if len(w.phones) is 1:
+                    p_context = "coextensive"
+                    pre_seg = pre_w.phones[-1].label
+                    fol_seg = fol_w.phones[0].label
+                elif p_index is 0:
+                    p_context = "initial"
+                    pre_seg = pre_w.phones[-1].label
+                    fol_seg = w.phones[p_index+1].label
+                elif p_index is (len(w.phones)-1):
+                    p_context = "final"
+                    pre_seg = w.phones[p_index-1].label
+                    fol_seg = fol_w.phones[0].label
+                else:
+                    p_context = "internal"                    
+                    pre_seg = w.phones[p_index-1].label
+                    fol_seg = w.phones[p_index+1].label
+
+
+
                 vowelFileStem = fileStem + '_' + \
                     p.label  # name of sound file - ".wav" + phone label
                 vowelWavFile = vowelFileStem + '.wav'
@@ -2047,6 +2117,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print ''
                     print "Extracting formants for vowel %s in word %s at %.3f" % (p.label, w.transcription, w.xmin)
+
                 markTime(count_analyzed + 1, p.label + " in " + w.transcription)
 
                 # get padding for vowel in question
@@ -2059,7 +2130,17 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
                 vm = getVowelMeasurement(vowelFileStem, p, w, opts.speechSoftware,
                                          formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker)
+
                 if vm:  # if vowel is too short for smoothing, nothing will be returned
+                    vm.context = p_context
+                    vm.pre_seg = pre_seg
+                    vm.fol_seg = fol_seg
+                    vm.p_index = str(p_index+1)
+                    vm.word_trans = word_trans
+                    vm.pre_word_trans = pre_word_trans
+                    vm.fol_word_trans = fol_word_trans
+                    vm.pre_word = pre_w.transcription
+                    vm.fol_word = fol_w.transcription
                     measurements.append(vm)
                     count_analyzed += 1
 

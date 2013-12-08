@@ -1,5 +1,5 @@
 --outputFormat
-text
+txt
 --speechSoftware
 Praat
 --formantPredictionMethod

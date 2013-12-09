@@ -759,9 +759,11 @@ def readInputData(speakername, speakernum, fileStem):
         for row in DictReader(source):
             sub = row['SubjectID']
             Input_dict[sub] = row
-
+    
+    # check to make sure speaker is in datafile
     if subject in Input_dict:
         speaker.name = Input_dict[subject]['Name']
+        # check to make sure speaker to extract is on the first tier
         if speaker.name[0:3] == speakername[0:3]:
             speaker.first_name = speaker.name.strip().split()[0]
             try:
@@ -777,9 +779,12 @@ def readInputData(speakername, speakernum, fileStem):
             speaker.tiernum = speakernum * \
                 2  # tiernum points to phone tier = first tier for given speaker
         else:
-            exit("Names " + speaker.name + " and " + speakername + " do not match!!")
+            raise NameError('In file ' + fileStem + ', tier name ' + speakername +
+                            ' does not match file name ' + speaker.name)
     else:
-        exit("Speaker " + subject + " not in Input_data.csv!")
+        raise KeyError("Subject " + subject + " not found in Input_data.csv")
+
+    print 'Extracting file: ', fileStem
     return speaker
 
 
@@ -2012,6 +2017,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # alignments
         tg = praat.TextGrid()
         tg.read(tgFile)
+
         if opts.speaker:
             speaker = readSpeakerFile(opts.speaker)
             print "Read speaker background information from .speaker file."
@@ -2019,7 +2025,14 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
             speakers = checkTiers(tg)  # -> returns list of speakers
             # prompt user to choose speaker to be analyzed, and for background
             # information on the speaker
-            speaker = whichSpeaker(speakers, fileStem)  # -> returns Speaker object
+            try:
+                speaker = whichSpeaker(speakers, fileStem)  # -> returns Speaker object
+            except NameError as wrong_tier:
+                print "ERROR!", wrong_tier # speaker not on first tier
+                continue
+            except KeyError as missing:
+                print "ERROR!", missing # speaker not in csv file
+                continue
 
         # adjust maximum formant frequency to speaker sex
         if speaker.sex in ["m", "M", "male", "MALE"]:

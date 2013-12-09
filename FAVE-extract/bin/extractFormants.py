@@ -1890,7 +1890,6 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
 
 def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     """run extractFormants on a sound file and TextGrid file, with the options specified in opts"""
-    # NOTE:  opts is a list of option-value pairs, e.g. [("--config", "config.txt"), ("--speaker", "speaker.txt")]
     # S(OX)PATH and P(RAAT)PATH do not need to be specified when run as a standalone program (they can be verified via the shell),
     # but in some cases (running EF as a module from a CGI script as user
     # "www") this information is needed

@@ -74,13 +74,15 @@ import praat
 import esps
 import plotnik
 import cmu
-import vowel
 
 import numpy as np
-from itertools import tee, islice, izip
 
+from itertools import tee, islice, izip
 from remeasure import remeasure
 from mahalanobis import mahalanobis
+from re import match
+from os import path
+from csv import DictReader
 
 os.chdir(os.getcwd())
 
@@ -739,6 +741,46 @@ def getSoundEditor():
         sys.exit()
 
     return soundEditor
+
+
+def readInputdata(speakername, speakernum, fileStem):
+    """reads speaker demographics from a csv file"""
+    speaker = Speaker()
+    datafile = 'bin/Input_data.csv'
+    SUBJECT = r'^\w\w\w?\d?\d?-\w?\d?\d?-\d?\d?\w?'
+    Input_dict = {}
+
+    m = match(SUBJECT, path.split(fileStem)[1])
+    if m == None:
+            exit('Malformed argument: "' + fname + '"' + ' regex match failed.')
+    subject = m.group(0)
+
+    with open(datafile, 'rU') as source:
+        for row in DictReader(source):
+            sub = row['SubjectID']
+            Input_dict[sub] = row
+
+    if subject in Input_dict:
+        speaker.name = Input_dict[subject]['Name']
+        if speaker.name[0:3] == speakername[0:3]:
+            speaker.first_name = speaker.name.strip().split()[0]
+            try:
+                speaker.last_name = speaker.name.strip().split()[1][0]
+            except IndexError:
+                speaker.last_name = ''
+            speaker.sex = Input_dict[subject]['Sex']
+            speaker.age = Input_dict[subject]['Age']
+            speaker.ethnicity = Input_dict[subject]['Ethnicity']
+            speaker.location = Input_dict[subject]['Nbrhood']
+            speaker.year = Input_dict[subject]['Year']
+            speaker.years_of_schooling = Input_dict[subject]['YearsOfSchool']
+            speaker.tiernum = speakernum * \
+                2  # tiernum points to phone tier = first tier for given speaker
+        else:
+            exit("Names " + speaker.name + " and " + speakername + " do not match!!")
+    else:
+        exit("Speaker " + subject + " not in Input_data.csv!")
+    return speaker
 
 
 def getSpeakerBackground(speakername, speakernum):
@@ -1732,7 +1774,7 @@ def window(iterable, window_len=2, window_step=1):
     return window_itr    
 
 
-def whichSpeaker(speakers):
+def whichSpeaker(speakers, fileStem):
     """prompts the user for input on the speaker to be analyzed"""
 
     # if there are just two tiers in the input TextGrid, speakers will be an
@@ -1741,19 +1783,20 @@ def whichSpeaker(speakers):
         speaker = getSpeakerBackground("", 0)
         return speaker
     # get speaker from list of tiers
-    print "Speakers in TextGrid:"
-    for i, s in enumerate(speakers):
-        print "%i.\t%s" % (i + 1, s)
+    #print "Speakers in TextGrid:"
+    #for i, s in enumerate(speakers):
+    #    print "%i.\t%s" % (i + 1, s)
     # user input is from 1 to number of speakers; index in speaker list one
     # less!
-    speaknum = int(raw_input("Which speaker should be analyzed (number)?  ")) - 1
+    #speaknum = int(raw_input("Which speaker should be analyzed (number)?  ")) - 1
+    speaknum = 0 #this may not always be true, fix later
     if speaknum not in range(len(speakers)):
         print "ERROR!  Please select a speaker number from 1 - %i.  " % (len(speakers) + 1)
         speaker = whichSpeaker(speakers)
         return speaker
     # plus, prompt for speaker background info and return speaker object
     else:
-        speaker = getSpeakerBackground(speakers[speaknum], speaknum)
+        speaker = readInputdata(speakers[speaknum], speaknum, fileStem)
         return speaker
 
 
@@ -1976,7 +2019,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
             speakers = checkTiers(tg)  # -> returns list of speakers
             # prompt user to choose speaker to be analyzed, and for background
             # information on the speaker
-            speaker = whichSpeaker(speakers)  # -> returns Speaker object
+            speaker = whichSpeaker(speakers, fileStem)  # -> returns Speaker object
 
         # adjust maximum formant frequency to speaker sex
         if speaker.sex in ["m", "M", "male", "MALE"]:

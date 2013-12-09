@@ -743,7 +743,7 @@ def getSoundEditor():
     return soundEditor
 
 
-def readInputdata(speakername, speakernum, fileStem):
+def readInputData(speakername, speakernum, fileStem):
     """reads speaker demographics from a csv file"""
     speaker = Speaker()
     datafile = 'bin/Input_data.csv'
@@ -1796,7 +1796,7 @@ def whichSpeaker(speakers, fileStem):
         return speaker
     # plus, prompt for speaker background info and return speaker object
     else:
-        speaker = readInputdata(speakers[speaknum], speaknum, fileStem)
+        speaker = readInputData(speakers[speaknum], speaknum, fileStem)
         return speaker
 
 

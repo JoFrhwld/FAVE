@@ -554,8 +554,8 @@ def extractPortion(wavFile, vowelWavFile, beg, end, soundEditor):
     if soundEditor == 'sox':  # this is the default setting, since it's faster
         # force output format because there have been issues with some sound
         # files where Praat could not read the extracted portion
-        os.system(os.path.join(SOXPATH, 'sox') + ' ' + wavFile + ' -t wavpcm ' +
-                  os.path.join(SCRIPTS_HOME, vowelWavFile) + ' trim ' + str(beg) + ' ' + str(end - beg))
+        os.system(os.path.join(SOXPATH, 'sox') + ' ' + '"' + wavFile + '"' + ' -t wavpcm "' +
+                  os.path.join(SCRIPTS_HOME, vowelWavFile) + '" trim ' + str(beg) + ' ' + str(end - beg))
     elif soundEditor == 'praat':
         os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' +
                   os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
@@ -1654,14 +1654,14 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
 
 
 def processInput(wavInput, tgInput, output):
-    """for the "multipleFiles" option, processes the three files which contain lists of input filenames,
-    one filename per line; returns list of filenames"""
+    """for the "multipleFiles" option, processes the three files which contain 
+    lists of input filenames, one filename per line; returns list of filenames"""
 
     # remove the trailing newline character from each line of the file, and
     # store the filenames in a list
-    wavFiles = [f.replace('\n', '') for f in open(wavInput, 'r').readlines()]
-    tgFiles = [f.replace('\n', '') for f in open(tgInput, 'r').readlines()]
-    outputFiles = [f.replace('\n', '') for f in open(output, 'r').readlines()]
+    wavFiles = [f.replace('\n', '') for f in open(wavInput, 'rU').readlines()]
+    tgFiles = [f.replace('\n', '') for f in open(tgInput, 'rU').readlines()]
+    outputFiles = [f.replace('\n', '') for f in open(output, 'rU').readlines()]
     return (wavFiles, tgFiles, outputFiles)
 
 
@@ -2005,8 +2005,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
     # process each tuple of input/output files
     for (wavFile, tgFile, outputFile) in zip(wavFiles, tgFiles, outputFiles):
-        # make sure that we can find the input files, and that the TextGrid file is formatted properly
-        # (functions will exit if files not formatted properly)
+        # make sure that we can find the input files, and that the TextGrid 
+        # file is formatted properly (functions will exit otherwise)
         checkWavFile(wavFile)
         checkTextGridFile(tgFile)
 

@@ -398,14 +398,14 @@ def check_dictionary_entries(lines, wavfile):
     ## write new version of the CMU dictionary to file
     ## (do this here so that new entries to dictionary will still be saved if "check transcription" option is selected
     ## in addition to the "import transcriptions" option)
-    #write_dict(options.dict)
+    global options  ## need to make options global because dict setting must be changed
+    write_dict(options.dict)
     ## NOTE:  dict will no longer be re-written to file as people might upload all kinds of junk
     ##        Uploaded additional transcriptions will be written to a separate file instead (in add_dictionary_entries), 
     ##        to be checked manually and merged with the main dictionary at certain intervals
 
         
     ## write temporary version of the CMU dict to file for use in alignment
-    global options  ## need to make options global because dict setting must be changed
     if not options.check:
         global temp_dict
         temp_dict = os.path.join(os.path.dirname(wavfile), '_'.join(os.path.basename(wavfile).split('_')[:2]) + "_" + "dict")

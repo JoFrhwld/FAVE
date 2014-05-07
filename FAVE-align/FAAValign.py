@@ -77,6 +77,7 @@ import subprocess
 import traceback
 import codecs
 import mimetypes
+import subprocess
 
 truncated = re.compile(r'\w+\-$')                       ## truncated words
 intended = re.compile(r'^\+\w+')                        ## intended word (inserted by transcribers after truncated word)
@@ -1354,7 +1355,35 @@ def write_log(filename, wavfile, duration):
     t_stamp = time.asctime()
     f.write(t_stamp)
     f.write("\n\n")
-    f.write("Alignment statistics for file %s:\n\n" % os.path.basename(wavfile))
+    f.write("Alignment statistics for file %s:\n" % os.path.basename(wavfile))
+    try:
+        check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)
+        version,err = check_version.communicate()
+        version = version.rstrip()
+    except OSError:
+        version = None
+
+    if version:
+        f.write("version info from Git: %s"%version)
+        f.write("\n")
+    else:
+        f.write("Not using Git version control. Version info unavailable.\n")
+        f.write("Consider installing Git (http://git-scm.com/).\
+         and cloning this repository from GitHub with: \n \
+         git clone git@github.com:JoFrhwld/FAVE.git")
+        f.write("\n")
+
+    try:
+        check_changes = subprocess.Popen(["git", "diff", "--stat"], stdout = subprocess.PIPE)
+        changes, err = check_changes.communicate()
+    except OSError:
+        changes = None
+
+    if changes:
+        f.write("Uncommitted changes when run:\n")
+        f.write(changes)
+        
+    f.write("\n")
     f.write("Total number of words:\t\t\t%i\n" % count_words)
     f.write("Uncertain transcriptions:\t\t%i\t(%.1f%%)\n" % (count_uncertain, float(count_uncertain)/float(count_words)*100))
     f.write("Unclear passages:\t\t\t%i\t(%.1f%%)\n" % (count_unclear, float(count_unclear)/float(count_words)*100))

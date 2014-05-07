@@ -75,6 +75,7 @@ import esps
 import plotnik
 import cmu
 import vowel
+import subprocess
 
 import numpy as np
 from itertools import tee, islice, izip
@@ -1762,6 +1763,20 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
 
     f = open(filename, 'w')
     f.write(time.asctime())
+    f.write("\n")
+    try:
+        check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)
+        out,err = check_version.communicate()
+        out = out.rstrip()
+    except OSError:
+        out = None
+
+    if out:
+        f.write("version info from Git: %s"%out)
+    else:
+        f.write("Not using git version control. Version info unavailable.")
+
+
     f.write("\n\n")
     f.write("extractFormants statistics for file %s:\n\n" %
             os.path.basename(wavFile))

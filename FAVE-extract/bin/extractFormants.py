@@ -1642,23 +1642,54 @@ def readSpeakerFile(speakerFile):
     """reads speaker background information from a speaker file"""
 
     speaker = Speaker()
-    for line in open(speakerFile, 'rU').readlines():
-        # check format of line
-        checkConfigLine(speakerFile, line)
-        # get speaker attributes
-        attribute, value = [f.strip() for f in line.split('=')]
-        # make tiernum an integer
-        if attribute == 'speakernum':
-            # speakernum: number of speaker in the TextGrid (starting at 1:  first speaker, second speaker etc.)
-            # tiernum:    points to the phone tier of the speaker (tier numbering starts with 0)
-            # (e.g. speaker is third speaker in the TextGrid -> tiernum = 4)
-            # - > needs to be converted
-            value = (int(value) - 1) * 2
-            attribute = "tiernum"  # Speaker object has only attribute tiernum!
-        if attribute == "vowelSystem":
+
+    speaker_parser = argparse.ArgumentParser(description="parses a .speaker file",
+                                     fromfile_prefix_chars="+")
+    speaker_parser.add_argument("--name")
+    speaker_parser.add_argument("--first_name")
+    speaker_parser.add_argument("--last_name")
+    speaker_parser.add_argument("--age")
+    speaker_parser.add_argument("--sex", 
+        choices = ["m","M","male","MALE", "f","F","female","FEMALE"],
+        required = True)
+    speaker_parser.add_argument("--ethnicity")
+    speaker_parser.add_argument("--years_of_schooling")
+    speaker_parser.add_argument("--location")
+    speaker_parser.add_argument("--city")
+    speaker_parser.add_argument("--state")
+    speaker_parser.add_argument("--year")
+    speaker_parser.add_argument("--speakernum")
+    speaker_parser.add_argument("--tiernum")
+    speaker_parser.add_argument("--vowelSystem", 
+        choices = ['phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET'])
+
+    speaker_opts = speaker_parser.parse_args(["+"+speakerFile])
+
+    if speaker_opts.speakernum is None and speaker_opts.tiernum is None:
+        print "Warning, analyzing first speaker by default."
+        setattr(speaker, "tiernum", 0)
+    elif speaker_opts.tiernum:
+        if speaker_opts.tiernum % 2 != 0:
+            print "Warning, invalid tiernum. Try specifying --speakernum instead"
+        else:
+            setattr(speaker, "tiernum", speaker_opts.tiernum)
+    elif speaker_opts.speakernum:
+        setattr(speaker, "tiernum", (int(speaker_opts.speakernum) - 1) * 2)
+
+    if speaker_opts.vowelSystem:
             global vowelSystem
             vowelSystem = value
-            continue
+
+    speaker_opts_dict = speaker_opts.__dict__
+    speaker_opts_keys = [x for x in speaker_opts_dict.keys() if \
+                            x not in ["tiernum", "speakernum", "vowelSystem"] and \
+                            speaker_opts_dict[x] is not None]
+
+
+
+    for attribute in speaker_opts_keys:
+        value = speaker_opts_dict[attribute]
+
         # check that attribute for speaker exists
         if hasattr(speaker, attribute):
             setattr(speaker, attribute, value)

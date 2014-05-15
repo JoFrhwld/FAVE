@@ -20,7 +20,7 @@ For the most part, we'll be utilizing the fork-and-pull paradigm (see [Using Pul
 
 As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.9846](http://dx.doi.org/10.5281/zenodo.9846). We would recommend the citation:
 
-Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Pritchard, Hilary; Yuan, Jiahong; 2014. FAVE (Forced Alignment and Vowel Extraction) Program Suite v1.1.3 doi:10.5281/zenodo.9846 
+Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Prichard, Hilary; Yuan, Jiahong; 2014. FAVE (Forced Alignment and Vowel Extraction) Program Suite v1.1.3 doi:10.5281/zenodo.9846 
 
 Use of the interactive online interface should continue to cite:
 

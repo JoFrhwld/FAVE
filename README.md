@@ -16,8 +16,12 @@ You can find user support for installing and using the FAVE toolkits at the [FAV
 For the most part, we'll be utilizing the fork-and-pull paradigm (see [Using Pull Requests](https://help.github.com/articles/using-pull-requests)). Please send pull requests to the `dev` branch.
 
 ## Attribution
-We ask that if you use the online interface, or the code available in this repository, that you cite:
+[http://dx.doi.org/10.5281/zenodo.9846](![10.5281/zenodo.9846](https://zenodo.org/badge/doi/10.5281/zenodo.9846.png))
+
+As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.9846](http://dx.doi.org/10.5281/zenodo.9846). We would recommend the citation:
+
+Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Pritchard, Hilary; Yuan, Jiahong; 2014. FAVE (Forced Alignment and Vowel Extraction) Program Suite v1.1.3 doi:10.5281/zenodo.9846 
+
+Use of the interactive online interface should continue to cite:
 
 Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan and Jiahong Yuan. 2011. FAVE (Forced Alignment and Vowel Extraction) Program Suite. http://fave.ling.upenn.edu.
-
-The contributions of some of these individuals, especially that of Ingrid Rosenfelder, are not reflected in the commit history.

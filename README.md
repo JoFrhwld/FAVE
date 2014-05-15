@@ -16,7 +16,7 @@ You can find user support for installing and using the FAVE toolkits at the [FAV
 For the most part, we'll be utilizing the fork-and-pull paradigm (see [Using Pull Requests](https://help.github.com/articles/using-pull-requests)). Please send pull requests to the `dev` branch.
 
 ## Attribution
-[http://dx.doi.org/10.5281/zenodo.9846](![10.5281/zenodo.9846](https://zenodo.org/badge/doi/10.5281/zenodo.9846.png))
+[![10.5281/zenodo.9846](https://zenodo.org/badge/doi/10.5281/zenodo.9846.png)](http://dx.doi.org/10.5281/zenodo.9846)
 
 As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.9846](http://dx.doi.org/10.5281/zenodo.9846). We would recommend the citation:
 

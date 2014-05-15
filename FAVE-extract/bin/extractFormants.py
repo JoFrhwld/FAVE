@@ -1872,7 +1872,6 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
          and cloning this repository from GitHub with: \n \
          git clone git@github.com:JoFrhwld/FAVE.git")
         f.write("\n")
-
     try:
         check_changes = subprocess.Popen(["git", "diff", "--stat"], stdout = subprocess.PIPE)
         changes, err = check_changes.communicate()
@@ -1885,6 +1884,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
 
 
     f.write("\n\n")
+
     f.write("extractFormants statistics for file %s:\n\n" %
             os.path.basename(wavFile))
     f.write("Total number of vowels (initially):\t%i\n" % count_vowels)

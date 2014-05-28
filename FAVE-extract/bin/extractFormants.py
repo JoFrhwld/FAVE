@@ -2221,7 +2221,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     try:
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
-						fol_seg = 'NA'
+                        fol_seg = 'NA'
                 elif p_index is 0:
                     p_context = "initial"
                     try:
@@ -2235,7 +2235,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     try:
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
-						fol_seg = 'NA'
+                        fol_seg = 'NA'
                 else:
                     p_context = "internal"
                     pre_seg = w.phones[p_index-1].label

@@ -11,32 +11,59 @@ class VowelMeasurement:
 
     """represents a vowel measurement"""
     # !!! not the same as class plotnik.VowelMeasurement !!!
-    phone = ''  # Arpabet coding
-    stress = ''  # stress level ("1", "2", "0")
-    style = ''  # style label (if present)
-    word = ''  # corresponding word
-    f1 = None  # first formant
-    f2 = None  # second formant
-    f3 = None  # third formant
-    b1 = None  # bandwidth of first formant
-    b2 = None  # bandwidth of second formant
-    b3 = None  # bandwidth of third formant
-    t = ''  # time of measurement
-    code = ''  # Plotnik vowel code ("xx.xxxxx")
-    cd = ''  # Plotnik code for vowel class
-    fm = ''  # Plotnik code for manner of following segment
-    fp = ''  # Plotnik code for place of following segment
-    fv = ''  # Plotnik code for voicing of following segment
-    ps = ''  # Plotnik code for preceding segment
-    fs = ''  # Plotnik code for following sequences
-    text = ''  # ???
-    beg = None  # beginning of vowel
-    end = None  # end of vowel
-    dur = None  # duration of vowel
-    poles = []  # original list of poles returned by LPC analysis
-    bandwidths = []  # original list of bandwidths returned by LPC analysis
-    nFormants = None  # actual formant settings used in the measurement (for Mahalanobis distance method)
-    glide = ''  # Plotnik glide coding
+
+    def __init__(self):
+        self.phone = ''  # Arpabet coding
+        self.stress = ''  # stress level ("1", "2", "0")
+        self.style = ''  # style label (if present)
+        self.word = ''  # corresponding word
+        self.f1 = None  # first formant
+        self.f2 = None  # second formant
+        self.f3 = None  # third formant
+        self.b1 = None  # bandwidth of first formant
+        self.b2 = None  # bandwidth of second formant
+        self.b3 = None  # bandwidth of third formant
+        self.t = ''  # time of measurement
+        self.code = ''  # Plotnik vowel code ("xx.xxxxx")
+        self.cd = ''  # Plotnik code for vowel class
+        self.fm = ''  # Plotnik code for manner of following segment
+        self.fp = ''  # Plotnik code for place of following segment
+        self.fv = ''  # Plotnik code for voicing of following segment
+        self.ps = ''  # Plotnik code for preceding segment
+        self.fs = ''  # Plotnik code for following sequences
+        self.text = ''  # ???
+        self.beg = None  # beginning of vowel
+        self.end = None  # end of vowel
+        self.dur = None  # duration of vowel
+        self.poles = []  # original list of poles returned by LPC analysis
+        self.bandwidths = []
+            # original list of bandwidths returned by LPC analysis
+        self.times = []
+        self.winner_poles = []
+        self.winner_bandwidths = []
+        self.all_poles = []
+        self.all_bandwidths = []
+        self.nFormants = None  # actual formant settings used in the measurement (for Mahalanobis distance method)
+        self.glide = ''  # Plotnik glide coding
+        self.norm_f1 = None  # normalized F1
+        self.norm_f2 = None  # normalized F2
+        self.norm_f3 = None  # normalized F3
+        self.tracks = []
+            # formant "tracks" (five sample points at 20%, 35%, 50%, 65% and
+            # 80% of the vowel)
+        self.all_tracks = []
+            # formant "tracks" for all possible formant settings (needed for
+            # remeasurement)
+        self.norm_tracks = []  # normalized formant "tracks"
+        self.pre_seg = ''
+        self.fol_seg = ''
+        self.context = ''
+        self.p_index = ''
+        self.word_trans = ''
+        self.pre_word_trans = ''
+        self.fol_word_trans = ''
+        self.pre_word = ''
+        self.fol_word = ''
 
 
 def loadfile(file):
@@ -269,6 +296,8 @@ def repredictF1F2(measurements, vowelMeans, vowelCovs, vowels):
         # change formant tracks to new values as well
         if not keepOldTracks:
             vm.tracks = vm.all_tracks[winnerIndex]
+            vm.winner_poles = vm.all_poles[winnerIndex]
+            vm.winner_bandwidths = vm.all_bandwidths[winner_bandwidths]
         remeasurements.append(vm)
 
     return remeasurements

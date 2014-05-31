@@ -24,7 +24,7 @@
 # - changed Praat Formant method to Burg for Mahalanobis measurement method   ##
 # - adapted Mahalanobis method to vary number of formants from 3 to 6 (Burg), ##
 # then choose winning pair from all F1/F2 combinations of these             ##
-# - changed Praat object from LPC to Formant                                  ##
+# - changed Praat object from` LPC to Formant                                  ##
 # - no restriction on # of formants per frame for Formant objects             ##
 # - smoothing of formant tracks ( -> parameter nSmoothing in options)         ##
 # - FAAV measurement procedure:                                               ##
@@ -168,6 +168,11 @@ class VowelMeasurement:
         self.poles = []  # original list of poles returned by LPC analysis
         self.bandwidths = []
             # original list of bandwidths returned by LPC analysis
+        self.times = []
+        self.winner_poles = []
+        self.winner_bandwidths = []
+        self.all_poles = []
+        self.all_bandwidths = []
         self.nFormants = None  # actual formant settings used in the measurement (for Mahalanobis distance method)
         self.glide = ''  # Plotnik glide coding
         self.norm_f1 = None  # normalized F1
@@ -1134,6 +1139,8 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
             return None
         measurementPoint = measurementPoints[winnerIndex][0]
         # get five sample points of selected formant tracks
+        winner_poles = poles[winnderIndex]
+        winner_bandwidths = bandwidths[winnerIndex]
         tracks = all_tracks[winnerIndex]
 
     else:  # formantPredictionMethod == 'default'
@@ -1164,6 +1171,8 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
         # get five sample points of formant tracks
         tracks = getFormantTracks(poles[0], times[0], phone.xmin, phone.xmax)
         all_tracks = []
+        winner_poles = poles[0]
+        winner_bandwidths = bandwidths[0]
 
     # put everything together into VowelMeasurement object
     vm = VowelMeasurement()
@@ -1196,6 +1205,7 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
                    # duration of vowel (rounded to msec)
     vm.poles = selectedpoles  # original poles returned by LPC analysis
     vm.bandwidths = selectedbandwidths  # original bandwidths returned by LPC analysis
+    vm.times = times
 
     if formantPredictionMethod == 'mahalanobis':
         vm.nFormants = winnerIndex + \
@@ -1205,6 +1215,10 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
                                          winnerIndex][0], measurementPoints[winnerIndex][1])
     vm.tracks = tracks  # F1 and F2 measurements at 20%, 35%, 50%, 65% and 80% of the vowel duration
     vm.all_tracks = all_tracks  # list of formant tracks for all possible formant settings (needed for remeasurement)
+    vm.winner_bandwidths = winner_bandwidths
+    vm.winner_poles = winner_poles
+    vm.all_poles = poles
+    vm.all_bandwidths = bandwidths
 
     return vm
 
@@ -1747,6 +1761,8 @@ def setup_parser():
                         help = "Words to be excluded from measurement")
     parser.add_argument("--stopWordsFile",      "-t", 
                         help = "file containing words to exclude from analysis")
+    parser.add_argument("--tracks", action="store_true", 
+                        help = "Write full formant tracks.")
     parser.add_argument("--vowelSystem", choices = ['phila', 'Phila', 'PHILA', 'NorthAmerican', 'simplifiedARPABET'],
                         default="NorthAmerican",help="If set to Phila, a number of vowels will be reclassified to reflect the phonemic distinctions of the Philadelphia vowel system.")
     parser.add_argument("--verbose", "-v", action="store_true",
@@ -2019,7 +2035,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     # assign the options to individual variables and to type conversion if
     # necessary
     global case, outputHeader, outputFormat, formantPredictionMethod, measurementMethod, measurementPointMethod, nFormants#, maxFormant
-    global nSmoothing, removeStopWords, measureUnstressed, minVowelDuration, windowSize, preEmphasis, multipleFiles, remeasurement, candidates, vowelSystem
+    global nSmoothing, removeStopWords, measureUnstressed, minVowelDuration, windowSize, preEmphasis, multipleFiles, remeasurement, candidates, vowelSystem, tracks
     case = opts.case
     outputFormat = opts.outputFormat
     outputHeader = not opts.noOutputHeader
@@ -2038,6 +2054,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     remeasurement = opts.remeasurement
     candidates = opts.candidates
     vowelSystem = opts.vowelSystem
+    tracks = opts.tracks
     print "Processed options."
 
     # read CMU phoneset ("cmu_phoneset.txt")
@@ -2223,7 +2240,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 elif p_index is (len(w.phones)-1):
                     p_context = "final"
                     pre_seg = w.phones[p_index-1].label
-                    fol_seg = fol_w.phones[0].label
+                    if len(fol_w.phones)>0:
+                        fol_seg = fol_w.phones[0].label
                 else:
                     p_context = "internal"                    
                     pre_seg = w.phones[p_index-1].label

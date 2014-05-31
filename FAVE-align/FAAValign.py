@@ -851,27 +851,27 @@ def is_TextGrid(f):
         return False
 
 
-def make_tempdir(tempdir):
-    """creates a temporary directory for all alignment "chunks";
-    warns against overwriting existing files if applicable"""
+# def make_tempdir(tempdir):
+#     """creates a temporary directory for all alignment "chunks";
+#     warns against overwriting existing files if applicable"""
     
-    ## check whether directory already exists and has files in it
-    if os.path.isdir(tempdir):
-        contents = os.listdir(tempdir)
-        if len(contents) != 0 and not options.noprompt:
-            print "WARNING!  Directory %s already exists and is non-empty!" % tempdir
-            print "(Files in directory:  %s )" % contents
-            overwrite = raw_input("Overwrite and continue?  [y/n]")
-            if overwrite == "y":
-                ## delete contents of tempdir
-                for item in contents:
-                    os.remove(os.path.join(tempdir, item))
-            elif overwrite == "n":
-                sys.exit("Exiting program.")
-            else:
-                sys.exit("Undecided user.  Exiting program.")
-    else:
-        os.mkdir(tempdir)
+#     ## check whether directory already exists and has files in it
+#     if os.path.isdir(tempdir):
+#         contents = os.listdir(tempdir)
+#         if len(contents) != 0 and not options.noprompt:
+#             print "WARNING!  Directory %s already exists and is non-empty!" % tempdir
+#             print "(Files in directory:  %s )" % contents
+#             overwrite = raw_input("Overwrite and continue?  [y/n]")
+#             if overwrite == "y":
+#                 ## delete contents of tempdir
+#                 for item in contents:
+#                     os.remove(os.path.join(tempdir, item))
+#             elif overwrite == "n":
+#                 sys.exit("Exiting program.")
+#             else:
+#                 sys.exit("Undecided user.  Exiting program.")
+#     else:
+#         os.mkdir(tempdir)
 
 
 def check_tempdir(tempdir):
@@ -1235,13 +1235,13 @@ def reinsert_uncertain(tg, text):
     return tg
 
 
-def remove_tempdir(tempdir):
-    """removes the temporary directory and all its contents"""
+# def remove_tempdir(tempdir):
+#     """removes the temporary directory and all its contents"""
     
-    for item in os.listdir(tempdir):
-        os.remove(os.path.join(tempdir, item))
-    os.removedirs(tempdir)
-    os.remove("blubbeldiblubb.txt")
+#     for item in os.listdir(tempdir):
+#         os.remove(os.path.join(tempdir, item))
+#     os.removedirs(tempdir)
+#     os.remove("blubbeldiblubb.txt")
 
  
 def replace_extension(filename, newextension):
@@ -1250,13 +1250,13 @@ def replace_extension(filename, newextension):
     return os.path.splitext(filename)[0] + newextension
 
 
-def empty_tempdir(tempdir):
-    """empties the temporary directory of all files"""
-    ## (NOTE:  This is a modified version of remove_tempdir)
+# def empty_tempdir(tempdir):
+#     """empties the temporary directory of all files"""
+#     ## (NOTE:  This is a modified version of remove_tempdir)
     
-    for item in os.listdir(tempdir):
-        os.remove(os.path.join(tempdir, item))
-    os.remove("blubbeldiblubb.txt")
+#     for item in os.listdir(tempdir):
+#         os.remove(os.path.join(tempdir, item))
+#     os.remove("blubbeldiblubb.txt")
 
 
 def tidyup(tg, beg, end, tgfile):
@@ -1355,11 +1355,8 @@ def write_log(filename, wavfile, duration):
     t_stamp = time.asctime()
     f.write(t_stamp)
     f.write("\n\n")
-<<<<<<< HEAD
-    f.write("Alignment statistics for file %s:\n" % os.path.basename(wavfile))
-=======
     f.write("Alignment statistics for file %s:\n\n" % os.path.basename(wavfile))
->>>>>>> master
+
     try:
         check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)
         version,err = check_version.communicate()

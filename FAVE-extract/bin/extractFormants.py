@@ -77,6 +77,8 @@ import cmu
 import vowel
 import subprocess
 
+import pickle
+
 import numpy as np
 from itertools import tee, islice, izip
 
@@ -1734,6 +1736,8 @@ def setup_parser():
     parser.add_argument("--preEmphasis", type=float, default=50,
                         help="The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.")
     parser.add_argument("--phoneset", "-p",  default = "cmu_phoneset.txt")
+    parser.add_argument("--pickle", action = "store_true",
+                        help = "save vowel measurement information as a picklefile")
     parser.add_argument("--remeasurement", action="store_true",
                         help="Do a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance")
     parser.add_argument("--removeStopWords", action="store_true",
@@ -1940,6 +1944,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
     f.write("- covsFile:\t\t\t%s\n" % opts.covariances)
     f.write("- remeasurement:\t\t%s\n" % opts.remeasurement)
     f.write("- vowelSystem:\t\t%s\n" % opts.vowelSystem)
+    f.write("- pickle\t\t%s\n" % opts.pickle)
     if opts.removeStopWords:
         f.write("- stopWords:\t\t\t%s\n" % opts.stopWords)
     f.write("\n\n")
@@ -2277,6 +2282,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements, m_means = normalize(measurements, m_means)
         print ''
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        if opts.pickle:
+            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
+            pickle.dump(measurements, pi)
+            pi.close()
 
         markTime("end")
 

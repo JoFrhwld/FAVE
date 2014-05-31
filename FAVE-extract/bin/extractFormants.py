@@ -1728,7 +1728,7 @@ def setup_parser():
                         help="Don't include output header in text output.")
     parser.add_argument("--nSmoothing", type=int, default=12,
                         help="Specifies the number of samples to be used for the smoothing of the formant tracks.")
-    parser.add_argument("--onlyMeasureStressed", action="store_false")
+    parser.add_argument("--onlyMeasureStressed", action="store_true")
     parser.add_argument("--outputFormat",   "-o",  choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
                         help = "Output format. Tab delimited file, plotnik file, or both.")    
     parser.add_argument("--preEmphasis", type=float, default=50,

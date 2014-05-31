@@ -2282,6 +2282,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements, m_means = normalize(measurements, m_means)
         print ''
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        if opts.pickle:
+            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
+            pickle.dump(measurements, pi)
+            pi.close()
 
         markTime("end")
 

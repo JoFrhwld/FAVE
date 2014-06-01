@@ -2284,7 +2284,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
         if opts.pickle:
             pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
-            pickle.dump(measurements, pi)
+            pickle.dump(measurements, pi, pickle.HIGHEST_PROTOCOL)
             pi.close()
 
         markTime("end")

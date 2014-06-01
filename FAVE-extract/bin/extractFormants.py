@@ -77,6 +77,9 @@ import cmu
 import vowel
 import subprocess
 
+import pickle
+import csv
+
 import numpy as np
 from itertools import tee, islice, izip
 
@@ -1139,7 +1142,7 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
             return None
         measurementPoint = measurementPoints[winnerIndex][0]
         # get five sample points of selected formant tracks
-        winner_poles = poles[winnderIndex]
+        winner_poles = poles[winnerIndex]
         winner_bandwidths = bandwidths[winnerIndex]
         tracks = all_tracks[winnerIndex]
 
@@ -1219,6 +1222,7 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
     vm.winner_poles = winner_poles
     vm.all_poles = poles
     vm.all_bandwidths = bandwidths
+    vm.times = times
 
     return vm
 
@@ -1508,6 +1512,7 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         fw.close()
         print "Normalized vowel measurements output in .txt format to the file %s" % (os.path.splitext(outputFile)[0] + "_norm.txt")
 
+
     ## outputFormat = "plotnik"
     if outputFormat in ['plotnik', 'Plotnik', 'plt', 'both']:
         plt = plotnik.PltFile()
@@ -1742,12 +1747,14 @@ def setup_parser():
                         help="Don't include output header in text output.")
     parser.add_argument("--nSmoothing", type=int, default=12,
                         help="Specifies the number of samples to be used for the smoothing of the formant tracks.")
-    parser.add_argument("--onlyMeasureStressed", action="store_false")
+    parser.add_argument("--onlyMeasureStressed", action="store_true")
     parser.add_argument("--outputFormat",   "-o",  choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
                         help = "Output format. Tab delimited file, plotnik file, or both.")    
     parser.add_argument("--preEmphasis", type=float, default=50,
                         help="The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.")
     parser.add_argument("--phoneset", "-p",  default = "cmu_phoneset.txt")
+    parser.add_argument("--pickle", action = "store_true",
+                        help = "save vowel measurement information as a picklefile")
     parser.add_argument("--remeasurement", action="store_true",
                         help="Do a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance")
     parser.add_argument("--removeStopWords", action="store_true",
@@ -1956,6 +1963,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
     f.write("- covsFile:\t\t\t%s\n" % opts.covariances)
     f.write("- remeasurement:\t\t%s\n" % opts.remeasurement)
     f.write("- vowelSystem:\t\t%s\n" % opts.vowelSystem)
+    f.write("- pickle\t\t%s\n" % opts.pickle)
     if opts.removeStopWords:
         f.write("- stopWords:\t\t\t%s\n" % opts.stopWords)
     f.write("\n\n")
@@ -2295,6 +2303,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements, m_means = normalize(measurements, m_means)
         print ''
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        if opts.pickle:
+            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
+            pickle.dump(measurements, pi, pickle.HIGHEST_PROTOCOL)
+            pi.close()
 
         markTime("end")
 

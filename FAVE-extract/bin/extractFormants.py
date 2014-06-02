@@ -1384,7 +1384,7 @@ def outputFormantSettings(measurements, speaker, outputFile):
     f.close()
 
 
-def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader):
+def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader, tracks):
     """writes measurements to file according to selected output format"""
 
     ## outputFormat = "text"
@@ -1511,6 +1511,65 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
             fw.write('\n')
         fw.close()
         print "Normalized vowel measurements output in .txt format to the file %s" % (os.path.splitext(outputFile)[0] + "_norm.txt")
+
+        if tracks:
+            with open(os.path.splitext(outputFile)[0]+".tracks", 'wb') as trackfile:
+                trackwriter = csv.writer(trackfile, delimiter = "\t", )
+                s_dict = speaker.__dict__
+                s_keys = s_dict.keys()
+                s_keys.sort()
+                speaker_attrs = [s_dict[x] for x in s_keys]
+                v_header = ['id', 'vowel', 'stress', 'pre_word', 'word', 'fol_word', 
+                                'F1_meas', 'F2_meas', 'F3_meas',
+                                'F1', 'F2', 'F3', 
+                                'B1', 'B2', 'B3', 't', 't_meas', 'dur',
+                                'plt_vclass', 'plt_manner', 'plt_place', 
+                                'plt_voice', 'plt_preseg', 'plt_folseq', 'style', 
+                                'glide', 'pre_seg', 'fol_seg', 'context', 
+                                'vowel_index', 'pre_word_trans', 'word_trans', 
+                                'fol_word_trans']
+
+                trackwriter.writerow(s_keys + v_header)
+
+                for nmeas, vm in enumerate(measurements):
+                    if len(vm.winner_poles[0]) < 2:
+                        continue
+
+                    vowel_info = [nmeas, vm.phone, vm.stress, vm.pre_word, vm.word, vm.fol_word, vm.f1, vm.f2]
+                    context_info = [str(vm.t), 
+                                 str(vm.dur), 
+                                 plotnik.plt_vowels(vm.cd), 
+                                 plotnik.plt_manner(vm.fm), 
+                                 plotnik.plt_place(vm.fp), 
+                                 plotnik.plt_voice(vm.fv), 
+                                 plotnik.plt_preseg(vm.ps), 
+                                 plotnik.plt_folseq(vm.fs), vm.style, vm.glide, 
+                                 vm.pre_seg,
+                                 vm.fol_seg, vm.context, vm.p_index, 
+                                 vm.pre_word_trans, vm.word_trans, 
+                                 vm.fol_word_trans]
+                    if vm.f3:
+                        vowel_info = vowel_info + [vm.f3]
+                    else:
+                        vowel_info = vowel_info + ['']
+                    f1_tracks = [p[0] for p in vm.winner_poles]
+                    f2_tracks = [p[1] if len(p) >= 2 else '' for p in vm.winner_poles]
+                    f3_tracks = [p[2] if len(p) >= 3 else '' for p in vm.winner_poles]
+
+                    b1_tracks = [b[0] if len(b) >= 1 else '' for b in vm.winner_bandwidths]
+                    b2_tracks = [b[1] if len(b) >= 2 else '' for b in vm.winner_bandwidths]
+                    b3_tracks = [b[2] if len(b) >= 3 else '' for b in vm.winner_bandwidths]
+                    times = vm.times[0]
+
+                    for f1, f2, f3, b1, b2, b3, t in zip(f1_tracks, f2_tracks, f3_tracks,
+                                                         b1_tracks, b2_tracks, f3_tracks,
+                                                         times):
+                        trackwriter.writerow(speaker_attrs + vowel_info + [f1, f2, f3, b1, b2, b3, t] +
+                                             context_info)
+
+
+
+
 
 
     ## outputFormat = "plotnik"
@@ -2302,7 +2361,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # normalize measurements
         measurements, m_means = normalize(measurements, m_means)
         print ''
-        outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader, opts.tracks)
+
         if opts.pickle:
             pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
             pickle.dump(measurements, pi, pickle.HIGHEST_PROTOCOL)

@@ -1569,9 +1569,10 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
                     # append poles and bandwidths to list of values
                     # (if F3 and bandwidth measurements exist, add to list of appended values)
                     if len(poles) > 2:
-                        values.append([x[0], x[1], x[2], x[3], poles[2], bandwidths[2]])
+                        values.append(
+                            [poles[i], poles[j], bandwidths[i], bandwidths[j], poles[2], bandwidths[2]])
                     else:
-                        values.append([x[0], x[1], x[2], x[3], '', ''])
+                        values.append([poles[i], poles[j], bandwidths[i], bandwidths[j], '', ''])
                     # append corresponding Mahalanobis distance to list of
                     # distances
                     distances.append(dist)
@@ -1594,11 +1595,11 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
     # if there is a "gap" in the wave form at the point of measurement, the bandwidths returned will be empty,
     # and the following will cause an error...
     if values[winnerIndex][2]:
-        b1 = math.exp(values[winnerIndex][2])
+        b1 = values[winnerIndex][2]
     else:
         b1 = ''
     if values[winnerIndex][3]:
-        b2 = math.exp(values[winnerIndex][3])
+        b2 = values[winnerIndex][3]
     else:
         b2 = ''
     if values[winnerIndex][5]:

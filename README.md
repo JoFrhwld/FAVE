@@ -15,6 +15,8 @@ You can find user support for installing and using the FAVE toolkits at the [FAV
 ## Contributing to FAVE
 For the most part, we'll be utilizing the fork-and-pull paradigm (see [Using Pull Requests](https://help.github.com/articles/using-pull-requests)). Please send pull requests to the `dev` branch.
 
+If you want to keep up to date on FAVE development, or have questions about FAVE development, send a request to join the [FAVE Developers' Group](https://groups.google.com/forum/#!forum/fave-dev).
+
 ## Attribution
 [![10.5281/zenodo.9846](https://zenodo.org/badge/doi/10.5281/zenodo.9846.png)](http://dx.doi.org/10.5281/zenodo.9846)
 

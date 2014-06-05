@@ -395,15 +395,15 @@ def check_dictionary_entries(lines, wavfile):
                 newwords.append(w)
         newlines.append(newwords)
 
-    ## write new version of the CMU dictionary to file
-    ## (do this here so that new entries to dictionary will still be saved if "check transcription" option is selected
-    ## in addition to the "import transcriptions" option)
-    global options  ## need to make options global because dict setting must be changed
+    # write new version of the CMU dictionary to file
+    # (do this here so that new entries to dictionary will still be saved if 
+    # "check transcription" option is selected in addition to the "import 
+    # transcriptions" option)
+        # The following two lines reverse the previous decision to disallow
+        # writing to the local dictionary for the website installation:
+    global options  
+    # need to make options global because dict setting must be changed
     write_dict(options.dict)
-    ## NOTE:  dict will no longer be re-written to file as people might upload all kinds of junk
-    ##        Uploaded additional transcriptions will be written to a separate file instead (in add_dictionary_entries), 
-    ##        to be checked manually and merged with the main dictionary at certain intervals
-
         
     ## write temporary version of the CMU dict to file for use in alignment
     if not options.check:

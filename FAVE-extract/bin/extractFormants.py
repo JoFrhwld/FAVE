@@ -77,6 +77,8 @@ import cmu
 import vowel
 import subprocess
 
+import pickle
+
 import numpy as np
 from itertools import tee, islice, izip
 
@@ -1567,9 +1569,10 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
                     # append poles and bandwidths to list of values
                     # (if F3 and bandwidth measurements exist, add to list of appended values)
                     if len(poles) > 2:
-                        values.append([x[0], x[1], x[2], x[3], poles[2], bandwidths[2]])
+                        values.append(
+                            [poles[i], poles[j], bandwidths[i], bandwidths[j], poles[2], bandwidths[2]])
                     else:
-                        values.append([x[0], x[1], x[2], x[3], '', ''])
+                        values.append([poles[i], poles[j], bandwidths[i], bandwidths[j], '', ''])
                     # append corresponding Mahalanobis distance to list of
                     # distances
                     distances.append(dist)
@@ -1592,11 +1595,11 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
     # if there is a "gap" in the wave form at the point of measurement, the bandwidths returned will be empty,
     # and the following will cause an error...
     if values[winnerIndex][2]:
-        b1 = math.exp(values[winnerIndex][2])
+        b1 = values[winnerIndex][2]
     else:
         b1 = ''
     if values[winnerIndex][3]:
-        b2 = math.exp(values[winnerIndex][3])
+        b2 = values[winnerIndex][3]
     else:
         b2 = ''
     if values[winnerIndex][5]:
@@ -1728,12 +1731,14 @@ def setup_parser():
                         help="Don't include output header in text output.")
     parser.add_argument("--nSmoothing", type=int, default=12,
                         help="Specifies the number of samples to be used for the smoothing of the formant tracks.")
-    parser.add_argument("--onlyMeasureStressed", action="store_false")
+    parser.add_argument("--onlyMeasureStressed", action="store_true")
     parser.add_argument("--outputFormat",   "-o",  choices = ['txt', 'text', 'plotnik', 'Plotnik', 'plt', 'both'], default="txt",
                         help = "Output format. Tab delimited file, plotnik file, or both.")    
     parser.add_argument("--preEmphasis", type=float, default=50,
                         help="The cut-off value in Hz for the application of a 6 dB/octave low-pass filter.")
     parser.add_argument("--phoneset", "-p",  default = "cmu_phoneset.txt")
+    parser.add_argument("--pickle", action = "store_true",
+                        help = "save vowel measurement information as a picklefile")
     parser.add_argument("--remeasurement", action="store_true",
                         help="Do a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance")
     parser.add_argument("--removeStopWords", action="store_true",
@@ -1940,6 +1945,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
     f.write("- covsFile:\t\t\t%s\n" % opts.covariances)
     f.write("- remeasurement:\t\t%s\n" % opts.remeasurement)
     f.write("- vowelSystem:\t\t%s\n" % opts.vowelSystem)
+    f.write("- pickle\t\t%s\n" % opts.pickle)
     if opts.removeStopWords:
         f.write("- stopWords:\t\t\t%s\n" % opts.stopWords)
     f.write("\n\n")
@@ -2289,6 +2295,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         measurements, m_means = normalize(measurements, m_means)
         print ''
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
+        if opts.pickle:
+            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
+            pickle.dump(measurements, pi, pickle.HIGHEST_PROTOCOL)
+            pi.close()
 
         markTime("end")
 

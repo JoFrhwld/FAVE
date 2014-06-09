@@ -81,6 +81,7 @@ import pickle
 
 import numpy as np
 from itertools import tee, islice, izip
+from bisect import bisect_left
 
 from remeasure import remeasure
 from mahalanobis import mahalanobis
@@ -926,56 +927,35 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
 
     print ''
     print 'Identifying vowels in the TextGrid'
-
-    n_words = len(tg[speaker.tiernum + 1])
-    word_iter = 0
-    old_percent = 0
-
-    progressbar_width = 100
-    sys.stdout.write("[%s]" % (" " * progressbar_width))
-    sys.stdout.flush()
-    sys.stdout.write("\b" * (progressbar_width + 1))
-                     # return to start of line, after '['
+                     
+    phone_midpoints = [p.xmin() + 0.5 * (p.xmax() - p.xmin()) for p in tg[speaker.tiernum]]
 
     words = []
     # iterate along word tier for given speaker
     for w in tg[speaker.tiernum + 1]:  # for each interval...
-
-        word_iter = word_iter + 1
-        new_percent = math.floor((float(word_iter) / n_words) * 100)
-
-        for p in range(int(old_percent), int(new_percent)):
-            sys.stdout.write("-")
-            sys.stdout.flush()
-            old_percent = new_percent
-
         word = Word()
         word.transcription = w.mark()
         word.xmin = w.xmin()
         word.xmax = w.xmax()
         word.phones = []
-
-        # skip to the first phone in the corresponding phone tier that could
-        # belong to this word
-        i, ph = 0, None
-        for i, ph in enumerate(n for n in tg[speaker.tiernum] if word.xmin >= n.xmin()):
-            pass
-
-        # iterate through phones until end of word
-        # ("i < len(tg[speaker.tiernum])":  stop "runaway" index at end of tier)
-        while (i < len(tg[speaker.tiernum]) and tg[speaker.tiernum][i].xmax() <= word.xmax):
+        
+        # get a slice of the phone tier which minimally includes phones
+        # that are at least halfway contained in this word at each margin
+        left = bisect_left(phone_midpoints, word.xmin)
+        right = bisect_left(phone_midpoints, word.xmax)
+        
+        for p in tg[speaker.tiernum][left:right]:
             phone = Phone()
-            phone.label = tg[speaker.tiernum][i].mark().upper()
-            phone.xmin = tg[speaker.tiernum][i].xmin()
-            phone.xmax = tg[speaker.tiernum][i].xmax()
+            phone.label = p.mark().upper()
+            phone.xmin = p.xmin()
+            phone.xmax = p.xmax()
             word.phones.append(phone)
             # count initial number of vowels here! (because uncertain
             # transcriptions are discarded on a by-word basis)
             if phone.label and isVowel(phone.label):
                 global count_vowels
                 count_vowels += 1
-            i += 1
-        
+         
         words.append(word)
 
     # add Plotnik-style codes for the preceding and following segments for all
@@ -2220,18 +2200,30 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
                 if len(w.phones) is 1:
                     p_context = "coextensive"
-                    pre_seg = pre_w.phones[-1].label
-                    fol_seg = fol_w.phones[0].label
+                    try:
+                        pre_seg = pre_w.phones[-1].label
+                    except IndexError:
+                        pre_seg = 'NA'
+                    try:
+                        fol_seg = fol_w.phones[0].label
+                    except IndexError:
+                        fol_seg = 'NA'
                 elif p_index is 0:
                     p_context = "initial"
-                    pre_seg = pre_w.phones[-1].label
+                    try:
+                        pre_seg = pre_w.phones[-1].label
+                    except IndexError:
+                        pre_seg = 'NA'
                     fol_seg = w.phones[p_index+1].label
                 elif p_index is (len(w.phones)-1):
                     p_context = "final"
                     pre_seg = w.phones[p_index-1].label
-                    fol_seg = fol_w.phones[0].label
+                    try:
+                        fol_seg = fol_w.phones[0].label
+                    except IndexError:
+                        fol_seg = 'NA'
                 else:
-                    p_context = "internal"                    
+                    p_context = "internal"
                     pre_seg = w.phones[p_index-1].label
                     fol_seg = w.phones[p_index+1].label
 

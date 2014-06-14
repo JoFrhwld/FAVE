@@ -68,6 +68,7 @@ Options:
 
 import os
 import sys
+import shutil
 import re
 import wave
 import optparse
@@ -209,12 +210,12 @@ def align(wavfile, trs_input, outfile, FADIR='', SOXPATH='', HTKTOOLSPATH=''):
     except Exception, e:
         FA_error = "Error in aligning file %s:  %s." % (os.path.basename(wavfile), e)
         ## clean up temporary alignment files
-        os.system("rm -r -f ./tmp" + identifier)
+        shutil.rmtree("./tmp" + identifier)
         raise Exception, FA_error
         ##errorhandler(FA_error)
 
     ## remove tmp directory and all files        
-    os.system("rm -r -f ./tmp" + identifier)
+    shutil.rmtree("./tmp" + identifier)
     
 
 ## This function is from Jiahong Yuan's align.py

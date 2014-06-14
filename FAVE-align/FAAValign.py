@@ -176,7 +176,7 @@ def align(wavfile, trs_input, outfile, FADIR='', SOXPATH='', HTKTOOLSPATH=''):
     ## - "tmp.wav"
     
     # create working directory  
-    os.system("mkdir ./tmp" + identifier)
+    os.mkdir("./tmp" + identifier)
     # prepare wavefile
     SR = prep_wav(wavfile, './tmp' + identifier + '/tmp' + identifier + '.wav', SOXPATH)
 
@@ -1355,11 +1355,10 @@ def write_log(filename, wavfile, duration):
     t_stamp = time.asctime()
     f.write(t_stamp)
     f.write("\n\n")
-<<<<<<< HEAD
-    f.write("Alignment statistics for file %s:\n" % os.path.basename(wavfile))
-=======
+
+
     f.write("Alignment statistics for file %s:\n\n" % os.path.basename(wavfile))
->>>>>>> master
+
     try:
         check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)
         version,err = check_version.communicate()

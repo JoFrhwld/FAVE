@@ -1510,7 +1510,7 @@ def parseStopWordsFile(f):
 
     # if removeStopWords = "T"
     # file specified by "--stopWords" option in command line input
-    stopWords = open(f, 'r').splitlines()
+    stopWords = open(f, 'r').read().splitlines()
     return stopWords
 
 
@@ -1593,9 +1593,9 @@ def processInput(wavInput, tgInput, output):
 
     # remove the trailing newline character from each line of the file, and
     # store the filenames in a list
-    wavFiles = open(wavInput, 'r').splitlines()
-    tgFiles = open(tgInput, 'r').splitlines()
-    outputFiles = open(output, 'r').splitlines()
+    wavFiles = open(wavInput, 'r').read().splitlines()
+    tgFiles = open(tgInput, 'r').read().splitlines()
+    outputFiles = open(output, 'r').read().splitlines()
     return (wavFiles, tgFiles, outputFiles)
 
 

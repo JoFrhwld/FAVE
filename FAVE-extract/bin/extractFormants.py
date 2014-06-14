@@ -1510,10 +1510,7 @@ def parseStopWordsFile(f):
 
     # if removeStopWords = "T"
     # file specified by "--stopWords" option in command line input
-    stopWords = []
-    for line in open(f, 'r').readlines():
-        word = line.rstrip('\n')
-        stopWords.append(word)
+    stopWords = open(f, 'r').splitlines()
     return stopWords
 
 
@@ -1596,9 +1593,9 @@ def processInput(wavInput, tgInput, output):
 
     # remove the trailing newline character from each line of the file, and
     # store the filenames in a list
-    wavFiles = [f.replace('\n', '') for f in open(wavInput, 'r').readlines()]
-    tgFiles = [f.replace('\n', '') for f in open(tgInput, 'r').readlines()]
-    outputFiles = [f.replace('\n', '') for f in open(output, 'r').readlines()]
+    wavFiles = open(wavInput, 'r').splitlines()
+    tgFiles = open(tgInput, 'r').splitlines()
+    outputFiles = open(output, 'r').splitlines()
     return (wavFiles, tgFiles, outputFiles)
 
 
@@ -2070,7 +2067,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         checkTextGridFile(tgFile)
 
         # this will be used for the temporary files that we write
-        fileStem = os.path.basename(wavFile).replace('.wav', '')
+        fileStem = os.path.basename(wavFile).rstrip('.wav')
 
         # load the information from the TextGrid file with the word and phone
         # alignments

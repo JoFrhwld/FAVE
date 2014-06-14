@@ -1832,7 +1832,7 @@ def whichSpeaker(speakers):
         return speaker
 
 
-def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
+def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
     """writes a log file"""
 
     f = open(filename, 'w')
@@ -1995,9 +1995,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     stopWordsFile = opts.stopWordsFile
 
     if stopWordsFile:
-        stopWords = parseStopWordsFile(stopWordsFile)
-    else:
-        stopWords = opts.stopWords
+        opts.stopWords = parseStopWordsFile(stopWordsFile)
 
     # assign the options to individual variables and to type conversion if
     # necessary
@@ -2046,10 +2044,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     # put the list of stop words in upper or lower case to match the word
     # transcriptions
     newStopWords = []
-    for w in stopWords:
+    for w in opts.stopWords:
         w = changeCase(w, case)
         newStopWords.append(w)
-    stopWords = newStopWords
+    opts.stopWords = newStopWords
 
     # for "multipleFiles" option:  read lists of files into (internal) lists
     if multipleFiles:
@@ -2146,7 +2144,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 continue
 
             # don't process this word if it's in the list of stop words
-            if removeStopWords and w.transcription in stopWords:
+            if removeStopWords and w.transcription in opts.stopWords:
                 count_stopwords += numV
                 if opts.verbose:
                     print ''
@@ -2283,7 +2281,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         # write log file
         writeLog(os.path.splitext(outputFile)
-                 [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, stopWords, opts)
+                 [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, opts)
 
 
 #

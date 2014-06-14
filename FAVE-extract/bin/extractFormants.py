@@ -2134,9 +2134,11 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
-            numV = getNumVowels(w)
+            pre_w.transcription = changeCase(pre_w.transcription, case)
+            fol_w.transcription = changeCase(fol_w.transcription, case)
 
             # if the word doesn't contain any vowels, then we won't analyze it
+            numV = getNumVowels(w)
             if numV == 0:
                 if opts.verbose:
                     print ''

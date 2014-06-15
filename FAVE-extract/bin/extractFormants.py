@@ -924,9 +924,6 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
 def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     """takes a Praat TextGrid file and returns a list of the words in the file,
     along with their associated phones, and Plotnik codes for the vowels"""
-
-    print ''
-    print 'Identifying vowels in the TextGrid'
                      
     phone_midpoints = [p.xmin() + 0.5 * (p.xmax() - p.xmin()) for p in tg[speaker.tiernum]]
 
@@ -2095,7 +2092,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # extract list of words and their corresponding phones (with all
         # coding) -> only for chosen speaker
         words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem)
-                                  # (all initial vowels are counted here)
+                                  # (all initial vowels are counted here)                                 
+        print 'Identified vowels in the TextGrid.'
         global maxTime
         maxTime = tg.xmax()  # duration of TextGrid/sound file
         measurements = []
@@ -2200,17 +2198,17 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     try:
                         pre_seg = pre_w.phones[-1].label
                     except IndexError:
-                        pre_seg = 'NA'
+                        pre_seg = ''
                     try:
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
-                        fol_seg = 'NA'
+                        fol_seg = ''
                 elif p_index is 0:
                     p_context = "initial"
                     try:
                         pre_seg = pre_w.phones[-1].label
                     except IndexError:
-                        pre_seg = 'NA'
+                        pre_seg = ''
                     fol_seg = w.phones[p_index+1].label
                 elif p_index is (len(w.phones)-1):
                     p_context = "final"
@@ -2218,7 +2216,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     try:
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
-                        fol_seg = 'NA'
+                        fol_seg = ''
                 else:
                     p_context = "internal"
                     pre_seg = w.phones[p_index-1].label

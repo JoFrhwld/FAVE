@@ -1358,7 +1358,7 @@ def write_log(filename, wavfile, duration):
     f.write("\n\n")
 
 
-    f.write("Alignment statistics for file %s:\n\n" % os.path.basename(wavfile))
+    f.write("Alignment statistics for file %s:\n" % os.path.basename(wavfile))
 
     try:
         check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)

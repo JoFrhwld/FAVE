@@ -924,9 +924,6 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
 def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
     """takes a Praat TextGrid file and returns a list of the words in the file,
     along with their associated phones, and Plotnik codes for the vowels"""
-
-    print ''
-    print 'Identifying vowels in the TextGrid'
                      
     phone_midpoints = [p.xmin() + 0.5 * (p.xmax() - p.xmin()) for p in tg[speaker.tiernum]]
 
@@ -1510,10 +1507,7 @@ def parseStopWordsFile(f):
 
     # if removeStopWords = "T"
     # file specified by "--stopWords" option in command line input
-    stopWords = []
-    for line in open(f, 'r').readlines():
-        word = line.rstrip('\n')
-        stopWords.append(word)
+    stopWords = open(f, 'r').read().splitlines()
     return stopWords
 
 
@@ -1596,9 +1590,9 @@ def processInput(wavInput, tgInput, output):
 
     # remove the trailing newline character from each line of the file, and
     # store the filenames in a list
-    wavFiles = [f.replace('\n', '') for f in open(wavInput, 'r').readlines()]
-    tgFiles = [f.replace('\n', '') for f in open(tgInput, 'r').readlines()]
-    outputFiles = [f.replace('\n', '') for f in open(output, 'r').readlines()]
+    wavFiles = open(wavInput, 'r').read().splitlines()
+    tgFiles = open(tgInput, 'r').read().splitlines()
+    outputFiles = open(output, 'r').read().splitlines()
     return (wavFiles, tgFiles, outputFiles)
 
 
@@ -1835,7 +1829,7 @@ def whichSpeaker(speakers):
         return speaker
 
 
-def writeLog(filename, wavFile, maxTime, meansFile, covsFile, stopWords, opts):
+def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
     """writes a log file"""
 
     f = open(filename, 'w')
@@ -1998,9 +1992,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     stopWordsFile = opts.stopWordsFile
 
     if stopWordsFile:
-        stopWords = parseStopWordsFile(stopWordsFile)
-    else:
-        stopWords = opts.stopWords
+        opts.stopWords = parseStopWordsFile(stopWordsFile)
 
     # assign the options to individual variables and to type conversion if
     # necessary
@@ -2049,10 +2041,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     # put the list of stop words in upper or lower case to match the word
     # transcriptions
     newStopWords = []
-    for w in stopWords:
+    for w in opts.stopWords:
         w = changeCase(w, case)
         newStopWords.append(w)
-    stopWords = newStopWords
+    opts.stopWords = newStopWords
 
     # for "multipleFiles" option:  read lists of files into (internal) lists
     if multipleFiles:
@@ -2070,7 +2062,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         checkTextGridFile(tgFile)
 
         # this will be used for the temporary files that we write
-        fileStem = os.path.basename(wavFile).replace('.wav', '')
+        fileStem = os.path.basename(wavFile).replace('.wav','')
 
         # load the information from the TextGrid file with the word and phone
         # alignments
@@ -2100,7 +2092,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # extract list of words and their corresponding phones (with all
         # coding) -> only for chosen speaker
         words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem)
-                                  # (all initial vowels are counted here)
+                                  # (all initial vowels are counted here)                                 
+        print 'Identified vowels in the TextGrid.'
         global maxTime
         maxTime = tg.xmax()  # duration of TextGrid/sound file
         measurements = []
@@ -2137,9 +2130,11 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
             # convert to upper or lower case, if necessary
             w.transcription = changeCase(w.transcription, case)
-            numV = getNumVowels(w)
+            pre_w.transcription = changeCase(pre_w.transcription, case)
+            fol_w.transcription = changeCase(fol_w.transcription, case)
 
             # if the word doesn't contain any vowels, then we won't analyze it
+            numV = getNumVowels(w)
             if numV == 0:
                 if opts.verbose:
                     print ''
@@ -2147,7 +2142,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 continue
 
             # don't process this word if it's in the list of stop words
-            if removeStopWords and w.transcription in stopWords:
+            if removeStopWords and w.transcription in opts.stopWords:
                 count_stopwords += numV
                 if opts.verbose:
                     print ''
@@ -2203,17 +2198,17 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     try:
                         pre_seg = pre_w.phones[-1].label
                     except IndexError:
-                        pre_seg = 'NA'
+                        pre_seg = ''
                     try:
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
-                        fol_seg = 'NA'
+                        fol_seg = ''
                 elif p_index is 0:
                     p_context = "initial"
                     try:
                         pre_seg = pre_w.phones[-1].label
                     except IndexError:
-                        pre_seg = 'NA'
+                        pre_seg = ''
                     fol_seg = w.phones[p_index+1].label
                 elif p_index is (len(w.phones)-1):
                     p_context = "final"
@@ -2221,7 +2216,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     try:
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
-                        fol_seg = 'NA'
+                        fol_seg = ''
                 else:
                     p_context = "internal"
                     pre_seg = w.phones[p_index-1].label
@@ -2276,7 +2271,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         print ''
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader)
         if opts.pickle:
-            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
+            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'wb')
             pickle.dump(measurements, pi, pickle.HIGHEST_PROTOCOL)
             pi.close()
 
@@ -2284,7 +2279,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         # write log file
         writeLog(os.path.splitext(outputFile)
-                 [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, stopWords, opts)
+                 [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, opts)
 
 
 #

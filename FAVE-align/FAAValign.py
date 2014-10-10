@@ -77,7 +77,6 @@ import praat
 import subprocess
 import traceback
 import codecs
-import mimetypes
 import subprocess
 
 truncated = re.compile(r'\w+\-$')                       ## truncated words
@@ -819,7 +818,7 @@ def get_duration(soundfile, FADIR=''):
 def is_sound(f):
     """checks whether a file is a .wav sound file"""
     
-    if re.search("\.wav$", f.lower()) and mimetypes.guess_type(f)[0] == "audio/x-wav":
+    if f.lower().endswith('.wav'):
 ## NOTE:  This is the old version of the file check using a call to 'file' via the command line
 ##    and ("audio/x-wav" in subprocess.Popen('file -bi "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
 ##                                           or "audio/x-wav" in subprocess.Popen('file -bI "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()):
@@ -834,7 +833,7 @@ def is_sound(f):
 def is_text(f):
     """checks whether a file is a .txt text file"""
     
-    if re.search("\.txt$", f.lower()) and mimetypes.guess_type(f)[0] == "text/plain":
+    if f.lower().endswith('.txt'):
 ## NOTE:  This is the old version of the file check using a call to 'file' via the command line
 ##    and ("text/plain" in subprocess.Popen('file -bi "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
 ##                                           or "text/plain" in subprocess.Popen('file -bI "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()):

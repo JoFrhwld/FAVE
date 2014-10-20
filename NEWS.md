@@ -1,0 +1,1 @@
+- new config option --trakx will write full formant trakcs to a *_tracks.txt file (@jofrhwld)

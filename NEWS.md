@@ -52,4 +52,5 @@ v1.2
 * FAVE-align now uses `os` and `shutil` module functions instead of OS-specific shell commands (@scjs)
 
 * FAVE-extract now uses `splitlines()` instead of stripping `\n` when parsing multiple input files or a stopwords file (@scjs)
-- new config option --trakx will write full formant trakcs to a *_tracks.txt file (@jofrhwld)
+
+* new config option --traks will write full formant trakcs to a *_tracks.txt file (@jofrhwld)

@@ -2275,7 +2275,6 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if len(w.phones) is 1:
                     p_context = "coextensive"
                     try:
-<<<<<<< HEAD
                         pre_seg = pre_w.phones[-1].label
                     except IndexError:
                         pre_seg = ''
@@ -2283,42 +2282,21 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
                         fol_seg = ''
-=======
-                        pre_seg = pre_w.phones[-1].label
-                    except IndexError:
-                        pre_seg = 'NA'
-                    try:
-                        fol_seg = fol_w.phones[0].label
-                    except IndexError:
-                        fol_seg = 'NA'
->>>>>>> feature/tracks
                 elif p_index is 0:
                     p_context = "initial"
                     try:
-<<<<<<< HEAD
                         pre_seg = pre_w.phones[-1].label
                     except IndexError:
                         pre_seg = ''
-=======
-                        pre_seg = pre_w.phones[-1].label
-                    except IndexError:
-                        pre_seg = 'NA'
->>>>>>> feature/tracks
                     fol_seg = w.phones[p_index+1].label
                 elif p_index is (len(w.phones)-1):
                     p_context = "final"
 
                     pre_seg = w.phones[p_index-1].label
                     try:
-<<<<<<< HEAD
                         fol_seg = fol_w.phones[0].label
                     except IndexError:
                         fol_seg = ''
-=======
-                        fol_seg = fol_w.phones[0].label
-                    except IndexError:
-                        fol_seg = 'NA'
->>>>>>> feature/tracks
                 else:
                     p_context = "internal"
                     pre_seg = w.phones[p_index-1].label

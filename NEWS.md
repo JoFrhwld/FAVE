@@ -24,11 +24,11 @@ v1.2
 
 	It is now done like this:
 
-   		> python bin/extractFormants.py +config.txt wavfile textgridfile outputfile
+   	    > python bin/extractFormants.py +config.txt wavfile textgridfile outputfile
 
 	Is now also possible to define any option in the commandline call to extractFormants.py itself. For example, it is possible to define an option like so:
-
-	   > python bin/extractFormants.py --minVowelDuration 0.3 wavfile textgridfile outputfile
+	
+	    > python bin/extractFormants.py --minVowelDuration 0.3 wavfile textgridfile outputfile
 
 	We would still recommend defining you config options in a config.txt file for ease, but however options are passed to extractFormants.py, the complete set of options and their settings will still be written to the log file.
 

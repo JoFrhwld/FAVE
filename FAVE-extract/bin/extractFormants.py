@@ -3,7 +3,6 @@
 #
 # !!! This is NOT the original extractFormants.py file !!!              ##
 #
-# Last modified by Ingrid Rosenfelder: February 6, 2013                       ##
 # - all comments beginning with a double pound sign ("##")                    ##
 # - docstrings for all classes and functions                                  ##
 # - alphabetic ordering outside of main program:                              ##

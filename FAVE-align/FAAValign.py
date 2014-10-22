@@ -63,7 +63,6 @@ Options:
 ## PROJECT "AUTOMATIC ALIGNMENT AND ANALYSIS OF LINGUISTIC CHANGE"            ##
 ## FAAValign.py                                                               ##
 ## written by Ingrid Rosenfelder                                              ##
-## last updated February 6, 2013                                              ##
 ################################################################################
 
 import os

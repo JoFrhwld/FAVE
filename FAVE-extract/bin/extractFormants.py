@@ -1913,7 +1913,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
     f.write(time.asctime())
     f.write("\n")
     try:
-        check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)
+        check_version = subprocess.Popen(["git","describe", "--tags"], stdout = subprocess.PIPE)
         version,err = check_version.communicate()
         version = version.rstrip()
     except OSError:

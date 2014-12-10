@@ -63,11 +63,11 @@ Options:
 ## PROJECT "AUTOMATIC ALIGNMENT AND ANALYSIS OF LINGUISTIC CHANGE"            ##
 ## FAAValign.py                                                               ##
 ## written by Ingrid Rosenfelder                                              ##
-## last updated February 6, 2013                                              ##
 ################################################################################
 
 import os
 import sys
+import shutil
 import re
 import wave
 import optparse
@@ -76,7 +76,6 @@ import praat
 import subprocess
 import traceback
 import codecs
-import mimetypes
 import subprocess
 
 truncated = re.compile(r'\w+\-$')                       ## truncated words
@@ -176,7 +175,7 @@ def align(wavfile, trs_input, outfile, FADIR='', SOXPATH='', HTKTOOLSPATH=''):
     ## - "tmp.wav"
     
     # create working directory  
-    os.system("mkdir ./tmp" + identifier)
+    os.mkdir("./tmp" + identifier)
     # prepare wavefile
     SR = prep_wav(wavfile, './tmp' + identifier + '/tmp' + identifier + '.wav', SOXPATH)
 
@@ -209,12 +208,12 @@ def align(wavfile, trs_input, outfile, FADIR='', SOXPATH='', HTKTOOLSPATH=''):
     except Exception, e:
         FA_error = "Error in aligning file %s:  %s." % (os.path.basename(wavfile), e)
         ## clean up temporary alignment files
-        os.system("rm -r -f ./tmp" + identifier)
+        shutil.rmtree("./tmp" + identifier)
         raise Exception, FA_error
         ##errorhandler(FA_error)
 
     ## remove tmp directory and all files        
-    os.system("rm -r -f ./tmp" + identifier)
+    shutil.rmtree("./tmp" + identifier)
     
 
 ## This function is from Jiahong Yuan's align.py
@@ -818,7 +817,7 @@ def get_duration(soundfile, FADIR=''):
 def is_sound(f):
     """checks whether a file is a .wav sound file"""
     
-    if re.search("\.wav$", f.lower()) and mimetypes.guess_type(f)[0] == "audio/x-wav":
+    if f.lower().endswith('.wav'):
 ## NOTE:  This is the old version of the file check using a call to 'file' via the command line
 ##    and ("audio/x-wav" in subprocess.Popen('file -bi "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
 ##                                           or "audio/x-wav" in subprocess.Popen('file -bI "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()):
@@ -833,7 +832,7 @@ def is_sound(f):
 def is_text(f):
     """checks whether a file is a .txt text file"""
     
-    if re.search("\.txt$", f.lower()) and mimetypes.guess_type(f)[0] == "text/plain":
+    if f.lower().endswith('.txt'):
 ## NOTE:  This is the old version of the file check using a call to 'file' via the command line
 ##    and ("text/plain" in subprocess.Popen('file -bi "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
 ##                                           or "text/plain" in subprocess.Popen('file -bI "%s"' % f, shell=True, stdout=subprocess.PIPE).communicate()[0].strip()):
@@ -851,27 +850,27 @@ def is_TextGrid(f):
         return False
 
 
-def make_tempdir(tempdir):
-    """creates a temporary directory for all alignment "chunks";
-    warns against overwriting existing files if applicable"""
+# def make_tempdir(tempdir):
+#     """creates a temporary directory for all alignment "chunks";
+#     warns against overwriting existing files if applicable"""
     
-    ## check whether directory already exists and has files in it
-    if os.path.isdir(tempdir):
-        contents = os.listdir(tempdir)
-        if len(contents) != 0 and not options.noprompt:
-            print "WARNING!  Directory %s already exists and is non-empty!" % tempdir
-            print "(Files in directory:  %s )" % contents
-            overwrite = raw_input("Overwrite and continue?  [y/n]")
-            if overwrite == "y":
-                ## delete contents of tempdir
-                for item in contents:
-                    os.remove(os.path.join(tempdir, item))
-            elif overwrite == "n":
-                sys.exit("Exiting program.")
-            else:
-                sys.exit("Undecided user.  Exiting program.")
-    else:
-        os.mkdir(tempdir)
+#     ## check whether directory already exists and has files in it
+#     if os.path.isdir(tempdir):
+#         contents = os.listdir(tempdir)
+#         if len(contents) != 0 and not options.noprompt:
+#             print "WARNING!  Directory %s already exists and is non-empty!" % tempdir
+#             print "(Files in directory:  %s )" % contents
+#             overwrite = raw_input("Overwrite and continue?  [y/n]")
+#             if overwrite == "y":
+#                 ## delete contents of tempdir
+#                 for item in contents:
+#                     os.remove(os.path.join(tempdir, item))
+#             elif overwrite == "n":
+#                 sys.exit("Exiting program.")
+#             else:
+#                 sys.exit("Undecided user.  Exiting program.")
+#     else:
+#         os.mkdir(tempdir)
 
 
 def check_tempdir(tempdir):
@@ -1235,13 +1234,13 @@ def reinsert_uncertain(tg, text):
     return tg
 
 
-def remove_tempdir(tempdir):
-    """removes the temporary directory and all its contents"""
+# def remove_tempdir(tempdir):
+#     """removes the temporary directory and all its contents"""
     
-    for item in os.listdir(tempdir):
-        os.remove(os.path.join(tempdir, item))
-    os.removedirs(tempdir)
-    os.remove("blubbeldiblubb.txt")
+#     for item in os.listdir(tempdir):
+#         os.remove(os.path.join(tempdir, item))
+#     os.removedirs(tempdir)
+#     os.remove("blubbeldiblubb.txt")
 
  
 def replace_extension(filename, newextension):
@@ -1250,13 +1249,13 @@ def replace_extension(filename, newextension):
     return os.path.splitext(filename)[0] + newextension
 
 
-def empty_tempdir(tempdir):
-    """empties the temporary directory of all files"""
-    ## (NOTE:  This is a modified version of remove_tempdir)
+# def empty_tempdir(tempdir):
+#     """empties the temporary directory of all files"""
+#     ## (NOTE:  This is a modified version of remove_tempdir)
     
-    for item in os.listdir(tempdir):
-        os.remove(os.path.join(tempdir, item))
-    os.remove("blubbeldiblubb.txt")
+#     for item in os.listdir(tempdir):
+#         os.remove(os.path.join(tempdir, item))
+#     os.remove("blubbeldiblubb.txt")
 
 
 def tidyup(tg, beg, end, tgfile):
@@ -1356,8 +1355,9 @@ def write_log(filename, wavfile, duration):
     f.write(t_stamp)
     f.write("\n\n")
     f.write("Alignment statistics for file %s:\n\n" % os.path.basename(wavfile))
+
     try:
-        check_version = subprocess.Popen(["git","describe"], stdout = subprocess.PIPE)
+        check_version = subprocess.Popen(["git","describe", "--tags"], stdout = subprocess.PIPE)
         version,err = check_version.communicate()
         version = version.rstrip()
     except OSError:
@@ -1382,7 +1382,8 @@ def write_log(filename, wavfile, duration):
     if changes:
         f.write("Uncommitted changes when run:\n")
         f.write(changes)
-            
+        
+    f.write("\n")
     f.write("Total number of words:\t\t\t%i\n" % count_words)
     f.write("Uncertain transcriptions:\t\t%i\t(%.1f%%)\n" % (count_uncertain, float(count_uncertain)/float(count_words)*100))
     f.write("Unclear passages:\t\t\t%i\t(%.1f%%)\n" % (count_unclear, float(count_unclear)/float(count_words)*100))

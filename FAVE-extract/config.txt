@@ -1,0 +1,13 @@
+--outputFormat
+txt
+--speechSoftware
+Praat
+--formantPredictionMethod
+mahalanobis
+--measurementPointMethod
+faav
+--nSmoothing
+12
+--remeasure
+--vowelSystem
+phila

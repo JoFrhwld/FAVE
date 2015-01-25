@@ -1798,6 +1798,54 @@ def readSpeakerFile(speakerFile):
         speaker.name = speaker.first_name + ' ' + speaker.last_name
     return speaker
 
+# TODO make this module compatible with new argparse setup, remove PNC assumptions
+def readPNCdata(speakername, speakernum, fileStem):
+    """reads speaker demographics from a csv file"""
+    speaker = Speaker()
+    # TODO move this, file now defined in option
+    datafile = 'bin/demographics.csv'
+
+    PNCSUBJECT = r'^\D\D\D?\d?\d?-\D?\d?\d?-\d\d?'
+    IHPSUBJECT = r'^\D\D\D\d-\d\d?\d?'
+    PNC_dict = {}
+
+    try:
+        subject = match(IHPSUBJECT, path.split(fileStem)[1]).group(0)
+    except:
+        try:            
+            m = match(PNCSUBJECT, path.split(fileStem)[1]).group(0)
+        except:
+            subject = fileStem
+    
+    # TODO move this to main function, should only be read in once!
+    with open(datafile, 'rU') as source:
+        for row in DictReader(source):
+            sub = row['SubjectID']
+            PNC_dict[sub] = row
+   
+    if subject in PNC_dict:
+        speaker.name = PNC_dict[subject]['Name']
+        if speaker.name[0:3] == speakername[0:3]:
+            speaker.first_name = speaker.name.strip().split()[0]
+            try:
+                speaker.last_name = speaker.name.strip().split()[1][0]
+            except IndexError:
+                speaker.last_name = ''
+            speaker.sex = PNC_dict[subject]['Sex']
+            speaker.age = PNC_dict[subject]['Age']
+            speaker.ethnicity = PNC_dict[subject]['Ethnicity']
+            speaker.location = PNC_dict[subject]['Location']
+            speaker.year = PNC_dict[subject]['Year']
+            speaker.years_of_schooling = PNC_dict[subject]['YearsOfSchool']
+            speaker.tiernum = speakernum * \
+                2  # tiernum points to phone tier = first tier for given speaker
+        else:
+            exit("Names " + speaker.name + " and " + speakername + " do not match!!")
+    else:
+        exit("Speaker " + subject + " not in demographics.csv!")
+    return speaker
+
+
 def setup_parser():
     parser = argparse.ArgumentParser(description="Takes as input a sound file and a Praat .TextGrid file (with word and phone tiers) and outputs automatically extracted F1 and F2 measurements for each vowel (either as a tab-delimited text file or as a Plotnik file).",
                                      usage='python %(prog)s [options] filename.wav filename.TextGrid outputFile [--stopWords ...]',
@@ -2196,6 +2244,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         if opts.speaker:
             speaker = readSpeakerFile(opts.speaker)
             print "Read speaker background information from .speaker file."
+# This is where I should add an option `opts.speakerlist` for the demographics.csv file
+#        if opts.speakerlist:
+#            speaker = readSpeakerList(opts.speakerlist)
+#            print "Read speaker background information from csv file." 
         else:
             speakers = checkTiers(tg)  # -> returns list of speakers
             # prompt user to choose speaker to be analyzed, and for background

@@ -80,6 +80,7 @@ import subprocess
 import traceback
 import codecs
 import mimetypes
+import string
 
 truncated = re.compile(r'\w+\-$')                       ## truncated words
 intended = re.compile(r'^\+\w+')                        ## intended word (inserted by transcribers after truncated word)
@@ -506,6 +507,23 @@ def check_transcription(w):
         
     return final_trans
 
+# substitute any 'smart' quotes in the input file with the corresponding
+# ASCII equivalents (otherwise they will be excluded as out-of-
+# vocabulary with respect to the CMU pronouncing dictionary)
+# WARNING: this function currently only works for UTF-8 input
+def replace_smart_quotes(all_input):
+  cleaned_lines = []
+  for line in all_input:
+    line = line.replace(u'\u2018', "'")
+    line = line.replace(u'\u2019', "'")
+    line = line.replace(u'\u201a', "'")
+    line = line.replace(u'\u201b', "'")
+    line = line.replace(u'\u201c', '"')
+    line = line.replace(u'\u201d', '"')
+    line = line.replace(u'\u201e', '"')
+    line = line.replace(u'\u201f', '"')
+    cleaned_lines.append(line)
+  return cleaned_lines
 
 def check_transcription_file(all_input):
     """checks the format of the input transcription file and returns a list of empty lines to be deleted from the input"""
@@ -1155,22 +1173,23 @@ def read_transcription_file(trsfile):
 
     try:  ## try UTF-16 encoding first
         t = codecs.open(trsfile, 'rU', encoding='utf-16')
-        lines = t.readlines()
         print "Encoding is UTF-16!"
+        lines = t.readlines()
     except UnicodeError:
         try:  ## then UTF-8...
             t = codecs.open(trsfile, 'rU', encoding='utf-8')
-            lines = t.readlines()
             print "Encoding is UTF-8!"
+            lines = t.readlines()
+            lines = replace_smart_quotes(lines)
         except UnicodeError:
             try:  ## then Windows encoding...
                 t = codecs.open(trsfile, 'rU', encoding='windows-1252')
-                lines = t.readlines()
                 print "Encoding is Windows-1252!"
+                lines = t.readlines()
             except UnicodeError:
                 t = open(trsfile, 'rU')
-                lines = t.readlines()
                 print "Encoding is ASCII!"
+                lines = t.readlines()
 
     return lines
 

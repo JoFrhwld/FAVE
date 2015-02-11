@@ -56,6 +56,9 @@ Options:
 
 -n, --noprompt ("no prompt"):
 
+-t HTKTOOLSPATH, --htktoolspath=HTKTOOLSPATH
+    Specifies the path to the HTKTools directory where the HTK executable files are located.  If not specified, the user's path will be searched for the location of the executable.
+
     User is not prompted for the transcription of words not in the dictionary, or truncated words.  Unknown words are ignored by the aligner.
 """
 
@@ -714,6 +717,7 @@ def define_options_and_arguments():
     verbose_help = """Detailed output on status of dictionary check and alignment progress."""
     dict_help = """Specifies the name of the file containing the pronunciation dictionary.  Default file is "/model/dict"."""
     noprompt_help = """User is not prompted for the transcription of words not in the dictionary, or truncated words.  Unknown words are ignored by the aligner."""
+    htktoolspath_help = """Specifies the path to the HTKTools directory where the HTK executable files are located.  If not specified, the user's path will be searched for the location of the executable."""
 
     parser = optparse.OptionParser(usage=new_use, description=new_desc, epilog=new_ep, version=vers)
     parser.add_option('-c', '--check', help=check_help, metavar='FILENAME')                        ## required argument FILENAME
@@ -721,6 +725,7 @@ def define_options_and_arguments():
     parser.add_option('-v', '--verbose', action='store_true', default=False, help=verbose_help)
     parser.add_option('-d', '--dict', default='model/dict', help=dict_help, metavar='FILENAME')
     parser.add_option('-n', '--noprompt', action='store_true', default=False, help=noprompt_help)
+    parser.add_option('-t', '--htktoolspath', default='', help=htktoolspath_help, metavar='HTKTOOLSPATH')
 
     ## After parsing with (options, args) = parser.parse_args(), options are accessible via
     ## - string options.check (default:  None)
@@ -1455,7 +1460,7 @@ def write_words(out, unknown):
 ################################################################################
 
 
-def FAAValign(opts, args, FADIR='', SOXPATH='', HTKTOOLSPATH=''):
+def FAAValign(opts, args, FADIR='', SOXPATH=''):
     """runs the forced aligner for the arguments given"""
 
     tempdir = os.path.join(FADIR, TEMPDIR)
@@ -1501,6 +1506,8 @@ def FAAValign(opts, args, FADIR='', SOXPATH='', HTKTOOLSPATH=''):
     count_unclear = 0
     style_tier = None
     failed_alignment = []
+
+    HTKTOOLSPATH = options.htktoolspath
 
     ## check correct format of input file; get list of transcription lines
     ## (this function skips empty annotation units -> lines to be deleted)

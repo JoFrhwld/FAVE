@@ -1,11 +1,11 @@
 NEWS
 
-dev
+v.1.2.1
 
 * AH0 is now mapped to schwa (`plt_vclass = @`) instead of wedge. (@jofrhwld)
 * When a vowel class isn't in means.txt or covs.txt, default to `nFormants = 5` for first pass. This was necessary to support schwa (@jofrhwld)
-
-* 
+* Fix for smart quotes in transcription (@kevanini)
+* Command-line argument for HTKTOOLSPATH (@kevanini)
 
 v1.2
 

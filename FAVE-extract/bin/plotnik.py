@@ -56,7 +56,7 @@ STYLES = {"R": "2", "N": "1", "L": "2", "G": "1", "S": "2", "K":
 # Plotnik vowel classes (in the order that they appear in the Plotnik side bar)
 PLOTNIKCODES = [
     '1', '2', '3', '5', '6', '7', '8', '11', '12', '21', '22', '41', '47', '61', '82',
-    '72', '73', '62', '63', '42', '33', '43', '53', '14', '24', '44', '54', '64', '74', '94', '31', '39']
+    '72', '73', '62', '63', '42', '33', '43', '53', '14', '24', '44', '54', '64', '74', '94', '31', '39', '*']
 
 # ARPABET phonesets
 CONSONANTS = ['B', 'CH', 'D', 'DH', 'F', 'G', 'HH', 'JH', 'K', 'L', 'M',
@@ -115,9 +115,10 @@ class VowelMeasurement:
     t = 0  # time of measurement
 
 
-def arpabet2plotnik(ac, trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs):
+def arpabet2plotnik(ac, stress, trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs):
     """translates Arpabet transcription of vowels into codes for Plotnik vowel classes"""
     # ac = Arpabet coding (without stress digit)
+    # stress = stress digit
     # trans = (orthographic) transcription of token
     # prec_p = preceding phone
     # foll_p = following phone
@@ -152,6 +153,9 @@ def arpabet2plotnik(ac, trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs):
     elif foll_p != ''and phoneset[foll_p].ctype == 'r' and ac != 'ER':
         pc = A2P_R[ac]
     # all other cases:
+
+    elif ac == "AH" and stress == '0':
+        pc = "*"
     else:
         pc = A2P[ac]
 
@@ -244,8 +248,11 @@ def cmu2plotnik_code(i, phones, trans, phoneset, speaker, vowelSystem):
 
     # convert CMU (Arpabet) transcription into Plotnik code
     # ("label[:-1]":  without stress digit)
-    code = arpabet2plotnik(re.findall(r'^([A-Z]{2,2})\d?$', phones[i].label.upper())[
-                           0], trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs)
+    code = arpabet2plotnik(re.findall(r'^([A-Z]{2,2})\d?$', 
+                                      phones[i].label.upper())[0], 
+                            re.findall(r'^[A-Z]+(\d)$',
+                                       phones[i].label.upper())[0],
+                            trans, prec_p, foll_p, phoneset, fm, fp, fv, ps, fs)
 
     # adjust vowel class assignment for Philadelphia system
 #  try:
@@ -772,7 +779,7 @@ def plt_vowels(cd):
                   '5':"o",
                   '6':"uh",
                   '7':"u",
-                  '*':"*",
+                  '*':"@",
                   '11':"iy",
                   '12':"iyF",
                   '21':"ey",

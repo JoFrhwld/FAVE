@@ -1,5 +1,12 @@
 NEWS
 
+dev
+
+* AH0 is now mapped to schwa (`plt_vclass = @`) instead of wedge. (@jofrhwld)
+* When a vowel class isn't in means.txt or covs.txt, default to `nFormants = 5` for first pass. This was necessary to support schwa (@jofrhwld)
+
+* 
+
 v1.2
 
 * Two major updates to user interface with FAVE-extract. (@jofrhwld)

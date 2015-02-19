@@ -1339,9 +1339,9 @@ def outputFormantSettings(measurements, speaker, outputFile):
     count = {}
     for code in plotnik.PLOTNIKCODES:
         for nf in range(3, 7):
-            count[(int(code), nf)] = 0
+            count[(str(code), nf)] = 0
     for vm in measurements:
-        count[(int(vm.cd), int(vm.nFormants))] += 1
+        count[(str(vm.cd), int(vm.nFormants))] += 1
 
     # filename = name of the output file, but with extension "nFormants"
     outfilename = os.path.splitext(outputFile)[0] + ".nFormants"
@@ -1355,7 +1355,7 @@ def outputFormantSettings(measurements, speaker, outputFile):
     for code in plotnik.PLOTNIKCODES:
         f.write(code)
         for nf in range(3, 7):
-            f.write('\t' + str(count[(int(code), nf)]))
+            f.write('\t' + str(count[(str(code), nf)]))
         f.write('\n')
     f.close()
 
@@ -1601,61 +1601,80 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
     distances = []
         # this list keeps track of the corresponding value of the Mahalanobis distance
     # for all values of nFormants:
-    for poles, bandwidths in zip(selectedpoles, selectedbandwidths):
-        # check that there are at least two formants in the selected frame
-        if len(poles) >= 2:
-            # nPoles = len(poles)     ## number of poles
-            # check all possible combinations of F1, F2, F3:
-            # for i in range(min([nPoles - 1, 2])):
-            #    for j in range(i+1, min([nPoles, 3])):
-                    i = 0
-                    j = 1
-                    # vector with current pole combination and associated
-                    # bandwidths
-                    x = np.array([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
-                    # calculate Mahalanobis distance between x and ANAE mean
-                    dist = mahalanobis(x, means[vowel], covs[vowel])
-                    # append poles and bandwidths to list of values
-                    # (if F3 and bandwidth measurements exist, add to list of appended values)
-                    if len(poles) > 2:
-                        values.append(
-                            [poles[i], poles[j], bandwidths[i], bandwidths[j], poles[2], bandwidths[2]])
-                    else:
-                        values.append([poles[i], poles[j], bandwidths[i], bandwidths[j], '', ''])
-                    # append corresponding Mahalanobis distance to list of
-                    # distances
-                    distances.append(dist)
-        # we need to append something to the distances and values lists so that the winnerIndex still corresponds with nFormants!
-        # (this is for the case that the selected formant frame only contains F1 - empty string will not be selected as minimum distance)
-        else:
-            # if there are gaps in the formant tracks and the vowel duration is
-            # short, the whole formant track may disappear during smoothing
-            if len(poles) == 1 and len(bandwidths) == 1:
-                values.append([poles[0], '', bandwidths[0], '', '', ''])
+    if vowel in means:
+        for poles, bandwidths in zip(selectedpoles, selectedbandwidths):
+            # check that there are at least two formants in the selected frame
+            if len(poles) >= 2:
+                # nPoles = len(poles)     ## number of poles
+                # check all possible combinations of F1, F2, F3:
+                # for i in range(min([nPoles - 1, 2])):
+                #    for j in range(i+1, min([nPoles, 3])):
+                        i = 0
+                        j = 1
+                        # vector with current pole combination and associated
+                        # bandwidths
+                        x = np.array([poles[i], poles[j], math.log(bandwidths[i]), math.log(bandwidths[j])])
+                        # calculate Mahalanobis distance between x and ANAE mean
+                        dist = mahalanobis(x, means[vowel], covs[vowel])
+                        # append poles and bandwidths to list of values
+                        # (if F3 and bandwidth measurements exist, add to list of appended values)
+                        if len(poles) > 2:
+                            values.append(
+                                [poles[i], poles[j], bandwidths[i], bandwidths[j], poles[2], bandwidths[2]])
+                        else:
+                            values.append([poles[i], poles[j], bandwidths[i], bandwidths[j], '', ''])
+                        # append corresponding Mahalanobis distance to list of
+                        # distances
+                        distances.append(dist)
+            # we need to append something to the distances and values lists so that the winnerIndex still corresponds with nFormants!
+            # (this is for the case that the selected formant frame only contains F1 - empty string will not be selected as minimum distance)
             else:
-                values.append(['', '', '', '', '', ''])
-            distances.append('')
-    # get index for minimum Mahalanobis distance
-    winnerIndex = distances.index(min(distances))
-    # get corresponding F1, F2 and bandwidths values
-    f1 = values[winnerIndex][0]
-    f2 = values[winnerIndex][1]
-    f3 = values[winnerIndex][4]
-    # if there is a "gap" in the wave form at the point of measurement, the bandwidths returned will be empty,
-    # and the following will cause an error...
-    if values[winnerIndex][2]:
-        b1 = values[winnerIndex][2]
+                # if there are gaps in the formant tracks and the vowel duration is
+                # short, the whole formant track may disappear during smoothing
+                if len(poles) == 1 and len(bandwidths) == 1:
+                    values.append([poles[0], '', bandwidths[0], '', '', ''])
+                else:
+                    values.append(['', '', '', '', '', ''])
+                distances.append('')
+        # get index for minimum Mahalanobis distance
+        winnerIndex = distances.index(min(distances))
+        # get corresponding F1, F2 and bandwidths values
+        f1 = values[winnerIndex][0]
+        f2 = values[winnerIndex][1]
+        f3 = values[winnerIndex][4]
+        # if there is a "gap" in the wave form at the point of measurement, the bandwidths returned will be empty,
+        # and the following will cause an error...
+        if values[winnerIndex][2]:
+            b1 = values[winnerIndex][2]
+        else:
+            b1 = ''
+        if values[winnerIndex][3]:
+            b2 = values[winnerIndex][3]
+        else:
+            b2 = ''
+        if values[winnerIndex][5]:
+            b3 = values[winnerIndex][5]
+        else:
+            b3 = ''
+        # return tuple of measurements
     else:
-        b1 = ''
-    if values[winnerIndex][3]:
-        b2 = values[winnerIndex][3]
-    else:
-        b2 = ''
-    if values[winnerIndex][5]:
-        b3 = values[winnerIndex][5]
-    else:
-        b3 = ''
-    # return tuple of measurements
+        winnerIndex = 2
+        f1 = selectedpoles[2][0]
+        f2 = selectedpoles[2][1]
+        f3 = selectedpoles[2][2]
+        if selectedbandwidths[2][0]:
+            b1 = selectedbandwidths[2][0]
+        else:
+            b1 = ''
+        if selectedbandwidths[2][1]:
+            b2 = selectedbandwidths[2][1]
+        else:
+            b2 = ''
+        if selectedbandwidths[2][2]:
+            b3 = selectedbandwidths[2][2]
+        else:
+            b3 = ''
+
     return (f1, f2, f3, b1, b2, b3, winnerIndex)
 
 

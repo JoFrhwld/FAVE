@@ -136,7 +136,7 @@ class Speaker:
         self.location = ''
         self.city = ''  # 'Philadelphia'
         self.state = ''  # 'PA'
-        self.year = None  # year of recording
+        self.year = ''  # year of recording
         self.tiernum = None  # tiernum points to phone tier = first tier for given speaker
 
 

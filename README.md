@@ -18,10 +18,10 @@ For the most part, we'll be utilizing the fork-and-pull paradigm (see [Using Pul
 If you want to keep up to date on FAVE development, or have questions about FAVE development, send a request to join the [FAVE Developers' Group](https://groups.google.com/forum/#!forum/fave-dev).
 
 ## Attribution
-[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.15530.svg)](http://dx.doi.org/10.5281/zenodo.15530)
-As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.15530](https://dx.doi.org/10.5281/zenodo.15530). We would recommend the citation:
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.22281.svg)](http://dx.doi.org/10.5281/zenodo.22281)
+As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.22281](http://dx.doi.org/10.5281/zenodo.22281). We would recommend the citation:
 
-Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Prichard, Hilary; Yuan, Jiahong; 2014. FAVE (Forced Alignment and Vowel Extraction) Program Suite v1.2.1 doi:10.5281/zenodo.15530
+Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Prichard, Hilary; Yuan, Jiahong; 2014. FAVE (Forced Alignment and Vowel Extraction) Program Suite v1.2.2 10.5281/zenodo.22281
 
 Use of the interactive online interface should continue to cite:
 

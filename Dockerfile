@@ -1,9 +1,9 @@
 FROM ubuntu:14.04
 MAINTAINER Patrick Callier "pcallier@lab41.org"
 
-RUN apt-get update && \
-  apt-get install -y build-essential git-core python python-pip && \
-  gcc-multilib g++multilib libc6 libc6-dev
+RUN apt-get update
+RUN apt-get install -y build-essential git-core python python-pip \
+  gcc-multilib g++-multilib libc6 libc6-dev
 
 # Install HTK (must be in build directory)
 # The licensing terms for this likely do NOT
@@ -23,7 +23,16 @@ RUN sed -i '1650s/ labid / labpr /' /opt/htk/HTKLib/HRec.c && \
 RUN apt-get -y install sox
 
 # Install numpy and dependencies
-RUN pip install numpy
+RUN apt-get install -y python-dev && \
+  pip install numpy
 
-ENTRYPOINT [ "/bin/bash", "-c", "--" ]
+# Install fave-align and fave-extract
+#  git clone https://github.com/JoFrhwld/FAVE && \
+ADD ./ /opt/FAVE
+RUN cd /opt/FAVE && \
+  # git checkout a6e2aeb3ba61e2af79157d0ace0e4a8cc40b1511 && \ # would overwrite my edits
+  echo 'export PATH=$PATH:/opt/FAVE/FAVE-align:/opt/FAVE/FAVE-extract' >> /etc/profile
+
+
+ENTRYPOINT [ "/bin/bash", "-lc", "--" ]
 

@@ -12,7 +12,7 @@ The interactive website for utilizing FAVE can be found at [fave.ling.upenn.edu]
 
 The included Docker (www.docker.com) file can be used to simplify the process of building and running FAVE. Install Docker according to the instructions for your platform ([Mac](https://docs.docker.com/engine/installation/mac/), [Windows](https://docs.docker.com/engine/installation/windows/), [Linux](https://docs.docker.com/engine/installation/linux/)).
 
-To install, clone this repository as described in the [FAVE-align instructions](/wiki/Installing-FAVE-align#downloading-fave-align). Download the [HTK-3.4.1.tar.gz file](http://htk.eng.cam.ac.uk/download.shtml) (registration required) into this directory (no need to unpack it). Run docker_build.sh (Mac or Linux only) or issue the command `docker build -t fave [FAVE_DIRECTORY]` where \[FAVE_DIRECTORY\] is the location of this repository on your disk. 
+To install, clone this repository as described in the [FAVE-align instructions](/wiki/Installing-FAVE-align#downloading-fave-align). Download the [HTK-3.4.1.tar.gz file](http://htk.eng.cam.ac.uk/download.shtml) (registration required) into the root of the repository (e.g. `Downloads/FAVE`; no need to unpack it). Run docker_build.sh (Mac or Linux only) or issue the command `docker build -t fave [FAVE_DIRECTORY]` where \[FAVE_DIRECTORY\] is the location of this repository on your disk. 
 
 To run FAVE-align from your Docker environment, issue commands along the following lines, modifying them according to the options documented in the FAVE-align and FAVE-extract scripts themselves:
 

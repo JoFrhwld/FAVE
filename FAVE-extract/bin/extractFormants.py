@@ -136,7 +136,7 @@ class Speaker:
         self.location = ''
         self.city = ''  # 'Philadelphia'
         self.state = ''  # 'PA'
-        self.year = None  # year of recording
+        self.year = ''  # year of recording
         self.tiernum = None  # tiernum points to phone tier = first tier for given speaker
 
 
@@ -1538,7 +1538,7 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
                     times = vm.times[0]
 
                     for f1, f2, f3, b1, b2, b3, t in zip(f1_tracks, f2_tracks, f3_tracks,
-                                                         b1_tracks, b2_tracks, f3_tracks,
+                                                         b1_tracks, b2_tracks, b3_tracks,
                                                          times):
                         trackwriter.writerow(speaker_attrs + vowel_info + [f1, f2, f3, b1, b2, b3, t] +
                                              context_info)

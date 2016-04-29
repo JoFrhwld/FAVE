@@ -26,7 +26,7 @@ docker run -it -v /path/to/audio/and/text/folder:/opt/audio fave 'FAAValign.py -
 # Use a custom dictionary
 docker run -it -v /path/to/audio/and/text/folder:/opt/audio -v /my/custom/dict:/opt/dict fave 'FAAValign.py -v --dict /opt/dict /opt/audio/my_audio.wav'
 ```
-Output textgrids will end up in the same folder as your audio and transcripts, as is normally the case in FAVE-align.
+Docker runs FAVE in a lightly virtualized environment (a container) with its own filesystem. The `-v` options above allow you to put folders containing your data into the container; you have total control over what is in them (audio, transcripts, dictionaries, etc.) and where they go. Output textgrids will end up in the same folder as your audio and transcripts, as is normally the case in FAVE-align.
 
 ## Support
 

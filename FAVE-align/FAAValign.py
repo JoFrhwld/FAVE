@@ -1681,7 +1681,9 @@ if __name__ == '__main__':
     ## get input/output file names and options
     parser = define_options_and_arguments()
     (opts, args) = parser.parse_args()
+    
+    script_location = os.path.dirname(os.path.realpath(__file__))
 
-    FAAValign(opts, args)
+    FAAValign(opts, args, FADIR=script_location)
 
 

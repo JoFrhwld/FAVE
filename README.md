@@ -8,6 +8,26 @@ The extractFormants code in the JoFrhwld/FAAV repository represents an earlier v
 
 The interactive website for utilizing FAVE can be found at [fave.ling.upenn.edu](http://fave.ling.upenn.edu/)
 
+## Building and running with Docker
+
+The included Docker ([www.docker.com]) file can be used to simplify the process of building and running FAVE. Install Docker according to the instructions for your platform ([Mac](https://docs.docker.com/engine/installation/mac/), [Windows](https://docs.docker.com/engine/installation/windows/), [Linux](https://docs.docker.com/engine/installation/linux/)).
+
+To install, clone this repository as described in the [FAVE-align instructions](/wiki/Installing-FAVE-align#downloading-fave-align). Download the [HTK-3.4.1.tar.gz file](http://htk.eng.cam.ac.uk/download.shtml) (registration required) into this directory (no need to unpack it). Run docker_build.sh (Mac or Linux only) or issue the command `docker build -t fave [FAVE_DIRECTORY]` where \[FAVE_DIRECTORY\] is the location of this repository on your disk. 
+
+To run FAVE-align from your Docker environment, issue commands along the following lines, modifying them according to the options documented in the FAAValign and FAAVextract scripts themselves:
+
+``` sh
+# Basic alignment run 
+docker run -it -v /path/to/audio/and/text/folder:/opt/audio fave 'FAAValign.py -v /opt/audio/my_audio.wav'
+# Check words
+docker run -it -v /path/to/audio/and/text/folder:/opt/audio fave 'FAAValign.py -vc /opt/audio/unknown_words.txt /opt/audio/my_audio.wav'
+# Use custom pronounciations (put them with your transcripts, or investigate the --volume option for Docker)
+docker run -it -v /path/to/audio/and/text/folder:/opt/audio fave 'FAAValign.py -vi /opt/audio/new_words.txt /opt/audio/my_audio.wav'
+# Use a custom dictionary
+docker run -it -v /path/to/audio/and/text/folder:/opt/audio -v /my/custom/dict:/opt/dict fave 'FAAValign.py -v --dict /opt/dict /opt/audio/my_audio.wav'
+```
+Output textgrids will end up in the same folder as your audio and transcripts, as is normally the case in FAVE-align.
+
 ## Support
 
 You can find user support for installing and using the FAVE toolkits at the [FAVE Users' Group](https://groups.google.com/forum/#!forum/fave-users).

@@ -105,11 +105,16 @@ class CMU_Dictionary():
         """
         Initializes object by reading in CMU dictionary (or similar)
 
-        @param string dictionary_file
-        @param bool verbose: Whether to print debug information
-        @param bool prompt: Whether to prompt the user to fix errors
-        @author Keelan Evanini
-        @author Christian Brickhouse
+		Parameters
+		----------
+        dictionary_file : string
+			The full path to the location of a CMU-style dictionary.
+        verbose : bool
+			Whether to print debug information.
+        prompt : bool
+			Whether to prompt the user to fix errors.
+		check : bool
+			Whether this is an alignment or transcript check.
         """
         self.logger = logging.getLogger(__name__)
         logging.basicConfig(

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <title>FAVE Aligner module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -14,30 +14,50 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAVE CMU Dictionary module" href="cmudictionary.html" />
     <link rel="prev" title="Quickstart guide to using FAVE 2.0" href="../usage/quickstart.html" />
-   
-  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
-  
-  
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
 
   </head><body>
-  
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmudictionary.html" title="FAVE CMU Dictionary module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../usage/quickstart.html" title="Quickstart guide to using FAVE 2.0"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          
-
           <div class="body" role="main">
             
   <div class="section" id="module-align.aligner">
 <span id="fave-aligner-module"></span><h1>FAVE Aligner module<a class="headerlink" href="#module-align.aligner" title="Permalink to this headline">¶</a></h1>
-<p>Wrapper for FAAV force aligner library</p>
+<p>aligner.py contains the Aligner class and coordinates the interaction of
+the other modules.</p>
 <dl class="py class">
 <dt id="align.aligner.Aligner">
 <em class="property">class </em><code class="sig-prename descclassname">align.aligner.</code><code class="sig-name descname">Aligner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wavfile</span></em>, <em class="sig-param"><span class="n">trsfile</span></em>, <em class="sig-param"><span class="n">inputfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tgfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dictionary_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">no_prompt</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">check</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">htktoolspath</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner" title="Permalink to this definition">¶</a></dt>
-<dd><p>Handles code related to force alignment of a transcript.</p>
+<dd><p>The Aligner class is the main user entry point to the FAVE library. It
+handles the interface between all the different modules and automates
+the process in a way that allows easy use in scripts or larger programs.</p>
 <dl class="py method">
 <dt id="align.aligner.Aligner.align">
 <code class="sig-name descname">align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tempdir</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.align" title="Permalink to this definition">¶</a></dt>
@@ -86,35 +106,23 @@
 
 
           </div>
-          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE)</a></h1>
-
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installing FAVE 2.0</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart guide to using FAVE 2.0</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">FAVE Aligner module</a></li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="../index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="../usage/quickstart.html" title="previous chapter">Quickstart guide to using FAVE 2.0</a></li>
-  </ul></li>
-</ul>
-</div>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../usage/quickstart.html"
+                        title="previous chapter">Quickstart guide to using FAVE 2.0</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="cmudictionary.html"
+                        title="next chapter">FAVE CMU Dictionary module</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/code/aligner.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -125,32 +133,31 @@
     </div>
 </div>
 <script>$('#searchbox').show(0);</script>
-
-
-
-
-
-
-
-
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="footer">
-      &copy;2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      
-      |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
-      
-      |
-      <a href="../_sources/code/aligner.rst.txt"
-          rel="nofollow">Page source</a>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cmudictionary.html" title="FAVE CMU Dictionary module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../usage/quickstart.html" title="Quickstart guide to using FAVE 2.0"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+      </ul>
     </div>
-
-    
-
-    
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
   </body>
 </html>

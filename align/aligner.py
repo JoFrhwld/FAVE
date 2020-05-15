@@ -2,7 +2,8 @@
 # *_* coding: utf-8 *_*
 
 """
-Wrapper for FAAV force aligner library
+aligner.py contains the Aligner class and coordinates the interaction of
+the other modules.
 """
 
 __version__ = "2.0.0-dev"
@@ -43,7 +44,10 @@ from . import praat
 
 
 class Aligner():
-    """Handles code related to force alignment of a transcript.
+    """
+	The Aligner class is the main user entry point to the FAVE library. It
+	handles the interface between all the different modules and automates
+	the process in a way that allows easy use in scripts or larger programs.
     """
     # pylint: disable=too-many-instance-attributes
     # Code debt: most of the instance attributes should be passed to functions

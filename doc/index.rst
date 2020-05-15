@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Forced Alignment and Vowel Extraction (FAVE) software documentation
-===================================================================
+Forced Alignment and Vowel Extraction (FAVE)
+============================================
 
 .. toctree::
    :maxdepth: 2
@@ -12,6 +12,8 @@ Forced Alignment and Vowel Extraction (FAVE) software documentation
    usage/installation
    usage/quickstart
    code/aligner
+   code/cmudictionary
+   code/transcriptprocessor
 
 
 Indices and tables

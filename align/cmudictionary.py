@@ -105,8 +105,8 @@ class CMU_Dictionary():
         """
         Initializes object by reading in CMU dictionary (or similar)
 
-		Parameters
-		----------
+	Parameters
+	----------
         dictionary_file : string
 			The full path to the location of a CMU-style dictionary.
         verbose : bool

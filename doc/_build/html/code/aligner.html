@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FAVE Aligner module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Quickstart guide to using FAVE 2.0" href="../usage/quickstart.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-align.aligner">
+<span id="fave-aligner-module"></span><h1>FAVE Aligner module<a class="headerlink" href="#module-align.aligner" title="Permalink to this headline">¶</a></h1>
+<p>Wrapper for FAAV force aligner library</p>
+<dl class="py class">
+<dt id="align.aligner.Aligner">
+<em class="property">class </em><code class="sig-prename descclassname">align.aligner.</code><code class="sig-name descname">Aligner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wavfile</span></em>, <em class="sig-param"><span class="n">trsfile</span></em>, <em class="sig-param"><span class="n">inputfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tgfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dictionary_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">no_prompt</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">check</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">htktoolspath</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles code related to force alignment of a transcript.</p>
+<dl class="py method">
+<dt id="align.aligner.Aligner.align">
+<code class="sig-name descname">align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tempdir</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.align" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main alignment function</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align.aligner.Aligner.check_against_dictionary">
+<code class="sig-name descname">check_against_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.check_against_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface with TranscriptProcesor to check dictionary entries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align.aligner.Aligner.check_transcript">
+<code class="sig-name descname">check_transcript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.check_transcript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface with TranscriptProcesor to check a file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align.aligner.Aligner.get_duration">
+<code class="sig-name descname">get_duration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">PRAATPATH</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.get_duration" title="Permalink to this definition">¶</a></dt>
+<dd><p>gets the overall duration of a soundfile</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align.aligner.Aligner.merge_textgrids">
+<code class="sig-name descname">merge_textgrids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">main_textgrid</span></em>, <em class="sig-param"><span class="n">new_textgrid</span></em>, <em class="sig-param"><span class="n">speaker</span></em>, <em class="sig-param"><span class="n">chunkname_textgrid</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.merge_textgrids" title="Permalink to this definition">¶</a></dt>
+<dd><p>adds the contents of TextGrid new_textgrid to TextGrid main_textgrid</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align.aligner.Aligner.process_style_tier">
+<code class="sig-name descname">process_style_tier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entries</span></em>, <em class="sig-param"><span class="n">style_tier</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.process_style_tier" title="Permalink to this definition">¶</a></dt>
+<dd><p>processes entries of style tier</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="align.aligner.Aligner.read_transcript">
+<code class="sig-name descname">read_transcript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.read_transcript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface with TranscriptProcesor to read a file</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE)</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage/installation.html">Installing FAVE 2.0</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/quickstart.html">Quickstart guide to using FAVE 2.0</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">FAVE Aligner module</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../usage/quickstart.html" title="previous chapter">Quickstart guide to using FAVE 2.0</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.0.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/code/aligner.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

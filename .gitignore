@@ -3,3 +3,5 @@
 .Rhistory
 .DS_Store
 *.sublime-project
+*egg-info
+*.wav

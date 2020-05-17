@@ -14,8 +14,6 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="FAVE CMU Dictionary module" href="cmudictionary.html" />
-    <link rel="prev" title="Quickstart guide to using FAVE 2.0" href="../usage/quickstart.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -30,15 +28,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="cmudictionary.html" title="FAVE CMU Dictionary module"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="../usage/quickstart.html" title="Quickstart guide to using FAVE 2.0"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -48,60 +37,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-align.aligner">
-<span id="fave-aligner-module"></span><h1>FAVE Aligner module<a class="headerlink" href="#module-align.aligner" title="Permalink to this headline">¶</a></h1>
-<p>aligner.py contains the Aligner class and coordinates the interaction of
-the other modules.</p>
-<dl class="py class">
-<dt id="align.aligner.Aligner">
-<em class="property">class </em><code class="sig-prename descclassname">align.aligner.</code><code class="sig-name descname">Aligner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wavfile</span></em>, <em class="sig-param"><span class="n">trsfile</span></em>, <em class="sig-param"><span class="n">inputfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tgfile</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dictionary_file</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">no_prompt</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">check</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">htktoolspath</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner" title="Permalink to this definition">¶</a></dt>
-<dd><p>The Aligner class is the main user entry point to the FAVE library. It
-handles the interface between all the different modules and automates
-the process in a way that allows easy use in scripts or larger programs.</p>
-<dl class="py method">
-<dt id="align.aligner.Aligner.align">
-<code class="sig-name descname">align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tempdir</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.align" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main alignment function</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.aligner.Aligner.check_against_dictionary">
-<code class="sig-name descname">check_against_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.check_against_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface with TranscriptProcesor to check dictionary entries</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.aligner.Aligner.check_transcript">
-<code class="sig-name descname">check_transcript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.check_transcript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface with TranscriptProcesor to check a file</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.aligner.Aligner.get_duration">
-<code class="sig-name descname">get_duration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">PRAATPATH</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.get_duration" title="Permalink to this definition">¶</a></dt>
-<dd><p>gets the overall duration of a soundfile</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.aligner.Aligner.merge_textgrids">
-<code class="sig-name descname">merge_textgrids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">main_textgrid</span></em>, <em class="sig-param"><span class="n">new_textgrid</span></em>, <em class="sig-param"><span class="n">speaker</span></em>, <em class="sig-param"><span class="n">chunkname_textgrid</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.merge_textgrids" title="Permalink to this definition">¶</a></dt>
-<dd><p>adds the contents of TextGrid new_textgrid to TextGrid main_textgrid</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.aligner.Aligner.process_style_tier">
-<code class="sig-name descname">process_style_tier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entries</span></em>, <em class="sig-param"><span class="n">style_tier</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.process_style_tier" title="Permalink to this definition">¶</a></dt>
-<dd><p>processes entries of style tier</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.aligner.Aligner.read_transcript">
-<code class="sig-name descname">read_transcript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.aligner.Aligner.read_transcript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface with TranscriptProcesor to read a file</p>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="fave-aligner-module">
+<h1>FAVE Aligner module<a class="headerlink" href="#fave-aligner-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -110,12 +47,6 @@ the process in a way that allows easy use in scripts or larger programs.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="../usage/quickstart.html"
-                        title="previous chapter">Quickstart guide to using FAVE 2.0</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="cmudictionary.html"
-                        title="next chapter">FAVE CMU Dictionary module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -143,15 +74,6 @@ the process in a way that allows easy use in scripts or larger programs.</p>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="cmudictionary.html" title="FAVE CMU Dictionary module"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="../usage/quickstart.html" title="Quickstart guide to using FAVE 2.0"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>

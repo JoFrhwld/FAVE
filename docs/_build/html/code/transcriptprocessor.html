@@ -14,7 +14,6 @@
     <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="FAVE CMU Dictionary module" href="cmudictionary.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -29,12 +28,6 @@
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="cmudictionary.html" title="FAVE CMU Dictionary module"
-             accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
@@ -44,56 +37,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-align.transcriptprocessor">
-<span id="fave-transcriptprocessor-module"></span><h1>FAVE TranscriptProcessor module<a class="headerlink" href="#module-align.transcriptprocessor" title="Permalink to this headline">¶</a></h1>
-<p>Functions for processing FAAV transcripts</p>
-<dl class="py class">
-<dt id="align.transcriptprocessor.TranscriptProcesor">
-<em class="property">class </em><code class="sig-prename descclassname">align.transcriptprocessor.</code><code class="sig-name descname">TranscriptProcesor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transript_file</span></em>, <em class="sig-param"><span class="n">pronunciation_dictionary</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper for handling tab delimited FAAV transcription files</p>
-<dl class="py method">
-<dt id="align.transcriptprocessor.TranscriptProcesor.check_dictionary_entries">
-<code class="sig-name descname">check_dictionary_entries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wavfile</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor.check_dictionary_entries" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks that all words in lines have an entry in the CMU dictionary;
-if not, prompts user for Arpabet transcription and adds it to the dict
-file. If “check transcription” option is selected, writes list of
-unknown words to file and exits.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.transcriptprocessor.TranscriptProcesor.check_transcription_file">
-<code class="sig-name descname">check_transcription_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor.check_transcription_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks the format of the input transcription file and returns a
-list of empty lines to be deleted from the input</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.transcriptprocessor.TranscriptProcesor.check_transcription_format">
-<em class="property">static </em><code class="sig-name descname">check_transcription_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor.check_transcription_format" title="Permalink to this definition">¶</a></dt>
-<dd><p>checks that input format of transcription file is correct
-(5 tab-delimited data fields)</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.transcriptprocessor.TranscriptProcesor.preprocess_transcription">
-<code class="sig-name descname">preprocess_transcription</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor.preprocess_transcription" title="Permalink to this definition">¶</a></dt>
-<dd><p>preprocesses transcription input for CMU dictionary lookup and forced alignment</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.transcriptprocessor.TranscriptProcesor.read_transcription_file">
-<code class="sig-name descname">read_transcription_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor.read_transcription_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads file into memory</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="align.transcriptprocessor.TranscriptProcesor.replace_smart_quotes">
-<em class="property">static </em><code class="sig-name descname">replace_smart_quotes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">all_input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#align.transcriptprocessor.TranscriptProcesor.replace_smart_quotes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace fancy quotes with straight quotes</p>
-</dd></dl>
-
-</dd></dl>
-
+  <div class="section" id="fave-transcriptprocessor-module">
+<h1>FAVE TranscriptProcessor module<a class="headerlink" href="#fave-transcriptprocessor-module" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -102,9 +47,6 @@ list of empty lines to be deleted from the input</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="cmudictionary.html"
-                        title="previous chapter">FAVE CMU Dictionary module</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -132,12 +74,6 @@ list of empty lines to be deleted from the input</p>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="cmudictionary.html" title="FAVE CMU Dictionary module"
-             >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
       </ul>
     </div>

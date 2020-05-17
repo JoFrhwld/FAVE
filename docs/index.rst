@@ -6,14 +6,17 @@
 Forced Alignment and Vowel Extraction (FAVE)
 ============================================
 
+Welcome to the FAVE documentation
+
 .. toctree::
    :maxdepth: 2
 
-   usage/installation
-   usage/quickstart
-   code/aligner
+   Installing FAVE <usage/installation>
+   Quickstart guide <usage/quickstart>
+   fave.align module <code/align/index>
+   fave.extract module <code/extract/index>
    code/cmudictionary
-   code/transcriptprocessor
+   code/praat
 
 
 Indices and tables

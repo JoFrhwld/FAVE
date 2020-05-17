@@ -1,5 +1,5 @@
 FAVE CMU Dictionary module
 ==========================
 
-.. automodule:: align.cmudictionary
+.. automodule:: fave.cmudictionary
   :members:

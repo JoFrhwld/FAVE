@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FAVE Praat module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fave.praat">
+<span id="fave-praat-module"></span><h1>FAVE Praat module<a class="headerlink" href="#module-fave.praat" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="fave.praat.Formant">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">Formant</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a formant contour as a series of frames</p>
+<dl class="py method">
+<dt id="fave.praat.Formant.bandwidths">
+<code class="sig-name descname">bandwidths</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.bandwidths" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list of formant bandwidths (for each formant F1-F3, for each frame)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.formants">
+<code class="sig-name descname">formants</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.formants" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns list of formant listings (F1-F3, for each frame)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.intensities">
+<code class="sig-name descname">intensities</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.intensities" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns list of intensities (maximum intensity in each frame)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.n">
+<code class="sig-name descname">n</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.n" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the number of frames</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads Formant from Praat .Formant file (either short or long file format)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.times">
+<code class="sig-name descname">times</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.times" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns list of measurement times (frames)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.xmax">
+<code class="sig-name descname">xmax</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.xmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns end time (in seconds)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.Formant.xmin">
+<code class="sig-name descname">xmin</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Formant.xmin" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns start time (in seconds)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.Intensity">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">Intensity</code><a class="headerlink" href="#fave.praat.Intensity" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents an intensity contour</p>
+<dl class="py method">
+<dt id="fave.praat.Intensity.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Intensity.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads an intensity object from a (short or long) text file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.Interval">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">Interval</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">mark</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Interval" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents an Interval</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.IntervalTier">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">IntervalTier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.IntervalTier" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a Praat IntervalTier</p>
+<dl class="py method">
+<dt id="fave.praat.IntervalTier.rename">
+<code class="sig-name descname">rename</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">newname</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.IntervalTier.rename" title="Permalink to this definition">¶</a></dt>
+<dd><p>assigns new name to tier</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.IntervalTier.sort_intervals">
+<code class="sig-name descname">sort_intervals</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">par</span><span class="o">=</span><span class="default_value">'xmin'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.IntervalTier.sort_intervals" title="Permalink to this definition">¶</a></dt>
+<dd><p>sorts intervals according to given parameter values.  Parameter can be xmin (default), xmax, or text.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.IntervalTier.tidyup">
+<code class="sig-name descname">tidyup</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.IntervalTier.tidyup" title="Permalink to this definition">¶</a></dt>
+<dd><p>inserts empty intervals in the gaps between transcription intervals</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.LPC">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">LPC</code><a class="headerlink" href="#fave.praat.LPC" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a Praat LPC (linear predictive coding) object</p>
+<dl class="py method">
+<dt id="fave.praat.LPC.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.LPC.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads LPC object from Praat .LPC file (saved as a short text file)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.MFCC">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">MFCC</code><a class="headerlink" href="#fave.praat.MFCC" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a Praat MFCC (mel frequency cepstral coefficients) object</p>
+<dl class="py method">
+<dt id="fave.praat.MFCC.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.MFCC.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads MFCC object from Praat .MFCC file (saved as a short text file)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.Point">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">Point</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span></em>, <em class="sig-param"><span class="n">mark</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.Point" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a Point</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.PointTier">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">PointTier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">xmin</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">xmax</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.PointTier" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a Praat PointTier</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.praat.TextGrid">
+<em class="property">class </em><code class="sig-prename descclassname">fave.praat.</code><code class="sig-name descname">TextGrid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.TextGrid" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a Praat TextGrid</p>
+<dl class="py method">
+<dt id="fave.praat.TextGrid.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.TextGrid.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads TextGrid from Praat .TextGrid file (long or short format)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.praat.TextGrid.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">text</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.praat.TextGrid.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>write TextGrid into a text file that Praat can read</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/code/praat.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

@@ -478,11 +478,17 @@ def checkTextGridFile(tgFile):
         sys.exit()
 
 
-def checkTiers(tg):
+def checkTiers(tg, mfa):
     """performs a check on the correct tier structure of a TextGrid"""
 
     # odd tiers must be phone tiers; even tiers word tiers (but vice versa in terms of indices!)
     # last tier can (optionally) be style tier
+    if mfa:
+        phone_tier = lambda x: 2 * x + 1
+        word_tier = lambda x: 2 * x
+    else:
+        phone_tier = lambda x: 2 * x
+        word_tier = lambda x: 2 * x + 1
     speakers = []
     ns, style = divmod(len(tg), 2)
                        # "ns":  number of speakers (well, "noise" is not a speaker...)
@@ -496,20 +502,20 @@ def checkTiers(tg):
             return speakers
         for i in range(ns):
             # even (in terms of indices) tiers must be phone tiers
-            if tg[2 * i].name().split(' - ')[1].strip().upper() != "PHONE":
-                print "ERROR!  Tier %i should be phone tier but isn't." % 2 * i
+            if not "PHONE" in tg[phone_tier(i)].name().split(' - ')[1].strip().upper():
+                print "ERROR!  Tier %i should be phone tier but isn't." % phone_tier(i)
                 sys.exit()
             # odd (in terms of indices) tiers must be word tiers
-            elif tg[2 * i + 1].name().split(' - ')[1].strip().upper() != "WORD":
-                print "ERROR!  Tier %i should be word tier but isn't." % 2 * i + 1
+            elif not "WORD" in tg[word_tier(i)].name().split(' - ')[1].strip().upper():
+                print "ERROR!  Tier %i should be word tier but isn't." % word_tier(i)
                 sys.exit()
             # speaker name must be the same for phone and word tier
-            elif tg[2 * i].name().split(' - ')[0].strip().upper() != tg[2 * i + 1].name().split(' - ')[0].strip().upper():
-                print "ERROR!  Speaker name does not match for tiers %i and %i." % (2 * i, 2 * i + 1)
+            elif tg[phone_tier(i)].name().split(' - ')[0].strip().upper() != tg[word_tier(i)].name().split(' - ')[0].strip().upper():
+                print "ERROR!  Speaker name does not match for tiers %i and %i." % (phone_tier(i), word_tier(i))
                 sys.exit()
             else:
                 # add speaker name to list of speakers
-                speakers.append(tg[2 * i].name().split(' - ')[0].strip())
+                speakers.append(tg[phone_tier(i)].name().split(' - ')[0].strip())
 
     if len(speakers) == 0:
         sys.exit("ERROR!  No speakers in TextGrid?!")
@@ -793,8 +799,8 @@ def getSpeakerBackground(speakername, speakernum):
     speaker.location = raw_input("Location:\t\t")
     speaker.year = raw_input("Year of recording:\t")
     speaker.years_of_schooling = raw_input("Years of schooling:\t")
-    speaker.tiernum = speakernum * \
-        2  # tiernum points to phone tier = first tier for given speaker
+    speaker.tiernum = speakernum * 2  
+    # tiernum points to first tier for given speaker
 
     return speaker
 
@@ -926,15 +932,23 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
     return vm
 
 
-def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
+def getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa):
     """takes a Praat TextGrid file and returns a list of the words in the file,
     along with their associated phones, and Plotnik codes for the vowels"""
+
+    if mfa:
+        phone_tier = lambda x: 2 * x + 1
+        word_tier = lambda x: 2 * x
+    else:
+        phone_tier = lambda x: 2 * x
+        word_tier = lambda x: 2 * x + 1
                      
-    phone_midpoints = [p.xmin() + 0.5 * (p.xmax() - p.xmin()) for p in tg[speaker.tiernum]]
+    phone_midpoints = [p.xmin() + 0.5 * (p.xmax() - p.xmin()) \
+                       for p in tg[phone_tier(speaker.tiernum/2)]]
 
     words = []
     # iterate along word tier for given speaker
-    for w in tg[speaker.tiernum + 1]:  # for each interval...
+    for w in tg[word_tier(speaker.tiernum/2)]:  # for each interval...
         word = Word()
         word.transcription = w.mark()
         word.xmin = w.xmin()
@@ -946,7 +960,7 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem):
         left = bisect_left(phone_midpoints, word.xmin)
         right = bisect_left(phone_midpoints, word.xmax)
         
-        for p in tg[speaker.tiernum][left:right]:
+        for p in tg[phone_tier(speaker.tiernum/2)][left:right]:
             phone = Phone()
             phone.label = p.mark().upper()
             phone.xmin = p.xmin()
@@ -1789,6 +1803,8 @@ def setup_parser():
                         help="mean values, required for mahalanobis method")
     parser.add_argument("--measurementPointMethod", choices = ['fourth', 'third', 'mid', 'lennig', 'anae', 'faav', 'maxint'],
                         default="faav", help = "Method for determining measurement point")
+    parser.add_argument("--mfa", action="store_true", 
+                        help = "Alignment is from the Montreal Forced Aligner")
     parser.add_argument("--minVowelDuration", type=float, default=0.05,
                         help = "Minimum duration in seconds, below which vowels won't be analyzed.")
     parser.add_argument("--multipleFiles", action="store_true",
@@ -2099,6 +2115,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     outputHeader = not opts.noOutputHeader
     formantPredictionMethod = opts.formantPredictionMethod
     measurementPointMethod = opts.measurementPointMethod
+    mfa = opts.mfa
     speechSoftware = opts.speechSoftware
     nFormants = opts.nFormants
     #maxFormant = opts.maxFormant
@@ -2169,7 +2186,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
             speaker = readSpeakerFile(opts.speaker)
             print "Read speaker background information from .speaker file."
         else:
-            speakers = checkTiers(tg)  # -> returns list of speakers
+            speakers = checkTiers(tg, mfa)  # -> returns list of speakers
             # prompt user to choose speaker to be analyzed, and for background
             # information on the speaker
             speaker = whichSpeaker(speakers)  # -> returns Speaker object
@@ -2188,7 +2205,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         markTime("prelim1")
         # extract list of words and their corresponding phones (with all
         # coding) -> only for chosen speaker
-        words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem)
+        words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa)
                                   # (all initial vowels are counted here)                                 
         print 'Identified vowels in the TextGrid.'
         global maxTime

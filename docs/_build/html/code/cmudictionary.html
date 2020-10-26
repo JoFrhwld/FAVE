@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>FAVE CMU Dictionary module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
+    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
+<!--[if lte IE 6]>
+<link rel="stylesheet" href="../_static/ie6.css" type="text/css" media="screen" charset="utf-8" />
+<![endif]-->
+
+  </head><body>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-fave.cmudictionary">
+<span id="fave-cmu-dictionary-module"></span><h1>FAVE CMU Dictionary module<a class="headerlink" href="#module-fave.cmudictionary" title="Permalink to this headline">¶</a></h1>
+<p>Functions for working with CMU pronunciation dictionary</p>
+<dl class="py class">
+<dt id="fave.cmudictionary.CMU_Dictionary">
+<em class="property">class </em><code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">CMU_Dictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dictionary_file</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Representation of the CMU dictionary</p>
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.add_dictionary_entries">
+<code class="sig-name descname">add_dictionary_entries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">infile</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.add_dictionary_entries" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads additional dictionary entries from file and adds them to the CMU dictionary</p>
+<p>&#64;param string infile
+&#64;param string path
+&#64;raises IndexError</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.check_phone">
+<code class="sig-name descname">check_phone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phone</span></em>, <em class="sig-param"><span class="n">transcription</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_phone" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks that a phone entered by the user is part of the Arpabet</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.check_transcription">
+<code class="sig-name descname">check_transcription</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transcription</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_transcription" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks that the transcription entered for a word conforms to the Arpabet style</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.check_word">
+<code class="sig-name descname">check_word</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em>, <em class="sig-param"><span class="n">next_word</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">unknown</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks whether a given word’s phonetic transcription is in the CMU dictionary;
+adds the transcription to the dictionary if not</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.merge_dicts">
+<em class="property">static </em><code class="sig-name descname">merge_dicts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d1</span></em>, <em class="sig-param"><span class="n">d2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.merge_dicts" title="Permalink to this definition">¶</a></dt>
+<dd><p>merges two versions of the CMU pronouncing dictionary</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dictionary_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>&#64;author Keelan Evanini</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.write_dict">
+<code class="sig-name descname">write_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">dictionary</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.write_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes the new version of the CMU dictionary (or any other dictionary) to file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="fave.cmudictionary.CMU_Dictionary.write_unknown_words">
+<code class="sig-name descname">write_unknown_words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">unknown</span></em>, <em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">'unknown.txt'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.write_unknown_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes the list of unknown words to file</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="fave.cmudictionary.Phone">
+<em class="property">class </em><code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">Phone</code><a class="headerlink" href="#fave.cmudictionary.Phone" title="Permalink to this definition">¶</a></dt>
+<dd><p>represents a CMU dict phoneme (label and distinctive features)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fave.cmudictionary.read_dict">
+<code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">read_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.read_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads the CMU dictionary and returns it as dictionary object,
+allowing multiple pronunciations for the same word</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="fave.cmudictionary.read_phoneset">
+<code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">read_phoneset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.read_phoneset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reads the CMU phoneset (assigns distinctive features to each phoneme);
+returns it as dictionary object</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/code/cmudictionary.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+    </div>
+  </body>
+</html>

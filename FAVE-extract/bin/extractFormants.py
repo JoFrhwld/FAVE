@@ -261,7 +261,7 @@ def addOverlaps(words, tg, speaker):
                             # if boundaries overlap and interval not empty
                             if ((((i.xmin() <= p.xmin) or (p.xmin <= i.xmin() <= p.xmax))
                                 and ((i.xmax() >= p.xmax) or (p.xmin <= i.xmax() <= p.xmax)))
-                                    and i.mark().upper() != "SP"):
+                                    and not i.mark().upper() in ["SP","sil",""]):
                                 p.overlap = True
                             pointer[sn] += 1
                         # go back one interval, since the last interval needs

@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM --platform=linux/amd64 ubuntu:14.04
 MAINTAINER Patrick Callier "pcallier@lab41.org"
 
 RUN apt-get update

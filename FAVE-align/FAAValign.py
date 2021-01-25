@@ -100,7 +100,7 @@ STYLE = ["style", "Style", "STYLE"]
 STYLE_ENTRIES = ["R", "N", "L", "G", "S", "K", "T", "C", "WL", "MP", "SD", "RP"]
 
 #TEMPDIR = "temp_FA"
-TEMPDIR = ""
+TEMPDIR = "/tmp"
 DICT_ADDITIONS = "added_dict_entries.txt"               ## file for collecting uploaded additions to the dictionary
 PRAATPATH = "/usr/local/bin/praat"                      ## this is just in case the wave module does not work (use Praat instead to determe the length of the sound file)
 ##PRAATPATH = "/Applications/Praat.app/Contents/MacOS/praat"  ## old setting on ingridpc.ling.upenn.edu
@@ -1481,7 +1481,7 @@ def write_words(out, unknown):
 def FAAValign(opts, args, FADIR='', SOXPATH=''):
     """runs the forced aligner for the arguments given"""
 
-    tempdir = os.path.join(FADIR, TEMPDIR)
+    tempdir = TEMPDIR
 
     ## need to make options global (now this is no longer the main program...)
     global options
@@ -1681,7 +1681,9 @@ if __name__ == '__main__':
     ## get input/output file names and options
     parser = define_options_and_arguments()
     (opts, args) = parser.parse_args()
+    
+    script_location = os.path.dirname(os.path.realpath(__file__))
 
-    FAAValign(opts, args)
+    FAAValign(opts, args, FADIR=script_location)
 
 

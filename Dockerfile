@@ -2,7 +2,7 @@ FROM --platform=linux/amd64 ubuntu:14.04
 MAINTAINER Patrick Callier "pcallier@lab41.org"
 
 RUN apt-get update
-RUN apt-get install -y build-essential git-core python python-pip \
+RUN apt-get install -y build-essential git-core python2.7 python-pip \
   gcc-multilib g++-multilib libc6 libc6-dev
 
 # Install HTK (must be in build directory)
@@ -23,8 +23,8 @@ RUN sed -i '1650s/ labid / labpr /' /opt/htk/HTKLib/HRec.c && \
 RUN apt-get -y install sox
 
 # Install numpy and dependencies
-RUN apt-get install -y python-dev && \
-  pip install numpy
+RUN apt-get install -y python2.7-dev
+RUN pip2 install numpy==1.16.6
 
 # Install fave-align and fave-extract
 #  git clone https://github.com/JoFrhwld/FAVE && \

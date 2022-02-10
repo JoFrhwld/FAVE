@@ -501,15 +501,15 @@ def checkTiers(tg, mfa):
         for i in range(ns):
             # even (in terms of indices) tiers must be phone tiers
             if not "PHONE" in tg[phone_tier(i)].name().split(' - ')[1].strip().upper():
-                print "ERROR!  Tier %i should be phone tier but isn't." % phone_tier(i)
+                print("ERROR!  Tier %i should be phone tier but isn't." % phone_tier(i))
                 sys.exit()
             # odd (in terms of indices) tiers must be word tiers
             elif not "WORD" in tg[word_tier(i)].name().split(' - ')[1].strip().upper():
-                print "ERROR!  Tier %i should be word tier but isn't." % word_tier(i)
+                print("ERROR!  Tier %i should be word tier but isn't." % word_tier(i))
                 sys.exit()
             # speaker name must be the same for phone and word tier
             elif tg[phone_tier(i)].name().split(' - ')[0].strip().upper() != tg[word_tier(i)].name().split(' - ')[0].strip().upper():
-                print "ERROR!  Speaker name does not match for tiers %i and %i." % (phone_tier(i), word_tier(i))
+                print("ERROR!  Speaker name does not match for tiers %i and %i." % (phone_tier(i), word_tier(i)))
                 sys.exit()
             else:
                 # add speaker name to list of speakers
@@ -787,16 +787,16 @@ def getSpeakerBackground(speakername, speakernum):
             print("ERROR!  Speaker sex must be defined for the 'mahalanobis' formantPredictionMethod!")
             sys.exit()
     speaker.age = input("Age:\t\t\t")
-##    speaker.city = raw_input("City:\t\tPhiladelphia")
+##    speaker.city = input("City:\t\tPhiladelphia")
 # if not speaker.city:
 ##        speaker.city = "Philadelphia"
-##    speaker.state = raw_input("State:\t\tPA")
+##    speaker.state = input("State:\t\tPA")
 # if not speaker.state:
 ##        speaker.state = "PA"
-    speaker.ethnicity = raw_input("Ethnicity:\t\t")
-    speaker.location = raw_input("Location:\t\t")
-    speaker.year = raw_input("Year of recording:\t")
-    speaker.years_of_schooling = raw_input("Years of schooling:\t")
+    speaker.ethnicity = input("Ethnicity:\t\t")
+    speaker.location = input("Location:\t\t")
+    speaker.year = input("Year of recording:\t")
+    speaker.years_of_schooling = input("Years of schooling:\t")
     speaker.tiernum = speakernum * 2  
     # tiernum points to first tier for given speaker
     return speaker
@@ -941,11 +941,11 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa):
         word_tier = lambda x: 2 * x + 1
                      
     phone_midpoints = [p.xmin() + 0.5 * (p.xmax() - p.xmin()) \
-                       for p in tg[phone_tier(speaker.tiernum/2)]]
+                       for p in tg[phone_tier(int(speaker.tiernum/2))]]
 
     words = []
     # iterate along word tier for given speaker
-    for w in tg[word_tier(speaker.tiernum/2)]:  # for each interval...
+    for w in tg[int(word_tier(int(speaker.tiernum/2)))]:  # for each interval...
         word = Word()
         word.transcription = w.mark()
         word.xmin = w.xmin()
@@ -957,7 +957,7 @@ def getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa):
         left = bisect_left(phone_midpoints, word.xmin)
         right = bisect_left(phone_midpoints, word.xmax)
 
-        for p in tg[phone_tier(speaker.tiernum/2)][left:right]:
+        for p in tg[phone_tier(int(speaker.tiernum/2))][left:right]:
 
             phone = Phone()
             phone.label = p.mark().upper()
@@ -2207,8 +2207,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # coding) -> only for chosen speaker
         words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa)
                                   # (all initial vowels are counted here)                                 
-        print 'Identified vowels in the TextGrid.'
-
+        print('Identified vowels in the TextGridmeans[vowel] = np.array([float(x)')
         global maxTime
         maxTime = tg.xmax()  # duration of TextGrid/sound file
         measurements = []

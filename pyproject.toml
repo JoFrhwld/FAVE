@@ -6,8 +6,8 @@ authors = ["FAVE contributors"]
 license = "GPL-3.0-only"
 
 [tool.poetry.dependencies]
-python = "^3.7"
-numpy = "^1.17"
+python = ">=3.8,<4.0"
+numpy = "^1.22"
 
 [tool.poetry.dev-dependencies]
 sphinx = "^3.0.3"

@@ -5,3 +5,4 @@
 *.sublime-project
 *egg-info
 *.wav
+build/*

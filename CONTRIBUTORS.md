@@ -8,3 +8,4 @@ This file lists contributors to the FAVE program.
 *Kyle Gorman
 *Hillary Prichard
 *Jiahong Yuan
+*Christian Brickhouse

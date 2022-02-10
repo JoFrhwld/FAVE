@@ -4,9 +4,12 @@ This is a repository for the FAVE-Align and FAVE-extract toolkits.
 The first commit here represents the toolkit as it was available on the FAVE website as of October 21, 2013.
 The extractFormants code in the JoFrhwld/FAAV repository represents an earlier version of the code.
 
+## Documentation
+Current documentation for installation and usage available on the github wiki. [https://github.com/JoFrhwld/FAVE/wiki](https://github.com/JoFrhwld/FAVE/wiki)
+
 ## FAVE website
 
-The interactive website for utilizing FAVE can be found at [fave.ling.upenn.edu](http://fave.ling.upenn.edu/)
+The interactive FAVE website hosted at the University of Pennsylvania is no longer available. The DARLA site hosted by Dartmouth can be used to run the Montreal Forced Aligner, and FAVE-extract. [http://darla.dartmouth.edu](http://darla.dartmouth.edu)
 
 ## Support
 
@@ -21,7 +24,7 @@ If you want to keep up to date on FAVE development, or have questions about FAVE
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.22281.svg)](http://dx.doi.org/10.5281/zenodo.22281)
 As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.22281](http://dx.doi.org/10.5281/zenodo.22281). We would recommend the citation:
 
-Rosenfelder, Ingrid; Fruehwald, Josef; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Prichard, Hilary; Yuan, Jiahong; 2014. FAVE (Forced Alignment and Vowel Extraction) Program Suite v1.2.2 10.5281/zenodo.22281
+Rosenfelder, Ingrid; Fruehwald, Josef; Brickhouse, Christian; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Prichard, Hilary; Yuan, Jiahong; 2022. FAVE (Forced Alignment and Vowel Extraction) Program Suite v2.0.0 */zenodo.*
 
 Use of the interactive online interface should continue to cite:
 

@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "fave"
+version = "2.0.0"
+description = "Forced alignment and vowel extraction"
+authors = ["FAVE contributors"]
+license = "GPL-3.0-only"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<4.0"
+numpy = "^1.22"
+
+[tool.poetry.dev-dependencies]
+sphinx = "^3.0.3"
+pylint = "^2.5.2"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"

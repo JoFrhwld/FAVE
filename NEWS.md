@@ -1,5 +1,11 @@
 NEWS
 
+v.2.0.0
+* Major update contributed by @chrisbrickhouse
+    * See Pull Request https://github.com/JoFrhwld/FAVE/pull/49
+* python3* compatibility
+* poetry package management
+
 v.1.2.1
 
 * AH0 is now mapped to schwa (`plt_vclass = @`) instead of wedge. (@jofrhwld)
@@ -60,4 +66,4 @@ v1.2
 
 * FAVE-extract now uses `splitlines()` instead of stripping `\n` when parsing multiple input files or a stopwords file (@scjs)
 
-* new config option --traks will write full formant trakcs to a *_tracks.txt file (@jofrhwld)
+* new config option --tracks will write full formant trakcs to a *_tracks.txt file (@jofrhwld)

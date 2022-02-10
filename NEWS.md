@@ -2,6 +2,7 @@ NEWS
 
 v.2.0.0
 * Major update contributed by @chrisbrickhouse
+    * See Pull Request https://github.com/JoFrhwld/FAVE/pull/49
 * python3* compatibility
 * poetry package management
 

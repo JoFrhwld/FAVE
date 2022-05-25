@@ -11,6 +11,7 @@ numpy = "^1.22"
 
 [tool.poetry.dev-dependencies]
 sphinx = "^4"
+jinja2 = "~3.0"
 pylint = "^2.5.2"
 
 [build-system]

@@ -16,3 +16,7 @@ pylint = "^2.5.2"
 [build-system]
 requires = ["poetry>=1.1"]
 build-backend = "poetry.masonry.api"
+
+[tool.poetry.scripts]
+extractFormants = "fave.extractFormants:main"
+FAAValign = "fave.FAAValign:setup"

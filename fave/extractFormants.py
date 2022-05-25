@@ -2397,12 +2397,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         writeLog(os.path.splitext(outputFile)
                  [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, opts)
 
-
-#
-# MAIN PROGRAM STARTS HERE                         ##
-#
-if __name__ == '__main__':
-
+def main():
     parser = setup_parser()
 
     opts = parser.parse_args()
@@ -2411,3 +2406,9 @@ if __name__ == '__main__':
     output = opts.output
 
     extractFormants(wavInput, tgInput, output, opts)
+
+#
+# MAIN PROGRAM STARTS HERE                         ##
+#
+if __name__ == '__main__':
+    main()

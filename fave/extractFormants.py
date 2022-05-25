@@ -2085,6 +2085,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     global PRAATPATH
     PRAATPATH = PPATH
 
+    # Add the applications directory to PATH
+    # See https://github.com/JoFrhwld/FAVE/issues/53
+    sys.path.append('/Applications')
+
     # set OS-specific variables
     global PRAATNAME
     if shutil.which('praat') is not None:

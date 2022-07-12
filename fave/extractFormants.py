@@ -1961,11 +1961,26 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
          and cloning this repository from GitHub with: \n \
          git clone git@github.com:JoFrhwld/FAVE.git")
         f.write("\n")
+
+    # For development, it's helpful to know if there's anything in the repo that has been
+    # changed. This block checks to see if we're in a git repo. If we are, then use git diff
+    # to get the changes and write to the log file.
+    #
+    # code debt: this block is repeated in extractFormants.py and the code should be consolidated.
     try:
-        check_changes = subprocess.Popen(["git", "diff", "--stat"], stdout = subprocess.PIPE)
-        changes, err = check_changes.communicate()
-    except OSError:
-        changes = None
+        subprocess.run(['git', 'rev-parse', '--is-inside-work-tree'], check=True, capture_output=True)
+        try:
+            check_changes = subprocess.Popen(
+                ["git", "diff", "--stat"], stdout=subprocess.PIPE)
+            changes, err = check_changes.communicate() # pylint: disable=unused-variable
+        except OSError:
+            changes = ''
+
+        if changes:
+            f.write("Uncommitted changes when run:\n")
+            f.write(changes)
+    except subprocess.CalledProcessError:
+        pass
 
     if changes:
         f.write("Uncommitted changes when run:\n")

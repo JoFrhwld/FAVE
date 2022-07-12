@@ -19,11 +19,11 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'Forced Alignment and Vowel Extraction (FAVE)'
-copyright = '2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors'
+copyright = '2022, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors'
 author = 'Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '2.0.1-dev'
 
 
 # -- General configuration ---------------------------------------------------

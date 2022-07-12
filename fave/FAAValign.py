@@ -147,7 +147,7 @@ def main(**kwargs):
     if not kwargs['check']:
         aligner.align()
 
-if __name__ == "__main__":
+def setup():
     parser = defineArguments(argparse.ArgumentParser(
         prog="FAAValign",
         description="""Aligns a sound file with the corresponding transcription text. The
@@ -160,5 +160,8 @@ if __name__ == "__main__":
     ))
     cliArgs = parseArgs(**vars(parser.parse_args()))
     main(**cliArgs)
-else:
-    raise ImportError('FAAValign is a command line utility. Use the align module.')
+
+if __name__ == "__main__":
+    setup()
+#else:
+#    raise ImportError('FAAValign is a command line utility. Use the align module.')

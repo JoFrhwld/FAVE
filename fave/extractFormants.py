@@ -2100,6 +2100,10 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     global PRAATPATH
     PRAATPATH = PPATH
 
+    # Add the applications directory to PATH
+    # See https://github.com/JoFrhwld/FAVE/issues/53
+    sys.path.append('/Applications')
+
     # set OS-specific variables
     global PRAATNAME
     if shutil.which('praat') is not None:
@@ -2412,12 +2416,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         writeLog(os.path.splitext(outputFile)
                  [0] + ".formantlog", wavFile, maxTime, meansFile, covsFile, opts)
 
-
-#
-# MAIN PROGRAM STARTS HERE                         ##
-#
-if __name__ == '__main__':
-
+def main():
     parser = setup_parser()
 
     opts = parser.parse_args()
@@ -2426,3 +2425,9 @@ if __name__ == '__main__':
     output = opts.output
 
     extractFormants(wavInput, tgInput, output, opts)
+
+#
+# MAIN PROGRAM STARTS HERE                         ##
+#
+if __name__ == '__main__':
+    main()

@@ -94,7 +94,7 @@ class Aligner():
         if kwargs['import']:
             self.cmu_dict.add_dictionary_entries(kwargs['import'])
 
-        self.transcript = transcriptprocessor.TranscriptProcesor(
+        self.transcript = transcriptprocessor.TranscriptProcessor(
             self.transcript,
             self.cmu_dict,
             *args,
@@ -105,15 +105,15 @@ class Aligner():
         self.check = kwargs['check']
 
     def read_transcript(self):
-        """Interface with TranscriptProcesor to read a file"""
+        """Interface with TranscriptProcessor to read a file"""
         self.transcript.read_transcription_file()
 
     def check_transcript(self):
-        """Interface with TranscriptProcesor to check a file"""
+        """Interface with TranscriptProcessor to check a file"""
         self.transcript.check_transcription_file()
 
     def check_against_dictionary(self):
-        """Interface with TranscriptProcesor to check dictionary entries"""
+        """Interface with TranscriptProcessor to check dictionary entries"""
         self.transcript.check_dictionary_entries(self.audio)
 
     def get_duration(self, FADIR='', PRAATPATH=''):

@@ -37,7 +37,7 @@ import logging
 from fave import cmudictionary
 
 
-class TranscriptProcesor():
+class TranscriptProcessor():
     """Wrapper for handling tab delimited FAAV transcription files"""
     # beginning of uncertain transcription
     start_uncertain = re.compile(r'(\(\()')

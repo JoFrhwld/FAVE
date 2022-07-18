@@ -35,7 +35,7 @@ def read_dict(f):
     ## check that cmudict has entries
     if len(cmudict) == 0:
         sys.exit("ERROR!  CMU dictionary is empty.")
-    print "Read CMU dictionary from file %s." % f
+    print("Read CMU dictionary from file %s." % f)
     return cmudict
 
 
@@ -53,7 +53,7 @@ def write_dict(f, d):
                 out.write(p + ' ')  ## list of phones, separated by spaces
             out.write('\n')         ## end of entry line
     out.close()
-    print "Written updated pronunciation dictionary to file."
+    print("Written updated pronunciation dictionary to file.")
 
 
 def merge_dicts(d1, d2):
@@ -80,7 +80,7 @@ if __name__ == '__main__':
         dict2 = sys.argv[2]
         merged_dict = sys.argv[3]
     except IndexError:
-        print __doc__
+        print(__doc__)
         sys.exit()
 
     ## read dictionary files

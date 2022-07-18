@@ -94,7 +94,7 @@ class Aligner():
         if kwargs['import']:
             self.cmu_dict.add_dictionary_entries(kwargs['import'])
 
-        self.transcript = transcriptprocessor.TranscriptProcesor(
+        self.transcript = transcriptprocessor.TranscriptProcessor(
             self.transcript,
             self.cmu_dict,
             *args,
@@ -105,15 +105,15 @@ class Aligner():
         self.check = kwargs['check']
 
     def read_transcript(self):
-        """Interface with TranscriptProcesor to read a file"""
+        """Interface with TranscriptProcessor to read a file"""
         self.transcript.read_transcription_file()
 
     def check_transcript(self):
-        """Interface with TranscriptProcesor to check a file"""
+        """Interface with TranscriptProcessor to check a file"""
         self.transcript.check_transcription_file()
 
     def check_against_dictionary(self):
-        """Interface with TranscriptProcesor to check dictionary entries"""
+        """Interface with TranscriptProcessor to check dictionary entries"""
         self.transcript.check_dictionary_entries(self.audio)
 
     def get_duration(self, FADIR='', PRAATPATH=''):
@@ -817,16 +817,25 @@ class Aligner():
 
         #version = __version__
 
+        # For development, it's helpful to know if there's anything in the repo that has been
+        # changed. This block checks to see if we're in a git repo. If we are, then use git diff
+        # to get the changes and write to the log file.
+        #
+        # code debt: this block is repeated in extractFormants.py and the code should be consolidated.
         try:
-            check_changes = subprocess.Popen(
-                ["git", "diff", "--stat"], stdout=subprocess.PIPE)
-            changes, err = check_changes.communicate() # pylint: disable=unused-variable
-        except OSError:
-            changes = ''
+            subprocess.run(['git', 'rev-parse', '--is-inside-work-tree'], check=True, capture_output=True)
+            try:
+                check_changes = subprocess.Popen(
+                    ["git", "diff", "--stat"], stdout=subprocess.PIPE)
+                changes, err = check_changes.communicate() # pylint: disable=unused-variable
+            except OSError:
+                changes = ''
 
-        if changes:
-            f.write("Uncommitted changes when run:\n")
-            f.write(changes)
+            if changes:
+                f.write("Uncommitted changes when run:\n")
+                f.write(changes)
+        except subprocess.CalledProcessError:
+            pass
 
         f.write("\n")
         f.write("Total number of words:\t\t\t%i\n" % count_words)

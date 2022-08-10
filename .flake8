@@ -1,0 +1,11 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    docs/conf.py,
+    old,
+    build,
+    dist,
+    dev,
+    tests
+max-complexity = 10

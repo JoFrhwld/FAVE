@@ -62,6 +62,7 @@ and outputs automatically extracted F1 and F2 measurements for each vowel
 """
 
 
+from curses.ascii import SO
 import sys
 import os
 import shutil
@@ -75,6 +76,8 @@ import pickle
 import subprocess
 from itertools import tee, islice
 from bisect import bisect_left
+
+import parselmouth
 
 import numpy as np
 
@@ -560,22 +563,6 @@ def detectMonophthong(formants, measurementPoint, index):
 
     return glide
 
-
-def extractPortion(wavFile, vowelWavFile, beg, end, soundEditor):
-    """extracts a single vowel (or any other part) from the main sound file"""
-
-    if soundEditor == 'sox':  # this is the default setting, since it's faster
-        # force output format because there have been issues with some sound
-        # files where Praat could not read the extracted portion
-        os.system(os.path.join(SOXPATH, 'sox') + ' ' + wavFile + ' -t wavpcm ' +
-                  os.path.join(SCRIPTS_HOME, vowelWavFile) + ' trim ' + str(beg) + ' ' + str(end - beg))
-    elif soundEditor == 'praat':
-        os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' +
-                  os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
-    else:
-        pass
-
-
 def faav(phone, formants, times, intensity):
     """returns the time of measurement according to the FAAV guidelines"""
 
@@ -739,23 +726,6 @@ def getPadding(phone, windowSize, maxTime):
 
     return (padBeg, padEnd)
 
-
-def getSoundEditor():
-    """checks whether SoX or Praat are available as sound editors"""
-
-    # use sox for manipulating the files if we have it, since it's faster
-    if (SOXPATH and programExists('sox', SOXPATH)) or (os.name == 'posix' and programExists('sox')) or (os.name == 'nt' and programExists('sox.exe')):
-        soundEditor = 'sox'
-    elif (PRAATPATH and programExists('praat', PRAATPATH)) or (os.name == 'posix' and programExists('praat')) or (os.name == 'nt' and programExists('praatcon.exe')):
-        soundEditor = 'praat'
-    else:
-        print("ERROR:  neither 'praat' ('praatcon' for Windows) nor 'sox' can be found in your path")
-        print("One of these two programs must be available for processing the audio file")
-        sys.exit()
-
-    return soundEditor
-
-
 def getSpeakerBackground(speakername, speakernum):
     """prompts the user to enter background information for a given speaker"""
 
@@ -858,53 +828,47 @@ def getTransitionLength(minimum, maximum):
     return transition
 
 
-def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker):
+def getVowelMeasurement(sound_part, p, w, speechSoftware, formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker):
     """makes a vowel measurement"""
 
-    vowelWavFile = vowelFileStem + '.wav'
+    if formantPredictionMethod == 'mahalanobis':
+        # get measurements for nFormants = 3, 4, 5, 6
+        LPCs = []
+        nFormants = 3
+        while nFormants <= 6:
+            formants = sound_part.to_formant_burg(time_step = 0.001, 
+                                                    max_number_of_formants = nFormants, 
+                                                    maximum_formant = maxFormant,
+                                                    window_length = windowSize,
+                                                    pre_emphasis_from = preEmphasis)
+            lpc = praat.Formant(formant=formants, maxFormant=nFormants)
+            LPCs.append(lpc)
+            nFormants += 1
+    else:
+        formants = sound_part.to_formant_burg(time_step = 0.001, 
+                                                max_number_of_formants = nFormants, 
+                                                maximum_formant = maxFormant,
+                                                window_length = windowSize,
+                                                pre_emphasis_from = preEmphasis)
 
-    # get necessary files (LPC or formant)
-    # via ESPS:  ## NOTE:  I haven't checked the path issues for the ESPS
-    # option yet...
-    if speechSoftware == 'esps':
-        esps.runFormant(vowelWavFile)
-        if formantPredictionMethod == 'mahalanobis':
-            lpc = esps.LPC()
-            lpc.read(vowelFileStem + '.pole')
+        fmt = praat.Formant(formant = formants, maxFormant=maxFormant)
+    # get Intensity object for intensity cutoff
+    # (only for those vowels where we need it)
+    if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
+        duration = sound_part.duration
+        if duration >= 0.064:
+            intensity_pm = sound_part.to_intensity(minimum_pitch = 100, 
+                                                time_step = 0.001, 
+                                                subtract_mean = True)
         else:
-            fmt = esps.Formant()
-            fmt.read(vowelFileStem + '.pole', vowelFileStem + '.fb')
-        # clean up the temporary files we created for this vowel
-        esps.rmFormantFiles(vowelFileStem)
-    # via Praat:  ## NOTE:  all temp files are in the "/bin" directory!
-    else:   # assume praat here
-        if formantPredictionMethod == 'mahalanobis':
-            # get measurements for nFormants = 3, 4, 5, 6
-            LPCs = []
-            nFormants = 3
-            while nFormants <= 6:
-                os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' +
-                          vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
-                lpc = praat.Formant()
-                lpc.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
-                LPCs.append(lpc)
-                nFormants += 1
-        else:
-            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'extractFormants.praat') + ' ' +
-                      vowelWavFile + ' ' + str(nFormants) + ' ' + str(maxFormant) + ' ' + str(windowSize) + ' ' + str(preEmphasis) + ' burg')
-            fmt = praat.Formant()
-            fmt.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
-        os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Formant'))
-        # get Intensity object for intensity cutoff
-        # (only for those vowels where we need it)
-        if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
-            os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + os.path.join(SCRIPTS_HOME, 'getIntensity.praat') + ' ' + vowelWavFile)
-            intensity = praat.Intensity()
-            intensity.read(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
-            os.remove(os.path.join(SCRIPTS_HOME, vowelFileStem + '.Intensity'))
-            intensity.change_offset(p.xmin - padBeg)
-        else:
-            intensity = praat.Intensity()
+            analysis_freq =  6.4 / duration
+            intensity_pm = sound_part.to_intensity(minimum_pitch = analysis_freq,
+                                               time_step = 0.001,
+                                               subtract_mean = True)
+        intensity = praat.Intensity(intensity_pm)
+        intensity.change_offset(p.xmin - padBeg)
+    else:
+        intensity = praat.Intensity()
     # get measurement according to formant prediction method
     # Mahalanobis:
     if formantPredictionMethod == 'mahalanobis':
@@ -927,7 +891,6 @@ def getVowelMeasurement(vowelFileStem, p, w, speechSoftware, formantPredictionMe
         vm = measureVowel(p, w, formants, bandwidths, convertedTimes, intensity, measurementPointMethod,
             formantPredictionMethod, padBeg, padEnd, '', '')
 
-    os.remove(os.path.join(SCRIPTS_HOME, vowelWavFile))
     return vm
 
 
@@ -1098,8 +1061,9 @@ def measureVowel(phone, word, poles, bandwidths, times, intensity, measurementPo
         # check that smoothing is possible for the value of nSmoothing and the length of the vowel
         # (e.g. impossible to do a 25ms-window smoothing (default) on a 24ms vowel)
         # (second condition is for methods that add a 20 ms transition at the beginning of the vowel)
-        if 2 * nSmoothing + 1 > len(times[0]):
-            print("ERROR! Vowel %s in word %s is too short to be measured with selected value for smoothing parameter." % (phone.label, word.transcription))
+        if (2 * nSmoothing + 1) > len(times[0]):
+            print(len(times))
+            #print("ERROR! Vowel %s in word %s is too short to be measured with selected value for smoothing parameter." % (phone.label, word.transcription))
             return None
         else:
             poles = [smoothTracks(p, nSmoothing) for p in poles]
@@ -1783,9 +1747,6 @@ def readSpeakerFile(speakerFile):
         global vowelSystem
         vowelSystem = value
 
-
-
-
     return speaker
 
 def setup_parser():
@@ -2118,13 +2079,13 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     phoneset = cmu.read_phoneset(opts.phoneset)
     print("Read CMU phone set.")
 
-    # make sure the specified speech analysis program is in our path
-    speechSoftware = checkSpeechSoftware(opts.speechSoftware)
-    print("Speech software to be used is %s." % speechSoftware)
+    # # make sure the specified speech analysis program is in our path
+    # speechSoftware = checkSpeechSoftware(opts.speechSoftware)
+    # print("Speech software to be used is %s." % speechSoftware)
 
-    # determine what program we'll use to extract portions of the audio file
-    soundEditor = getSoundEditor()
-    print("Sound editor to be used is %s." % soundEditor)
+    # # determine what program we'll use to extract portions of the audio file
+    # soundEditor = getSoundEditor()
+    # print("Sound editor to be used is %s." % soundEditor)
 
     # if we're using the Mahalanobis distance metric for vowel formant prediction,
     # we need to load files with the mean and covariance values
@@ -2156,6 +2117,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # (functions will exit if files not formatted properly)
         checkWavFile(wavFile)
         checkTextGridFile(tgFile)
+
+        sound = parselmouth.Sound(wavFile)
 
         # this will be used for the temporary files that we write
         fileStem = os.path.basename(wavFile).replace('.wav','')
@@ -2196,30 +2159,9 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         markTime("prelim2")
 
-        #if not opts.verbose:
-            # n_words = len(words)
-            # word_iter = 0
-            # old_percent = 0
-
-            # progressbar_width = 100
-            # sys.stdout.write("\nExtracting Formants\n")
-            # sys.stdout.write("[%s]" % (" " * progressbar_width))
-            # sys.stdout.flush()
-            # sys.stdout.write("\b" * (progressbar_width + 1))
-            #                  # return to start of line, after '['
 
         pbar = tqdm(range(len(words)))
         for pre_w, w, fol_w in window(words, window_len = 3):
-
-
-            # if not opts.verbose:
-            #     word_iter = word_iter + 1
-            #     new_percent = math.floor((float(word_iter) / n_words) * 100)
-
-            #     for p in range(int(old_percent), int(new_percent)):
-            #         sys.stdout.write("-")
-            #         sys.stdout.flush()
-            #         old_percent = new_percent
 
             # skip unclear transcriptions and silences
             if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
@@ -2325,11 +2267,6 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     fol_seg = w.phones[p_index+1].label
 
 
-
-                vowelFileStem = fileStem + '_' + \
-                    p.label  # name of sound file - ".wav" + phone label
-                vowelWavFile = vowelFileStem + '.wav'
-
                 if opts.verbose:
                     print('')
                     print("Extracting formants for vowel %s in word %s at %.3f" % (p.label, w.transcription, w.xmin))
@@ -2342,9 +2279,9 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 # windowSize:  from config file or default settings
                 # maxTime = duration of sound file/TextGrid
 
-                extractPortion(wavFile, vowelWavFile, p.xmin - padBeg, p.xmax + padEnd, soundEditor)
-
-                vm = getVowelMeasurement(vowelFileStem, p, w, opts.speechSoftware,
+                sound_part = sound.extract_part(from_time =  p.xmin - padBeg,
+                                                to_time = p.xmax + padEnd)
+                vm = getVowelMeasurement(sound_part, p, w, opts.speechSoftware,
                                          formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker)
 
                 if vm:  # if vowel is too short for smoothing, nothing will be returned

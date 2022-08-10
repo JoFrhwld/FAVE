@@ -1,23 +1,39 @@
-#
-# !!! This is NOT the original praat.py file !!!                    ##
-#
-# Last modified by Ingrid Rosenfelder:  February 2, 2012                             ##
-# - comments (all comments beginning with a double pound sign ("##"))                ##
-# - docstrings for all classes and functions                                         ##
-# - read() methods for TextGrid can read both long and short file formats            ##
-# - formant frames no longer need to have a minimum of x formants (formerly three)   ##
-# (smoothing routine in extractFormants.py demands equal spacing between frames)   ##
-# - added Intensity class                                                            ##
-# - round all times to three digits (i.e. ms)                                        ##
-# - improved reading of long TextGrid format                                         ##
-#
-
+import parselmouth
 
 class Formant:
 
     """represents a formant contour as a series of frames"""
 
-    def __init__(self, name=None):
+    def __init__(self, name=None, formant = None, maxFormant = None):
+        if formant and maxFormant:
+            if isinstance(formant, parselmouth.Formant):
+                self.__times = list(formant.ts())  # list of measurement times (frames)
+                self.__intensities = []
+                    # list of intensities (maximum intensity in each frame)
+                self.__formants = [[formant.get_value_at_time(formant_number = N, time = T) 
+                                      for N in (1,2,3) ]  
+                                    for T in formant.ts()]
+                    # list of formants frequencies (F1-F3, for each frame)
+                self.__bandwidths = [[formant.get_bandwidth_at_time(formant_number = N, time = T) 
+                                        for N in (1,2,3)] 
+                                    for T in formant.ts()]
+                    # list of bandwidths (for each formant F1-F3, for each frame)
+                                            # !!! CHANGED:  all above lists no longer include frames with only
+                                            # a minimum of 2 formant measurements
+                                            # !!!
+                self.__xmin = formant.xmin  # start time (in seconds)
+                self.__xmax = formant.xmax  # end time (in seconds)
+                self.__nx = formant.nx  # number of frames
+                self.__dx = formant.dx  # time step = frame duration (in seconds)
+                self.__x1 = formant.x1  # start time of first frame (in seconds)
+                self.__maxFormants = maxFormant  # maximum number of formants in a frame
+            else:
+                self.blanks()
+        else:
+            self.blanks()
+
+    def blanks(self):
+        """empty entries"""
         self.__times = []  # list of measurement times (frames)
         self.__intensities = []
             # list of intensities (maximum intensity in each frame)
@@ -25,15 +41,16 @@ class Formant:
             # list of formants frequencies (F1-F3, for each frame)
         self.__bandwidths = []
             # list of bandwidths (for each formant F1-F3, for each frame)
-                                      # !!! CHANGED:  all above lists no longer include frames with only
-                                      # a minimum of 2 formant measurements
-                                      # !!!
+                                    # !!! CHANGED:  all above lists no longer include frames with only
+                                    # a minimum of 2 formant measurements
+                                    # !!!
         self.__xmin = None  # start time (in seconds)
         self.__xmax = None  # end time (in seconds)
         self.__nx = None  # number of frames
         self.__dx = None  # time step = frame duration (in seconds)
         self.__x1 = None  # start time of first frame (in seconds)
         self.__maxFormants = None  # maximum number of formants in a frame
+
 
     def n(self):
         """returns the number of frames"""
@@ -294,15 +311,25 @@ class Intensity:
 
     """represents an intensity contour"""
 
-    def __init__(self):
-        self.__xmin = None
-        self.__xmax = None
-        self.__n = None
-        self.__nx = None
-        self.__dx = None
-        self.__x1 = None
-        self.__times = []
-        self.__intensities = []
+    def __init__(self, intensity = None):
+        if intensity and isinstance(intensity, parselmouth.Intensity):
+            self.__xmin = intensity.xmin
+            self.__xmax = intensity.xmax
+            self.__n = intensity.nx
+            self.__nx = intensity.nx
+            self.__dx = intensity.dx
+            self.__x1 = intensity.x1
+            self.__times = list(intensity.ts())
+            self.__intensities = [intensity.get_value(time = T) for T in intensity.ts()]
+        else:
+            self.__xmin = None
+            self.__xmax = None
+            self.__n = None
+            self.__nx = None
+            self.__dx = None
+            self.__x1 = None
+            self.__times = []
+            self.__intensities = []
 
     def __str__(self):
         return '<Intensity object with %i frames>' % self.__n

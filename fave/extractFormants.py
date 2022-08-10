@@ -78,6 +78,8 @@ from bisect import bisect_left
 
 import numpy as np
 
+from tqdm import tqdm
+
 import fave
 from fave.extract import esps
 from fave.extract import plotnik
@@ -1500,7 +1502,7 @@ def outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile,
         print("Normalized vowel measurements output in .txt format to the file %s" % (os.path.splitext(outputFile)[0] + "_norm.txt"))
 
         if tracks:
-            with open(os.path.splitext(outputFile)[0]+".tracks", 'wb') as trackfile:
+            with open(os.path.splitext(outputFile)[0]+".tracks", 'w') as trackfile:
                 trackwriter = csv.writer(trackfile, delimiter = "\t", )
                 s_dict = speaker.__dict__
                 s_keys = sorted(s_dict.keys())
@@ -1978,7 +1980,7 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
 
         if changes:
             f.write("Uncommitted changes when run:\n")
-            f.write(changes)
+            f.write(str(changes, 'utf-8'))
     except subprocess.CalledProcessError:
         pass
 
@@ -2233,29 +2235,30 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
         markTime("prelim2")
 
-        if not opts.verbose:
-            n_words = len(words)
-            word_iter = 0
-            old_percent = 0
+        #if not opts.verbose:
+            # n_words = len(words)
+            # word_iter = 0
+            # old_percent = 0
 
-            progressbar_width = 100
-            sys.stdout.write("\nExtracting Formants\n")
-            sys.stdout.write("[%s]" % (" " * progressbar_width))
-            sys.stdout.flush()
-            sys.stdout.write("\b" * (progressbar_width + 1))
-                             # return to start of line, after '['
+            # progressbar_width = 100
+            # sys.stdout.write("\nExtracting Formants\n")
+            # sys.stdout.write("[%s]" % (" " * progressbar_width))
+            # sys.stdout.flush()
+            # sys.stdout.write("\b" * (progressbar_width + 1))
+            #                  # return to start of line, after '['
 
+        pbar = tqdm(range(len(words)))
         for pre_w, w, fol_w in window(words, window_len = 3):
 
 
-            if not opts.verbose:
-                word_iter = word_iter + 1
-                new_percent = math.floor((float(word_iter) / n_words) * 100)
+            # if not opts.verbose:
+            #     word_iter = word_iter + 1
+            #     new_percent = math.floor((float(word_iter) / n_words) * 100)
 
-                for p in range(int(old_percent), int(new_percent)):
-                    sys.stdout.write("-")
-                    sys.stdout.flush()
-                    old_percent = new_percent
+            #     for p in range(int(old_percent), int(new_percent)):
+            #         sys.stdout.write("-")
+            #         sys.stdout.flush()
+            #         old_percent = new_percent
 
             # skip unclear transcriptions and silences
             if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
@@ -2391,7 +2394,8 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                     vm.fol_word = fol_w.transcription
                     measurements.append(vm)
                     count_analyzed += 1
-
+            pbar.update(1)
+        pbar.close()
         if remeasurement and formantPredictionMethod == 'mahalanobis':
             measurements = remeasure(measurements)
 
@@ -2406,7 +2410,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         outputMeasurements(outputFormat, measurements, m_means, speaker, outputFile, outputHeader, opts.tracks)
 
         if opts.pickle:
-            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'wb')
+            pi = open(os.path.splitext(outputFile)[0] + ".pickle", 'w')
             pickle.dump(measurements, pi, pickle.HIGHEST_PROTOCOL)
             pi.close()
 

@@ -8,6 +8,7 @@ license = "GPL-3.0-only"
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
 numpy = "^1.22"
+tqdm = "^4.64.0"
 
 [tool.poetry.dev-dependencies]
 sphinx = "^4"

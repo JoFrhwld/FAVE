@@ -2257,6 +2257,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
             # skip unclear transcriptions and silences
             if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
+                pbar.update(1)
                 continue
 
             # convert to upper or lower case, if necessary
@@ -2270,6 +2271,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print('')
                     print("\t\t\t...no vowels in word %s at %.3f." % (w.transcription, w.xmin))
+                pbar.update(1)
                 continue
 
             # don't process this word if it's in the list of stop words
@@ -2278,6 +2280,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print('')
                     print("\t\t\t...word %s at %.3f is stop word." % (w.transcription, w.xmin))
+                pbar.update(1)
                 continue
 
             # exclude uncertain transcriptions
@@ -2286,6 +2289,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print('')
                     print("\t\t\t...word %s at %.3f is uncertain transcription." % (w.transcription, w.xmin))
+                pbar.update(1)
                 continue
 
             for p_index, p in enumerate(w.phones):

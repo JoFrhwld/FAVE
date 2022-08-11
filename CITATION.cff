@@ -1,0 +1,32 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: 'FAVE: Forced alignment and vowel extraction'
+message: Please cite this software using these metadata.
+type: software
+authors:
+  - given-names: Ingrid
+    family-names: Rosenfelder
+  - given-names: Josef
+    family-names: Fruehwald
+    email: JoFrhwld@gmail.com
+    orcid: 'https://orcid.org/0000-0001-8480-9461'
+  - given-names: Keelan
+    family-names: Evanini
+  - given-names: Scott
+    family-names: Seyfarth
+  - given-names: Christian
+    family-names: Brickhouse
+    orcid: 'https://orcid.org/0000-0002-2748-8056'
+  - given-names: Kyle
+    family-names: Gorman
+    orcid: 'https://orcid.org/0000-0002-4233-6595'
+  - given-names: Hillary
+    family-names: Prichard
+  - given-names: Jiahong
+    family-names: Yuan
+repository-code: 'https://github.com/JoFrhwld/FAVE'
+license: GPL-3.0
+version: v2.0.1
+date-released: 2022-08-11

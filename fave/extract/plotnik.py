@@ -809,6 +809,43 @@ def plt_vowels(cd):
     except:
         return ''
 
+def plt_ipa(cd):
+    """translates numerical vowel class code to ipa-like."""
+    trans_dict = {'1':"ɪ",
+                  '2':"ɛ",
+                  '3':"æ",
+                  '5':"ɑ",
+                  '6':"ʌ",
+                  '7':"ʊ",
+                  '*':"ə",
+                  '11':"i",
+                  '12':"iF",
+                  '21':"ej",
+                  '22':"ejF",
+                  '41':"aj",
+                  '47':"aj0",
+                  '61':"oj",
+                  '42':"aw",
+                  '62':"ow",
+                  '63':"owF",
+                  '72':"u",
+                  '73':"Tu",
+                  '82':"iw",
+                  '33':"æh",
+                  '39':"æBR",
+                  '43':"a",
+                  '53':"ɔ",
+                  '14':"ir",
+                  '24':"ejr",
+                  '44':"ar",
+                  '54':"ɔr",
+                  '64':"owr",
+                  '74':"uwr",
+                  '94':"ə˞"}
+    try:
+        return trans_dict[str(cd)]
+    except:
+        return ''
 
 def process_measurement_line(line):
     """splits Plotnik measurement line into values for formants, vowel class, stress, token, glide, style, and comment"""

@@ -2187,7 +2187,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # coding) -> only for chosen speaker
         words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa)
                                   # (all initial vowels are counted here)                                 
-        print('Identified vowels in the TextGridmeans[vowel] = np.array([float(x)')
+        print('Identified vowels in the TextGrid')
         global maxTime
         maxTime = tg.xmax()  # duration of TextGrid/sound file
         measurements = []

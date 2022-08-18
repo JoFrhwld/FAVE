@@ -245,7 +245,7 @@ class CMU_Dictionary():
         # checked for correct format)
 
         # convert to upper case and split into phones
-        phones = transcription.upper().split()
+        phones = transcription.upper().split(' ')
 
         # check that phones are separated by spaces
         # (len(w) > 3:  transcription could just consist of a single phone!)
@@ -266,7 +266,7 @@ class CMU_Dictionary():
                     self.check_phone(phone, transcription, index)
                 except ValueError as err:
                     raise err
-        return transcription
+        return transcription.split(' ')
 
     def check_phone(self, phone, transcription, index):
         """checks that a phone entered by the user is part of the Arpabet"""

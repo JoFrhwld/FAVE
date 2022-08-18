@@ -214,7 +214,7 @@ class CMU_Dictionary():
                     if t not in cmu_dict[word]:
                         cmu_dict[word].append(t)
                     if word not in add_dict:
-                        add_dict = []
+                        add_dict[word] = []
                     if t not in add_dict[word]:
                         add_dict[word].append(t)
 

@@ -29,6 +29,16 @@ def test_dictionary_init(tmp_path):
     assert p.read_text() == CMU_EXCERPT
 
 def test_add_dictionary_entries(tmp_path):
+    """
+    TODO list:
+     * generalize the old_word new_word tests so that they
+       can be handled by a provider, for an example see 
+       tests/fave/align/test_transcriptprocessor.py
+
+     * reduce code redundancy in the dict_obj setup probably 
+       using pytest fixtures in a conftest.py file, see
+       https://docs.pytest.org/en/6.2.x/fixture.html#conftest-py-sharing-fixtures-across-multiple-files
+    """
     d = tmp_path / "sub"
     d.mkdir()
 
@@ -47,3 +57,11 @@ def test_add_dictionary_entries(tmp_path):
     
     added_entries_file = d / dict_obj.DICT_ADDITIONS
     assert new_word.replace("\t", "  ") in added_entries_file.read_text()
+
+    old_word = "TEST\tT EH1 S T \n"
+    old_word_file = d / "old_word_file.dict"
+    old_word_file.write_text(old_word)
+
+    dict_obj.add_dictionary_entries(old_word_file, path=d)
+
+    assert old_word.replace("\t", "  ") in added_entries_file.read_text()

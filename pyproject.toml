@@ -2,7 +2,17 @@
 name = "fave"
 version = "2.0.2"
 description = "Forced alignment and vowel extraction"
-authors = ["FAVE contributors"]
+authors = [
+	"Ingrid Rosenfelder",
+	"Josef Fruehwald <josef.fruehwald@uky.edu>",
+	"Christian Brickhouse <brickhouse@stanford.edu>",
+	"Keelan Evanini",
+	"Scott Seyfarth",
+	"Kyle Gorman",
+	"Hilary Prichard",
+	"Jiahong Yuan",
+	"FAVE contributors"
+]
 license = "GPL-3.0-only"
 readme = "README.rst"
 homepage = "https://github.com/JoFrhwld/FAVE"

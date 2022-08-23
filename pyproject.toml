@@ -24,6 +24,7 @@ tqdm = "^4.64.0"
 
 [tool.poetry.dev-dependencies]
 sphinx = "^7"
+sphinx_pyproject = "0.1"
 jinja2 = "~3.0"
 pylint = "^2.5.2"
 

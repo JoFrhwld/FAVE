@@ -11,8 +11,15 @@ with the differences between the current and legacy versions of FAVE.
 
 ## Guides and documentation
 
+### For Users
+
 ```{toctree} maxdepth: 2
 usage/index
+```
+
+### For Developers
+
+```{toctree} maxdepth: 2
 code/index
 ```
 

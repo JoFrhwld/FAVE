@@ -53,37 +53,36 @@
             
   <section id="quickstart-guide-to-using-fave-2-0">
 <h1>Quickstart guide to using FAVE 2.0<a class="headerlink" href="#quickstart-guide-to-using-fave-2-0" title="Permalink to this headline">¶</a></h1>
-<blockquote>
-<div><ol class="arabic">
+<ol class="arabic simple">
 <li><p>Install FAVE and its dependencies according to <a class="reference internal" href="installation.html"><span class="doc">the directions</span></a>.</p></li>
 <li><p>Download the <code class="docutils literal notranslate"><span class="pre">FAAValign.py</span></code> and <code class="docutils literal notranslate"><span class="pre">extractFormants.py</span></code> scripts.</p></li>
-<li><p>Check your transcription for out-of-dictionary words</p>
+<li><p>Check your transcription for out-of-dictionary words</p></li>
+</ol>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Check for out-of-dictionary words</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 FAAValign.py --check unknown_words.txt AudioFile.wav TranscriptionFile.txt OutputAlignment.TextGrid</span>
 </pre></div>
 </div>
 </div>
-</li>
+<ol class="arabic simple" start="4">
 <li><p>Open <code class="docutils literal notranslate"><span class="pre">unknown_words.txt</span></code> and create a transcription for each word listed.</p></li>
-<li><p>Align your audio and transcripts including your new transcriptions:</p>
+<li><p>Align your audio and transcripts including your new transcriptions:</p></li>
+</ol>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Begin forced alignment</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 FAAValign.py --import custom_dictionary.txt AudioFile.wav TranscriptionFile.txt OutputAlignment.TextGrid</span>
 </pre></div>
 </div>
 </div>
-</li>
-<li><p>Extract formant data using the default settings:</p>
+<ol class="arabic simple" start="6">
+<li><p>Extract formant data using the default settings:</p></li>
+</ol>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Extract formant data</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 extractFormants.py AudioFile.wav Alignment.TextGrid OutputFileName.tsv</span>
 </pre></div>
 </div>
 </div>
-</li>
-</ol>
-</div></blockquote>
 </section>
 
 

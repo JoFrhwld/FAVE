@@ -1947,47 +1947,6 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
     f = open(filename, 'w')
     f.write(time.asctime())
     f.write("\n")
-    try:
-        check_version = subprocess.Popen(["git","describe", "--tags"], stdout = subprocess.PIPE)
-        version,err = check_version.communicate()
-        version = version.rstrip()
-    except OSError:
-        version = None
-
-    if version:
-        f.write("version info from Git: %s"%version)
-        f.write("\n")
-    else:
-        f.write("Not using Git version control. Version info unavailable.\n")
-        f.write("Consider installing Git (http://git-scm.com/).\
-         and cloning this repository from GitHub with: \n \
-         git clone git@github.com:JoFrhwld/FAVE.git")
-        f.write("\n")
-
-    # For development, it's helpful to know if there's anything in the repo that has been
-    # changed. This block checks to see if we're in a git repo. If we are, then use git diff
-    # to get the changes and write to the log file.
-    #
-    # code debt: this block is repeated in extractFormants.py and the code should be consolidated.
-    try:
-        subprocess.run(['git', 'rev-parse', '--is-inside-work-tree'], check=True, capture_output=True)
-        try:
-            check_changes = subprocess.Popen(
-                ["git", "diff", "--stat"], stdout=subprocess.PIPE)
-            changes, err = check_changes.communicate() # pylint: disable=unused-variable
-        except OSError:
-            changes = ''
-
-        if changes:
-            f.write("Uncommitted changes when run:\n")
-            f.write(str(changes, 'utf-8'))
-    except subprocess.CalledProcessError:
-        pass
-
-    if changes:
-        f.write("Uncommitted changes when run:\n")
-        f.write(str(changes,'utf-8'))
-
 
     f.write("\n\n")
 
@@ -2228,7 +2187,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
         # coding) -> only for chosen speaker
         words = getWordsAndPhones(tg, phoneset, speaker, vowelSystem, mfa)
                                   # (all initial vowels are counted here)                                 
-        print('Identified vowels in the TextGridmeans[vowel] = np.array([float(x)')
+        print('Identified vowels in the TextGrid')
         global maxTime
         maxTime = tg.xmax()  # duration of TextGrid/sound file
         measurements = []
@@ -2262,6 +2221,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
             # skip unclear transcriptions and silences
             if w.transcription == '' or w.transcription == "((xxxx))" or w.transcription.upper() == "SP":
+                pbar.update(1)
                 continue
 
             # convert to upper or lower case, if necessary
@@ -2275,6 +2235,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print('')
                     print("\t\t\t...no vowels in word %s at %.3f." % (w.transcription, w.xmin))
+                pbar.update(1)
                 continue
 
             # don't process this word if it's in the list of stop words
@@ -2283,6 +2244,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print('')
                     print("\t\t\t...word %s at %.3f is stop word." % (w.transcription, w.xmin))
+                pbar.update(1)
                 continue
 
             # exclude uncertain transcriptions
@@ -2291,6 +2253,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
                 if opts.verbose:
                     print('')
                     print("\t\t\t...word %s at %.3f is uncertain transcription." % (w.transcription, w.xmin))
+                pbar.update(1)
                 continue
 
             for p_index, p in enumerate(w.phones):

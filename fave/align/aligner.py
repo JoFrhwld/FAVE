@@ -42,7 +42,7 @@ import pkg_resources
 from . import transcriptprocessor
 from fave import cmudictionary
 from fave import praat
-
+import parselmouth
 
 class Aligner():
     """
@@ -129,21 +129,23 @@ class Aligner():
             f.close()
             duration = round((nx / sr), 3)
         except wave.Error:  # wave.py does not seem to support 32-bit .wav files???
-            self.logger.debug('Script path is %s',os.path.join(
-                FADIR, "praatScripts", "get_duration.praat"))
-            if PRAATPATH:
-                dur_command = "%s %s %s" % (PRAATPATH, os.path.join(
-                    FADIR, "praatScripts", "get_duration.praat"), self.audio)
-            else:
-                dur_command = "praat %s %s" % (os.path.join(
-                    FADIR, "praatScripts", "get_duration.praat"), self.audio)
-            duration = round(
-                float(
-                    subprocess.Popen(
-                        dur_command,
-                        shell=True,
-                        stdout=subprocess.PIPE).communicate()[0].strip()),
-                3)
+            sound = parselmouth.Sound(self.audio)
+            duration = round(sound.duration, 3)
+            # self.logger.debug('Script path is %s',os.path.join(
+            #     FADIR, "praatScripts", "get_duration.praat"))
+            # if PRAATPATH:
+            #     dur_command = "%s %s %s" % (PRAATPATH, os.path.join(
+            #         FADIR, "praatScripts", "get_duration.praat"), self.audio)
+            # else:
+            #     dur_command = "praat %s %s" % (os.path.join(
+            #         FADIR, "praatScripts", "get_duration.praat"), self.audio)
+            # duration = round(
+            #     float(
+            #         subprocess.Popen(
+            #             dur_command,
+            #             shell=True,
+            #             stdout=subprocess.PIPE).communicate()[0].strip()),
+            #     3)
 
         return duration
 

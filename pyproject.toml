@@ -14,6 +14,8 @@ authors = [
 	"FAVE contributors"
 ]
 license = "GPL-3.0-only"
+readme = "README.rst"
+homepage = "https://github.com/JoFrhwld/FAVE"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"

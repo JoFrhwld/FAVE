@@ -20,5 +20,5 @@ requires = ["poetry>=1.1"]
 build-backend = "poetry.masonry.api"
 
 [tool.poetry.scripts]
-extractFormants = "fave.extractFormants:main"
-FAAValign = "fave.FAAValign:setup"
+fave-extract = "fave.extractFormants:main"
+fave-align = "fave.FAAValign:setup"

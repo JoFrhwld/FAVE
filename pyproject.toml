@@ -1,8 +1,18 @@
 [tool.poetry]
 name = "fave"
-version = "2.0.1"
+version = "2.0.2-dev"
 description = "Forced alignment and vowel extraction"
-authors = ["FAVE contributors"]
+authors = [
+	"Ingrid Rosenfelder",
+	"Josef Fruehwald <josef.fruehwald@uky.edu>",
+	"Christian Brickhouse <brickhouse@stanford.edu>",
+	"Keelan Evanini",
+	"Scott Seyfarth",
+	"Kyle Gorman",
+	"Hilary Prichard",
+	"Jiahong Yuan",
+	"FAVE contributors"
+]
 license = "GPL-3.0-only"
 
 [tool.poetry.dependencies]
@@ -12,6 +22,7 @@ tqdm = "^4.64.0"
 
 [tool.poetry.dev-dependencies]
 sphinx = "^4"
+sphinx_pyproject = "0.1"
 jinja2 = "~3.0"
 pylint = "^2.5.2"
 

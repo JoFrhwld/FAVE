@@ -6,21 +6,21 @@
 Forced Alignment and Vowel Extraction (FAVE)
 ============================================
 
-Welcome to the FAVE documentation
+This website documents the FAVE software, version 2. 
 
+.. warning::
+   If you have used FAVE before, please read :doc:`usage/whats-new` to familiarize yourself with the differences between the current and legacy versions of FAVE. 
+
+Guides and documentation
+------------------------
 .. toctree::
    :maxdepth: 2
 
-   Installing FAVE <usage/installation>
-   Quickstart guide <usage/quickstart>
-   fave.align module <code/align/index>
-   fave.extract module <code/extract/index>
-   code/cmudictionary
-   code/praat
+   usage/index
+   code/index
 
-
-Indices and tables
-==================
+Indices
+-------
 
 * :ref:`genindex`
 * :ref:`modindex`

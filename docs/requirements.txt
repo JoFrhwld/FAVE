@@ -1,2 +1,3 @@
 jinja2==3.0.0
 sphinx-pyproject==0.1.0
+myst-parser~=0.18

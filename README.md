@@ -18,7 +18,9 @@ You can find user support for installing and using the FAVE toolkits at the [FAV
 ## Contributing to FAVE
 For the most part, we'll be utilizing the fork-and-pull paradigm (see [Using Pull Requests](https://help.github.com/articles/using-pull-requests)). Please send pull requests to the `dev` branch.
 
-To fill a bug report, please follow this link [Bug Report](/.github/ISSUE_TEMPLATE/bug_report.yml)
+You can fill in a bug report at the issue tab. 
+
+We will work on the bugs with a bug triage. This means, that every bug is rated after its importance of fixing. Those bugs with the highest rating are solved first. This can lead to a bit dely in solving some bugs, but we will work on the most important first. 
 
 ## Attribution
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.22281.svg)](http://dx.doi.org/10.5281/zenodo.22281)

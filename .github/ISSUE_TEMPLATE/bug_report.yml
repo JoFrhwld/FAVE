@@ -1,5 +1,5 @@
 name: Bug Report
-description: File a bug report here
+description: The software does something unwanted or unusual
 title: "[BUG]: "
 labels: ["bug"]
 
@@ -11,23 +11,30 @@ body:
   - type: checkboxes
     id: new-bug
     attributes:
-      label: Is there an existing issue for this?
+      label: Did you search for similar bugs?
       description: Please search to see if an issue already exists for the bug you encountered.
       options:
       - label: I have searched the existing issues
-        required: true
+        required: false
   - type: textarea
     id: bug-description
     attributes:
-      label: Description of the bug
-      description: Tell us what bug you encountered and what should have happened
+      label: What happened?
+      description: Tell us what bug you encountered
+    validations:
+      required: true
+  - type: textarea
+    id: bug-behaviour
+    attributes:
+      label: Expectations?
+      description: Tell us what should have happened
     validations:
       required: true
   - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps To Reproduce
-      description: Steps to reproduce the behavior.
+      description: Can you describe your steps, when you encountered the bug?
       placeholder: Please write the steps in a list form
     validations:
-      required: true
+      required: false

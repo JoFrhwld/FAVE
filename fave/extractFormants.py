@@ -92,7 +92,6 @@ from fave import cmudictionary as cmu
 from fave.extract.remeasure import remeasure
 from fave.extract.mahalanobis import mahalanobis
 
-SCRIPTS_HOME = pkg_resources.resource_filename('fave','praatScripts')
 os.chdir(os.getcwd())
 
 uncertain = re.compile(r"\(\(([\*\+]?['\w]+\-?)\)\)")
@@ -445,29 +444,6 @@ def checkLocation(file):
 
     if not os.path.exists(file):
         print("ERROR:  Could not locate %s" % file)
-        sys.exit()
-
-
-def checkSpeechSoftware(speechSoftware):
-    """checks that either Praat or ESPS is available as a speech analysis program"""
-
-    if speechSoftware in ['ESPS', 'esps']:
-        if os.name == 'nt':
-            print("ERROR:  ESPS was specified as the speech analysis program, but this option is not yet compatible with Windows")
-            sys.exit()
-        if not programExists('formant'):
-            print("ERROR:  ESPS was specified as the speech analysis program, but the command 'formant' is not in your path")
-            sys.exit()
-        else:
-            return 'esps'
-    elif speechSoftware in ['praat', 'Praat']:
-        if not ((PRAATPATH and programExists(speechSoftware, PRAATPATH)) or (os.name == 'posix' and programExists(speechSoftware)) or (os.name == 'nt' and programExists('praatcon.exe'))):
-            print("ERROR: Praat was specified as the speech analysis program, but the command 'praat' ('praatcon' for Windows) is not in your path")
-            sys.exit()
-        else:
-            return speechSoftware
-    else:
-        print("ERROR: unsupported speech analysis software %s" % speechSoftware)
         sys.exit()
 
 
@@ -828,7 +804,7 @@ def getTransitionLength(minimum, maximum):
     return transition
 
 
-def getVowelMeasurement(sound_part, p, w, speechSoftware, formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker):
+def getVowelMeasurement(sound_part, p, w, formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker):
     """makes a vowel measurement"""
 
     if formantPredictionMethod == 'mahalanobis':
@@ -1667,26 +1643,6 @@ def processInput(wavInput, tgInput, output):
     outputFiles = open(output, 'r').read().splitlines()
     return (wavFiles, tgFiles, outputFiles)
 
-
-def programExists(program, path=''):
-    """checks whether a given command line program exists (path can be specified optionally)"""
-
-    if not path:
-        if os.name == 'posix':
-            pathDirs = os.environ['PATH'].split(':')
-        elif os.name == 'nt':
-            pathDirs = os.environ['PATH'].split(';')
-        else:
-            print("ERROR: did not recognize OS type '%s'. Paths to 'praat' and 'sox' must be specified manually" % os.name)
-            sys.exit()
-        for p in pathDirs:
-            if os.path.isfile(os.path.join(p, program)):
-                return True
-        return False
-    else:  # path is specified
-        return os.path.isfile(os.path.join(path, program))
-
-
 def readSpeakerFile(speakerFile):
     """reads speaker background information from a speaker file"""
 
@@ -1790,8 +1746,6 @@ def setup_parser():
                         help="Do a second pass is performed on the data, using the speaker's own system as the base of comparison for the Mahalanobis distance")
     parser.add_argument("--removeStopWords", action="store_true",
                         help="Don't measure vowels in stop words." )
-    parser.add_argument("--speechSoftware", choices = ['praat', 'Praat', 'esps', 'ESPS'], default = "Praat",
-                        help="The speech software program to be used for LPC analysis.")
     parser.add_argument("--speaker",  "-s",
                         help = "*.speaker file, if used")
     parser.add_argument("--stopWords", nargs="+", default=["AND", "BUT", "FOR", "HE", "HE'S", "HUH", "I", "I'LL", "I'M", "IS", "IT", "IT'S", "ITS", "MY", "OF", "OH",
@@ -1959,7 +1913,6 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
     f.write("- nSmoothing:\t\t\t%i\n" % opts.nSmoothing)
     f.write("- windowSize:\t\t\t%.3f\n" % opts.windowSize)
     f.write("- preEmphasis:\t\t\t%i\n" % opts.preEmphasis)
-    f.write("- speechSoftware:\t\t%s\n" % opts.speechSoftware)
     f.write("- outputFormat:\t\t\t%s\n" % opts.outputFormat)
     f.write("- outputHeader:\t\t\t%s\n" % (not opts.noOutputHeader))
     f.write("- case:\t\t\t\t%s\n" % opts.case)
@@ -2059,7 +2012,6 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     formantPredictionMethod = opts.formantPredictionMethod
     measurementPointMethod = opts.measurementPointMethod
     mfa = opts.mfa
-    speechSoftware = opts.speechSoftware
     nFormants = opts.nFormants
     #maxFormant = opts.maxFormant
     nSmoothing = opts.nSmoothing
@@ -2078,14 +2030,6 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
     # read CMU phoneset ("cmu_phoneset.txt")
     phoneset = cmu.read_phoneset(opts.phoneset)
     print("Read CMU phone set.")
-
-    # # make sure the specified speech analysis program is in our path
-    # speechSoftware = checkSpeechSoftware(opts.speechSoftware)
-    # print("Speech software to be used is %s." % speechSoftware)
-
-    # # determine what program we'll use to extract portions of the audio file
-    # soundEditor = getSoundEditor()
-    # print("Sound editor to be used is %s." % soundEditor)
 
     # if we're using the Mahalanobis distance metric for vowel formant prediction,
     # we need to load files with the mean and covariance values
@@ -2281,7 +2225,7 @@ def extractFormants(wavInput, tgInput, output, opts, SPATH='', PPATH=''):
 
                 sound_part = sound.extract_part(from_time =  p.xmin - padBeg,
                                                 to_time = p.xmax + padEnd)
-                vm = getVowelMeasurement(sound_part, p, w, opts.speechSoftware,
+                vm = getVowelMeasurement(sound_part, p, w, 
                                          formantPredictionMethod, measurementPointMethod, nFormants, maxFormant, windowSize, preEmphasis, padBeg, padEnd, speaker)
 
                 if vm:  # if vowel is too short for smoothing, nothing will be returned

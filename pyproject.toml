@@ -4,6 +4,8 @@ version = "2.0.1"
 description = "Forced alignment and vowel extraction"
 authors = ["FAVE contributors"]
 license = "GPL-3.0-only"
+readme = "README.rst"
+homepage = "https://github.com/JoFrhwld/FAVE"
 
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
@@ -22,3 +24,5 @@ build-backend = "poetry.masonry.api"
 [tool.poetry.scripts]
 fave-extract = "fave.extractFormants:main"
 fave-align = "fave.FAAValign:setup"
+extractFormants = "fave.extractFormants:main"
+FAAValign = "fave.FAAValign:setup"

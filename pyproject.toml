@@ -24,3 +24,5 @@ build-backend = "poetry.masonry.api"
 [tool.poetry.scripts]
 fave-extract = "fave.extractFormants:main"
 fave-align = "fave.FAAValign:setup"
+extractFormants = "fave.extractFormants:main"
+FAAValign = "fave.FAAValign:setup"

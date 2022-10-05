@@ -254,12 +254,6 @@ class TranscriptProcessor():
                 # Log a warning about having detected a header row
                 self.logger.warning('Header row was detected')
                 del lines[0]
-                # check, if there is a next line
-                try:
-                    # jump to the next line of the file
-                    next(f)
-                except:
-                    pass
 
     # substitute any 'smart' quotes in the input file with the corresponding
     # ASCII equivalents (otherwise they will be excluded as out-of-

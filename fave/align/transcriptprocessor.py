@@ -33,7 +33,6 @@ __credits__ = ["Brandon Waldon"]
 import re
 import sys
 import os
-import csv
 import logging
 from fave import cmudictionary
 
@@ -247,19 +246,20 @@ class TranscriptProcessor():
     def read_transcription_file(self):
         """Reads file into memory"""
         with open(self.file) as f:
+            lines = self.replace_smart_quotes(f.readlines())
+            self.lines = lines
             try:
-                lines = self.replace_smart_quotes(f.readlines())
                 float(lines[0].split('\t')[2]) 
             except ValueError:
                 # Log a warning about having detected a header row
-                print("Header row was detected")
+                self.logger.warning('Header row was detected')
+                del lines[0]
                 # check, if there is a next line
                 try:
                     # jump to the next line of the file
                     next(f)
                 except:
                     pass
-            self.lines = lines
 
     # substitute any 'smart' quotes in the input file with the corresponding
     # ASCII equivalents (otherwise they will be excluded as out-of-

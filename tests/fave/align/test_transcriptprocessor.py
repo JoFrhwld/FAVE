@@ -125,22 +125,22 @@ def provide_value_error_file():
             ['Foo\tBar\t0.0\t3.2\t3.2']
         ],
         [   # test with one line 
-            "Foo\tBar\t0.0\t3.2\t3.2\nTest\t1.0\4.5\t3.5",
+            "Foo\tBar\t0.0\t3.2\t3.2\nTest\t1.0\t4.5\t3.5",
             {
                 'prompt': "IDK what this is -CJB",
                 'check' : '',
                 'verbose': logging.DEBUG
             },
-            ['Foo\tBar\t0.0\t3.2\t3.2\n', 'Test\t1.0\4.5\t3.5']
+            ['Foo\tBar\t0.0\t3.2\t3.2\n', 'Test\t1.0\t4.5\t3.5']
         ],
         [   # test with more lines 
-            "Foo\tBar\t0.0\t3.2\t3.2\nTest\t1.0\4.5\t3.5\nTest\t1.0\4.5\t3.5",
+            "Foo\tBar\t0.0\t3.2\t3.2\nTest\t1.0\t4.5\t3.5\nTest\t1.0\t4.5\t3.5",
             {
                 'prompt': "IDK what this is -CJB",
                 'check' : '',
                 'verbose': logging.DEBUG
             },
-            ['Foo\tBar\t0.0\t3.2\t3.2\n', 'Test\t1.0\4.5\t3.5\n', 'Test\t1.0\4.5\t3.5']
+            ['Foo\tBar\t0.0\t3.2\t3.2\n', 'Test\t1.0\t4.5\t3.5\n', 'Test\t1.0\t4.5\t3.5']
         ]
 
     ]

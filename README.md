@@ -24,6 +24,8 @@ There may be a delay between when a bug is reported and when a bug is resolved. 
 
 ## Attribution
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.22281.svg)](http://dx.doi.org/10.5281/zenodo.22281)
+![GitHub](https://img.shields.io/github/license/JoFrhwld/FAVE)
+![GitHub](https://img.shields.io/badge/Python-3.8%2B-brightgreen)
 As of v1.1.3 onwards, releases from this repository will have a DOI associated with them through Zenodo. The DOI for the current release is [10.5281/zenodo.22281](http://dx.doi.org/10.5281/zenodo.22281). We would recommend the citation:
 
 Rosenfelder, Ingrid; Fruehwald, Josef; Brickhouse, Christian; Evanini, Keelan; Seyfarth, Scott; Gorman, Kyle; Prichard, Hilary; Yuan, Jiahong; 2022. FAVE (Forced Alignment and Vowel Extraction) Program Suite v2.0.0 */zenodo.*

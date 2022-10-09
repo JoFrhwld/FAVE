@@ -4,16 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FAVE TranscriptProcessor module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FAVE TranscriptProcessor module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyramid.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FAVE Extract module" href="../extract/index.html" />
+    <link rel="prev" title="FAVE Aligner module" href="aligner.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -31,7 +34,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="../extract/index.html" title="FAVE Extract module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="aligner.html" title="FAVE Aligner module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">FAVE Align module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE TranscriptProcessor module</a></li> 
       </ul>
     </div>  
 
@@ -40,16 +52,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fave.align.transcriptprocessor">
+  <section id="module-fave.align.transcriptprocessor">
 <span id="fave-transcriptprocessor-module"></span><h1>FAVE TranscriptProcessor module<a class="headerlink" href="#module-fave.align.transcriptprocessor" title="Permalink to this headline">¶</a></h1>
 <p>Functions for processing FAAV transcripts</p>
 <dl class="py class">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor">
-<em class="property">class </em><code class="sig-prename descclassname">fave.align.transcriptprocessor.</code><code class="sig-name descname">TranscriptProcesor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transript_file</span></em>, <em class="sig-param"><span class="n">pronunciation_dictionary</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.align.transcriptprocessor.</span></span><span class="sig-name descname"><span class="pre">TranscriptProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transript_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pronunciation_dictionary</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wrapper for handling tab delimited FAAV transcription files</p>
 <dl class="py method">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor.check_dictionary_entries">
-<code class="sig-name descname">check_dictionary_entries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wavfile</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor.check_dictionary_entries" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor.check_dictionary_entries">
+<span class="sig-name descname"><span class="pre">check_dictionary_entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavfile</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor.check_dictionary_entries" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks that all words in lines have an entry in the CMU dictionary;
 if not, prompts user for Arpabet transcription and adds it to the dict
 file. If “check transcription” option is selected, writes list of
@@ -57,47 +69,58 @@ unknown words to file and exits.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor.check_transcription_file">
-<code class="sig-name descname">check_transcription_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor.check_transcription_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor.check_transcription_file">
+<span class="sig-name descname"><span class="pre">check_transcription_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor.check_transcription_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks the format of the input transcription file and returns a
 list of empty lines to be deleted from the input</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor.check_transcription_format">
-<em class="property">static </em><code class="sig-name descname">check_transcription_format</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor.check_transcription_format" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor.check_transcription_format">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">check_transcription_format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor.check_transcription_format" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks that input format of transcription file is correct
 (5 tab-delimited data fields)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor.preprocess_transcription">
-<code class="sig-name descname">preprocess_transcription</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor.preprocess_transcription" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor.preprocess_transcription">
+<span class="sig-name descname"><span class="pre">preprocess_transcription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor.preprocess_transcription" title="Permalink to this definition">¶</a></dt>
 <dd><p>preprocesses transcription input for CMU dictionary lookup and forced alignment</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor.read_transcription_file">
-<code class="sig-name descname">read_transcription_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor.read_transcription_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor.read_transcription_file">
+<span class="sig-name descname"><span class="pre">read_transcription_file</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor.read_transcription_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads file into memory</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.transcriptprocessor.TranscriptProcesor.replace_smart_quotes">
-<em class="property">static </em><code class="sig-name descname">replace_smart_quotes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">all_input</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcesor.replace_smart_quotes" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.transcriptprocessor.TranscriptProcessor.replace_smart_quotes">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">replace_smart_quotes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">all_input</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.transcriptprocessor.TranscriptProcessor.replace_smart_quotes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Replace fancy quotes with straight quotes</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="aligner.html"
+                          title="previous chapter">FAVE Aligner module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="../extract/index.html"
+                          title="next chapter">FAVE Extract module</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -109,7 +132,7 @@ list of empty lines to be deleted from the input</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -128,12 +151,21 @@ list of empty lines to be deleted from the input</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="../extract/index.html" title="FAVE Extract module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="aligner.html" title="FAVE Aligner module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >FAVE Align module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE TranscriptProcessor module</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2022, Ingrid Rosenfelder, Josef Fruehwald, Christian Brickhouse, Keelan Evanini, Scott Seyfarth, Kyle Gorman, Hilary Prichard, Jiahong Yuan and FAVE contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

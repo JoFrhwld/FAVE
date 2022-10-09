@@ -4,16 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FAVE Plotnik module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FAVE Plotnik module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyramid.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FAVE Remeasure module" href="remeasure.html" />
+    <link rel="prev" title="FAVE Mahalanobis module" href="mahalanobis.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -31,7 +34,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="remeasure.html" title="FAVE Remeasure module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="mahalanobis.html" title="FAVE Mahalanobis module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">FAVE Extract module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Plotnik module</a></li> 
       </ul>
     </div>  
 
@@ -40,214 +52,225 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fave.extract.plotnik">
+  <section id="module-fave.extract.plotnik">
 <span id="fave-plotnik-module"></span><h1>FAVE Plotnik module<a class="headerlink" href="#module-fave.extract.plotnik" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fave.extract.plotnik.PltFile">
-<em class="property">class </em><code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">PltFile</code><a class="headerlink" href="#fave.extract.plotnik.PltFile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.PltFile">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">PltFile</span></span><a class="headerlink" href="#fave.extract.plotnik.PltFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents a Plotnik file (header and vowel measurements)</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="fave.extract.plotnik.VowelMeasurement">
-<em class="property">class </em><code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">VowelMeasurement</code><a class="headerlink" href="#fave.extract.plotnik.VowelMeasurement" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.VowelMeasurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">VowelMeasurement</span></span><a class="headerlink" href="#fave.extract.plotnik.VowelMeasurement" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents a single vowel token (one line in a Plotnik data file)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.arpabet2plotnik">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">arpabet2plotnik</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ac</span></em>, <em class="sig-param"><span class="n">stress</span></em>, <em class="sig-param"><span class="n">trans</span></em>, <em class="sig-param"><span class="n">prec_p</span></em>, <em class="sig-param"><span class="n">foll_p</span></em>, <em class="sig-param"><span class="n">phoneset</span></em>, <em class="sig-param"><span class="n">fm</span></em>, <em class="sig-param"><span class="n">fp</span></em>, <em class="sig-param"><span class="n">fv</span></em>, <em class="sig-param"><span class="n">ps</span></em>, <em class="sig-param"><span class="n">fs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.arpabet2plotnik" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.arpabet2plotnik">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">arpabet2plotnik</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ac</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prec_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">foll_p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phoneset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.arpabet2plotnik" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates Arpabet transcription of vowels into codes for Plotnik vowel classes</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.cmu2plotnik_code">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">cmu2plotnik_code</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i</span></em>, <em class="sig-param"><span class="n">phones</span></em>, <em class="sig-param"><span class="n">trans</span></em>, <em class="sig-param"><span class="n">phoneset</span></em>, <em class="sig-param"><span class="n">speaker</span></em>, <em class="sig-param"><span class="n">vowelSystem</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.cmu2plotnik_code" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.cmu2plotnik_code">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">cmu2plotnik_code</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phoneset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelSystem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.cmu2plotnik_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts Arpabet to Plotnik coding (for vowels) and adds Plotnik environmental codes (.xxxxx)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.convertDur">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">convertDur</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dur</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.convertDur" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.convertDur">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">convertDur</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dur</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.convertDur" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts durations into integer msec (as required by Plotnik)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.convertStress">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">convertStress</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stress</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.convertStress" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.convertStress">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">convertStress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stress</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.convertStress" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts labeling of unstressed vowels from ‘0’ in the CMU Pronouncing Dictionary to ‘3’ in Plotnik</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_age">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_age</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_age" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_age">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_age</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_age" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns age of speaker from header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_city">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_city</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_city" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_city">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_city</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_city" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns city from header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_first_name">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_first_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_first_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_first_name">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_first_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_first_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns first name of speaker from header line of Plotnik file</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_last_name">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_last_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_last_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_last_name">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_last_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_last_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns last name of speaker from header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_n">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_n</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_n" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_n">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_n</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_n" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns number of tokens from second header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_n_foll_c">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_n_foll_c</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i</span></em>, <em class="sig-param"><span class="n">phones</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_n_foll_c" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_n_foll_c">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_n_foll_c</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phones</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_n_foll_c" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns the number of consonants in the syllable coda</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_n_foll_syl">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_n_foll_syl</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i</span></em>, <em class="sig-param"><span class="n">phones</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_n_foll_syl" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_n_foll_syl">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_n_foll_syl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phones</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_n_foll_syl" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns the number of following syllables</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_s">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_s</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_s" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_s">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_s</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_s" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns ??? from second header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_sex">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_sex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_sex" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_sex">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_sex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_sex" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns speaker sex from header line of Plotnik file, if included</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_state">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_state" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_state">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns state from header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_stressed_v">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_stressed_v</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phones</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_stressed_v" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_stressed_v">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_stressed_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phones</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_stressed_v" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns the index of the stressed vowel, or ‘’ if none or more than one exist</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.get_ts">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">get_ts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_ts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.get_ts">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">get_ts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.get_ts" title="Permalink to this definition">¶</a></dt>
 <dd><p>returns Telsur subject number from header line of Plotnik file, if present</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.is_v">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">is_v</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">label</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.is_v" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.is_v">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">is_v</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.is_v" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks whether a phone is a vowel</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.outputPlotnikFile">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">outputPlotnikFile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">Plt</span></em>, <em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.outputPlotnikFile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.outputPlotnikFile">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">outputPlotnikFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Plt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.outputPlotnikFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>writes the contents of a PltFile object to file (in Plotnik format)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.phila_system">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">phila_system</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">i</span></em>, <em class="sig-param"><span class="n">phones</span></em>, <em class="sig-param"><span class="n">trans</span></em>, <em class="sig-param"><span class="n">fm</span></em>, <em class="sig-param"><span class="n">fp</span></em>, <em class="sig-param"><span class="n">fv</span></em>, <em class="sig-param"><span class="n">ps</span></em>, <em class="sig-param"><span class="n">fs</span></em>, <em class="sig-param"><span class="n">pc</span></em>, <em class="sig-param"><span class="n">phoneset</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.phila_system" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.phila_system">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">phila_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phones</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phoneset</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.phila_system" title="Permalink to this definition">¶</a></dt>
 <dd><p>redefines vowel classes for Philadelphia</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.plt_folseq">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">plt_folseq</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_folseq" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.plt_folseq">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">plt_folseq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_folseq" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates numerical following sequence code to a readable code.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.plt_manner">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">plt_manner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fm</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_manner" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.plt_manner">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">plt_manner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_manner" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates numerical following manner code to a readable code.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.plt_place">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">plt_place</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fp</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_place" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.plt_place">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">plt_place</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_place" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates numerical following place code to a readable code.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.plt_preseg">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">plt_preseg</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ps</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_preseg" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.plt_preseg">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">plt_preseg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_preseg" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates numerical preceding segment code to a readable code.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.plt_voice">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">plt_voice</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fv</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_voice" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.plt_voice">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">plt_voice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_voice" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates numerical voicing code to a readable code.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.plt_vowels">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">plt_vowels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cd</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_vowels" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.plt_vowels">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">plt_vowels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.plt_vowels" title="Permalink to this definition">¶</a></dt>
 <dd><p>translates numerical vowel class code to modified Labovian transcription.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.process_measurement_line">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">process_measurement_line</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">line</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.process_measurement_line" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.process_measurement_line">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">process_measurement_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.process_measurement_line" title="Permalink to this definition">¶</a></dt>
 <dd><p>splits Plotnik measurement line into values for formants, vowel class, stress, token, glide, style, and comment</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.process_plt_file">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">process_plt_file</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.process_plt_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.process_plt_file">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">process_plt_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.process_plt_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>reads a Plotnik data file into a PltFile object</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.split_stress_digit">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">split_stress_digit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phones</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.split_stress_digit" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.split_stress_digit">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">split_stress_digit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phones</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.split_stress_digit" title="Permalink to this definition">¶</a></dt>
 <dd><p>separates the stress digit from the Arpabet code for vowels</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.style2plotnik">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">style2plotnik</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">stylecode</span></em>, <em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.style2plotnik" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.style2plotnik">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">style2plotnik</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stylecode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.style2plotnik" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts single- or double-letter style codes to the corresponding Plotnik digits</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.word2fname">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">word2fname</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.word2fname" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.word2fname">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">word2fname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.word2fname" title="Permalink to this definition">¶</a></dt>
 <dd><p>makes a unique filename out of token name???  (limited to 8 characters, count included as final) ???</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.plotnik.word2trans">
-<code class="sig-prename descclassname">fave.extract.plotnik.</code><code class="sig-name descname">word2trans</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.word2trans" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.plotnik.word2trans">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.plotnik.</span></span><span class="sig-name descname"><span class="pre">word2trans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.plotnik.word2trans" title="Permalink to this definition">¶</a></dt>
 <dd><p>converts Plotnik word as originally entered (with parentheses and token number) into normal transcription (upper case)</p>
 </dd></dl>
 
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="mahalanobis.html"
+                          title="previous chapter">FAVE Mahalanobis module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="remeasure.html"
+                          title="next chapter">FAVE Remeasure module</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -259,7 +282,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -278,12 +301,21 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="remeasure.html" title="FAVE Remeasure module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="mahalanobis.html" title="FAVE Mahalanobis module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >FAVE Extract module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Plotnik module</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2022, Ingrid Rosenfelder, Josef Fruehwald, Christian Brickhouse, Keelan Evanini, Scott Seyfarth, Kyle Gorman, Hilary Prichard, Jiahong Yuan and FAVE contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

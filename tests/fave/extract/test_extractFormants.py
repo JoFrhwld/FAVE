@@ -42,7 +42,7 @@ def provide_valuelist():
             [-1],
             np.mean([-1]),
             0
-        ]
+        ],
         [
             [3.5, 2.6, 11.6, None, 34.66, 2.8, 4.7],
             np.nanmean(np.array([3.5, 2.6, 11.6, None, 34.66, 2.8, 4.7], 

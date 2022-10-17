@@ -1,5 +1,6 @@
-FAVE Praat module
-=================
+# FAVE Praat module
 
+```{eval-rst}
 .. automodule:: fave.praat
   :members:
+```

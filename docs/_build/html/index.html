@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Forced Alignment and Vowel Extraction (FAVE) &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <title>Forced Alignment and Vowel Extraction (FAVE) &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.2-dev documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/pyramid.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="usage/index.html" title="FAVE User Guides"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">Forced Alignment and Vowel Extraction (FAVE) 2.0.2-dev documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Forced Alignment and Vowel Extraction (FAVE)</a></li> 
       </ul>
     </div>  
@@ -51,35 +51,78 @@
 <p>This website documents the FAVE software, version 2.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>If you have used FAVE before, please read <a class="reference internal" href="usage/whats-new.html"><span class="doc">What’s new in version 2</span></a> to familiarize yourself with the differences between the current and legacy versions of FAVE.</p>
+<p>If you have used FAVE before, please read
+<a class="reference internal" href="usage/whats-new.html"><span class="doc std std-doc">usage/whats-new</span></a> to familiarize yourself
+with the differences between the current and legacy versions of FAVE.</p>
 </div>
 <section id="guides-and-documentation">
 <h2>Guides and documentation<a class="headerlink" href="#guides-and-documentation" title="Permalink to this headline">¶</a></h2>
+<section id="for-users">
+<h3>For Users<a class="headerlink" href="#for-users" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="usage/index.html">FAVE User Guides</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="usage/whats-new.html">What’s new in version 2</a></li>
-<li class="toctree-l2"><a class="reference internal" href="usage/installation.html">Installing FAVE 2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="usage/whats-new.html">What’s new in version 2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage/whats-new.html#updating-software">Updating software</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usage/whats-new.html#check-your-python-version">Check your python version</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usage/whats-new.html#installing-fave">Installing FAVE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usage/whats-new.html#aligning-and-extracting-with-fave-2">Aligning and extracting with FAVE 2</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usage/whats-new.html#aligning-using-faavalign-py">Aligning using FAAValign.py</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usage/whats-new.html#getting-vowel-data-using-extractformants-py">Getting vowel data using extractFormants.py</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="usage/whats-new.html#the-fave-python-module">The FAVE Python module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage/whats-new.html#frequently-asked-questions">Frequently Asked Questions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usage/whats-new.html#what-was-wrong-with-the-old-fave">What was wrong with the old FAVE?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="usage/whats-new.html#why-does-the-new-version-work-differently">Why does the new version work differently?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="usage/installation.html">Installing FAVE 2</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="usage/installation.html#required-software">Required software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="usage/installation.html#install-with-pip">Install with PIP</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="usage/installation.html#other-package-managers">Other package managers</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="usage/quickstart.html">Quickstart guide to using FAVE 2.0</a></li>
 </ul>
 </li>
+</ul>
+</div>
+</section>
+<section id="for-developers">
+<h3>For Developers<a class="headerlink" href="#for-developers" title="Permalink to this headline">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="code/index.html">Module documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code/align/index.html">fave.align</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code/extract/index.html">fave.extract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code/align/index.html">fave.align</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/align/aligner.html">FAVE Aligner module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/align/transcriptprocessor.html">FAVE TranscriptProcessor module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="code/extract/index.html">fave.extract</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="code/extract/esps.html">FAVE esps module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/extract/mahalanobis.html">FAVE Mahalanobis module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/extract/plotnik.html">FAVE Plotnik module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/extract/remeasure.html">FAVE Remeasure module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="code/extract/vowel.html">FAVE Vowel module</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="code/cmudictionary.html">fave.cmudictionary</a></li>
 <li class="toctree-l2"><a class="reference internal" href="code/praat.html">fave.praat</a></li>
 </ul>
 </li>
 </ul>
 </div>
+<!-- ::: {.toctree maxdepth="2"}
+usage/index code/index
+::: -->
 </section>
-<section id="indices">
-<h2>Indices<a class="headerlink" href="#indices" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
 </section>
 </section>
 
@@ -94,8 +137,11 @@
     <h3><a href="#">Table of Contents</a></h3>
     <ul>
 <li><a class="reference internal" href="#">Forced Alignment and Vowel Extraction (FAVE)</a><ul>
-<li><a class="reference internal" href="#guides-and-documentation">Guides and documentation</a></li>
-<li><a class="reference internal" href="#indices">Indices</a></li>
+<li><a class="reference internal" href="#guides-and-documentation">Guides and documentation</a><ul>
+<li><a class="reference internal" href="#for-users">For Users</a></li>
+<li><a class="reference internal" href="#for-developers">For Developers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -109,7 +155,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.rst.txt"
+      <li><a href="_sources/index.md.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -139,7 +185,7 @@
         <li class="right" >
           <a href="usage/index.html" title="FAVE User Guides"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">Forced Alignment and Vowel Extraction (FAVE) 2.0.2-dev documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Forced Alignment and Vowel Extraction (FAVE)</a></li> 
       </ul>
     </div>

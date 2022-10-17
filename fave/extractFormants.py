@@ -78,9 +78,10 @@ from itertools import tee, islice
 from bisect import bisect_left
 
 import parselmouth
-
+from deprecated.sphinx import deprecated
+from deprecated.sphinx import versionadded
+from deprecated.sphinx import versionchanged
 import numpy as np
-
 from tqdm import tqdm
 
 import fave
@@ -92,6 +93,7 @@ from fave import cmudictionary as cmu
 from fave.extract.remeasure import remeasure
 from fave.extract.mahalanobis import mahalanobis
 
+SCRIPTS_HOME = pkg_resources.resource_filename('fave','praatScripts')
 os.chdir(os.getcwd())
 
 uncertain = re.compile(r"\(\(([\*\+]?['\w]+\-?)\)\)")
@@ -446,6 +448,28 @@ def checkLocation(file):
         print("ERROR:  Could not locate %s" % file)
         sys.exit()
 
+@deprecated(version="2.1.0",reason="External speech software will not be supported.")
+def checkSpeechSoftware(speechSoftware):
+    """checks that either Praat or ESPS is available as a speech analysis program"""
+
+    if speechSoftware in ['ESPS', 'esps']:
+        if os.name == 'nt':
+            print("ERROR:  ESPS was specified as the speech analysis program, but this option is not yet compatible with Windows")
+            sys.exit()
+        if not programExists('formant'):
+            print("ERROR:  ESPS was specified as the speech analysis program, but the command 'formant' is not in your path")
+            sys.exit()
+        else:
+            return 'esps'
+    elif speechSoftware in ['praat', 'Praat']:
+        if not ((PRAATPATH and programExists(speechSoftware, PRAATPATH)) or (os.name == 'posix' and programExists(speechSoftware)) or (os.name == 'nt' and programExists('praatcon.exe'))):
+            print("ERROR: Praat was specified as the speech analysis program, but the command 'praat' ('praatcon' for Windows) is not in your path")
+            sys.exit()
+        else:
+            return speechSoftware
+    else:
+        print("ERROR: unsupported speech analysis software %s" % speechSoftware)
+        sys.exit()
 
 def checkTextGridFile(tgFile):
     """checks whether a TextGrid file exists and has the correct file format"""
@@ -538,6 +562,21 @@ def detectMonophthong(formants, measurementPoint, index):
         glide = ''
 
     return glide
+
+@deprecated(version="2.1",reason="Parselmouth migration replaces SoX")
+def extractPortion(wavFile, vowelWavFile, beg, end, soundEditor):
+    """extracts a single vowel (or any other part) from the main sound file"""
+
+    if soundEditor == 'sox':  # this is the default setting, since it's faster
+        # force output format because there have been issues with some sound
+        # files where Praat could not read the extracted portion
+        os.system(os.path.join(SOXPATH, 'sox') + ' ' + wavFile + ' -t wavpcm ' +
+                  os.path.join(SCRIPTS_HOME, vowelWavFile) + ' trim ' + str(beg) + ' ' + str(end - beg))
+    elif soundEditor == 'praat':
+        os.system(os.path.join(PRAATPATH, PRAATNAME) + ' ' + SCRIPTS_HOME + '/extractSegment.praat ' +
+                  os.path.join(os.path.pardir, wavFile) + ' ' + vowelWavFile + ' ' + str(beg) + ' ' + str(end))
+    else:
+        pass
 
 def faav(phone, formants, times, intensity):
     """returns the time of measurement according to the FAAV guidelines"""

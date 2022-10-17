@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fave"
-version = "2.0.2-dev"
+version = "2.0.3-dev"
 description = "Forced alignment and vowel extraction"
 authors = [
 	"Ingrid Rosenfelder",
@@ -29,6 +29,9 @@ sphinx_pyproject = "0.1"
 jinja2 = "~3.0"
 pylint = "^2.5.2"
 ipykernel = "^6.15.1"
+myst-parser = "^0.18.0"
+pytest = "^7"
+flake8 = "^5" 
 
 [build-system]
 requires = ["poetry>=1.1"]
@@ -37,3 +40,5 @@ build-backend = "poetry.masonry.api"
 [tool.poetry.scripts]
 fave-extract = "fave.extractFormants:main"
 fave-align = "fave.FAAValign:setup"
+extractFormants = "fave.extractFormants:main"
+FAAValign = "fave.FAAValign:setup"

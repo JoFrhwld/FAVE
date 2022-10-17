@@ -1068,28 +1068,14 @@ def maximumIntensity(intensities, times):
 def mean_stdv(valuelist):
     """returns the arithmetic mean and sample standard deviation (N-1 in the denominator) of a list of values"""
 
-    n = len(valuelist)
-    empty = 0
-    if n > 0:
-        if n == 1:
+    np_valuelist = np.array(valuelist,dtype=np.float64)
+    if len(np_valuelist) > 0:
+        if len(np_valuelist) == 1:
             mean = valuelist[0]
             stdv = 0
         else:
-            sum_i = 0
-            for i in range(n):
-                if valuelist[i] == None:
-                    empty += 1
-                    continue
-                else:
-                    sum_i += valuelist[i]
-            mean = sum_i / (n - empty)
-            diffsum_i = 0
-            for i in range(n):
-                if valuelist[i] == None:
-                    continue
-                else:
-                    diffsum_i += (valuelist[i] - mean) ** 2
-            stdv = math.sqrt(diffsum_i / ((n - empty) - 1))
+            mean = np.nanmean(np_valuelist)
+            stdv = np.nanstd(np_valuelist, ddof=1)
 
     else:  # empty list
         mean = None

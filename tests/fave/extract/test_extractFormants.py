@@ -1,4 +1,5 @@
 
+from cmath import nan
 import logging
 import pytest
 import numpy as np

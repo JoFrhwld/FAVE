@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fave"
-version = "2.0.2-dev"
+version = "2.0.3-dev"
 description = "Forced alignment and vowel extraction"
 authors = [
 	"Ingrid Rosenfelder",
@@ -29,6 +29,8 @@ sphinx_pyproject = "0.1"
 jinja2 = "~3.0"
 pylint = "^2.5.2"
 ipykernel = "^6.15.1"
+flake8 = "^5"
+pytest = "^7"
 
 [build-system]
 requires = ["poetry>=1.1"]

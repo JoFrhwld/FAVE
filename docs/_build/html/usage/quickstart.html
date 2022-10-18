@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Quickstart guide to using FAVE 2.0 &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.2-dev documentation</title>
+    <title>Quickstart guide to using FAVE 2.0 &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pyramid.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="installation.html" title="Installing FAVE 2"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.2-dev documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">FAVE User Guides</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Quickstart guide to using FAVE 2.0</a></li> 
       </ul>
@@ -53,36 +53,37 @@
             
   <section id="quickstart-guide-to-using-fave-2-0">
 <h1>Quickstart guide to using FAVE 2.0<a class="headerlink" href="#quickstart-guide-to-using-fave-2-0" title="Permalink to this headline">¶</a></h1>
-<ol class="arabic simple">
+<blockquote>
+<div><ol class="arabic">
 <li><p>Install FAVE and its dependencies according to <a class="reference internal" href="installation.html"><span class="doc">the directions</span></a>.</p></li>
 <li><p>Download the <code class="docutils literal notranslate"><span class="pre">FAAValign.py</span></code> and <code class="docutils literal notranslate"><span class="pre">extractFormants.py</span></code> scripts.</p></li>
-<li><p>Check your transcription for out-of-dictionary words</p></li>
-</ol>
+<li><p>Check your transcription for out-of-dictionary words</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Check for out-of-dictionary words</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 FAAValign.py --check unknown_words.txt AudioFile.wav TranscriptionFile.txt OutputAlignment.TextGrid</span>
 </pre></div>
 </div>
 </div>
-<ol class="arabic simple" start="4">
+</li>
 <li><p>Open <code class="docutils literal notranslate"><span class="pre">unknown_words.txt</span></code> and create a transcription for each word listed.</p></li>
-<li><p>Align your audio and transcripts including your new transcriptions:</p></li>
-</ol>
+<li><p>Align your audio and transcripts including your new transcriptions:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Begin forced alignment</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 FAAValign.py --import custom_dictionary.txt AudioFile.wav TranscriptionFile.txt OutputAlignment.TextGrid</span>
 </pre></div>
 </div>
 </div>
-<ol class="arabic simple" start="6">
-<li><p>Extract formant data using the default settings:</p></li>
-</ol>
+</li>
+<li><p>Extract formant data using the default settings:</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Extract formant data</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">python3 extractFormants.py AudioFile.wav Alignment.TextGrid OutputFileName.tsv</span>
 </pre></div>
 </div>
 </div>
+</li>
+</ol>
+</div></blockquote>
 </section>
 
 
@@ -105,7 +106,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/usage/quickstart.md.txt"
+      <li><a href="../_sources/usage/quickstart.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -138,7 +139,7 @@
         <li class="right" >
           <a href="installation.html" title="Installing FAVE 2"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.2-dev documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="index.html" >FAVE User Guides</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Quickstart guide to using FAVE 2.0</a></li> 
       </ul>

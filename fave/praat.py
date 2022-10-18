@@ -1,36 +1,16 @@
 import parselmouth
+from deprecated.sphinx import deprecated
 
-class Formant:
+from fave import parselmouth_bridge as pm_bridge
 
+@deprecated(version="2.1",reason="fave.praat.Formant is deprecated in favor of fave.parselmouth_bridge.")
+class Formant():
     """represents a formant contour as a series of frames"""
-
     def __init__(self, name=None, formant = None, maxFormant = None):
-        if formant and maxFormant:
-            if isinstance(formant, parselmouth.Formant):
-                self.__times = list(formant.ts())  # list of measurement times (frames)
-                self.__intensities = []
-                    # list of intensities (maximum intensity in each frame)
-                self.__formants = [[formant.get_value_at_time(formant_number = N, time = T) 
-                                      for N in (1,2,3) ]  
-                                    for T in formant.ts()]
-                    # list of formants frequencies (F1-F3, for each frame)
-                self.__bandwidths = [[formant.get_bandwidth_at_time(formant_number = N, time = T) 
-                                        for N in (1,2,3)] 
-                                    for T in formant.ts()]
-                    # list of bandwidths (for each formant F1-F3, for each frame)
-                                            # !!! CHANGED:  all above lists no longer include frames with only
-                                            # a minimum of 2 formant measurements
-                                            # !!!
-                self.__xmin = formant.xmin  # start time (in seconds)
-                self.__xmax = formant.xmax  # end time (in seconds)
-                self.__nx = formant.nx  # number of frames
-                self.__dx = formant.dx  # time step = frame duration (in seconds)
-                self.__x1 = formant.x1  # start time of first frame (in seconds)
-                self.__maxFormants = maxFormant  # maximum number of formants in a frame
-            else:
-                self.blanks()
-        else:
-            self.blanks()
+        self.blanks()  # Set empty by default
+        if isinstance(formant, parselmouth.Formant):
+            pm_formant = pm_bridge.Formant(formant, maxFormant)
+            self.__dict__ = pm_formant.__dict__ # replace this instance with the pm_bridge
 
     def blanks(self):
         """empty entries"""
@@ -167,7 +147,6 @@ class Formant:
 
 
 class LPC:
-
     """represents a Praat LPC (linear predictive coding) object"""
 
     def __init__(self):
@@ -307,29 +286,22 @@ class MFCC:
         text.close()
 
 
+@deprecated(version="2.1",reason="fave.praat.Intensity is deprecated in favor of fave.parselmouth_bridge.")
 class Intensity:
-
     """represents an intensity contour"""
-
     def __init__(self, intensity = None):
         if intensity and isinstance(intensity, parselmouth.Intensity):
-            self.__xmin = intensity.xmin
-            self.__xmax = intensity.xmax
-            self.__n = intensity.nx
-            self.__nx = intensity.nx
-            self.__dx = intensity.dx
-            self.__x1 = intensity.x1
-            self.__times = list(intensity.ts())
-            self.__intensities = [intensity.get_value(time = T) for T in intensity.ts()]
-        else:
-            self.__xmin = None
-            self.__xmax = None
-            self.__n = None
-            self.__nx = None
-            self.__dx = None
-            self.__x1 = None
-            self.__times = []
-            self.__intensities = []
+            pmi = pm_bridge.Intensity(intensity)
+            self.__dict__ = pmi.__dict__
+            return
+        self.__xmin = None
+        self.__xmax = None
+        self.__n = None
+        self.__nx = None
+        self.__dx = None
+        self.__x1 = None
+        self.__times = []
+        self.__intensities = []
 
     def __str__(self):
         return '<Intensity object with %i frames>' % self.__n

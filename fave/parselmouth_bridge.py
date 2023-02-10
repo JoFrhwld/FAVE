@@ -13,7 +13,7 @@ class Formant():
         """
         self.__pm_formant = formant_obj
         self.__maxFormant = maxFormant
-        self.intensities = []
+        self.__intensities = []
     
     def __formant_iter( self, function, range_ ):
         """Takes a callback function from parselmouth.Formant and applies a loop

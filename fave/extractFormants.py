@@ -857,7 +857,7 @@ def getVowelMeasurement(sound_part, p, w, formantPredictionMethod, measurementPo
                                                     maximum_formant = maxFormant,
                                                     window_length = windowSize,
                                                     pre_emphasis_from = preEmphasis)
-            lpc = parselmouth_bridge.Formant(formant=formants, maxFormant=nFormants)
+            lpc = parselmouth_bridge.Formant(formant_obj=formants, maxFormant=nFormants)
             LPCs.append(lpc)
             nFormants += 1
     else:
@@ -867,7 +867,7 @@ def getVowelMeasurement(sound_part, p, w, formantPredictionMethod, measurementPo
                                                 window_length = windowSize,
                                                 pre_emphasis_from = preEmphasis)
 
-        fmt = parselmouth_bridge.Formant(formant = formants, maxFormant=maxFormant)
+        fmt = parselmouth_bridge.Formant(formant_obj = formants, maxFormant=maxFormant)
     # get Intensity object for intensity cutoff
     # (only for those vowels where we need it)
     if (p.label[:-1] in ["AY", "EY", "OW", "AW"]) or (p.label[:-1] == "UW" and p.cd == "73"):
@@ -884,7 +884,7 @@ def getVowelMeasurement(sound_part, p, w, formantPredictionMethod, measurementPo
         intensity = parselmouth_bridge.Intensity(intensity_pm)
         intensity.change_offset(p.xmin - padBeg)
     else:
-        intensity = parselmouth_bridge.Intensity()
+        intensity = praat.Intensity()
     # get measurement according to formant prediction method
     # Mahalanobis:
     if formantPredictionMethod == 'mahalanobis':

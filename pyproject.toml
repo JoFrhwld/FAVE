@@ -22,6 +22,7 @@ python = ">=3.8,<4.0"
 numpy = "^1.22"
 tqdm = "^4.64.0"
 praat-parselmouth = "^0.4.1"
+deprecated = "^1.2.13"
 
 [tool.poetry.dev-dependencies]
 sphinx = "^4"

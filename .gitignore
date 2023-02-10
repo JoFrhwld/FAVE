@@ -13,3 +13,4 @@ docs/_build
 env
 dist/*
 .ipynb_checkpoints/*
+venv/

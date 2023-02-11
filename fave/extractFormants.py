@@ -106,7 +106,7 @@ VOWELS = ['AA', 'AE', 'AH', 'AO', 'AW', 'AY', 'EH',
 SPECIAL = ['BR', 'CG', 'LS', 'LG', 'NS']
 
 
-#
+
 
 class Phone:
 
@@ -1598,7 +1598,7 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
     if vowel in means:
         for poles, bandwidths in zip(selectedpoles, selectedbandwidths):
             # check that there are at least two formants in the selected frame
-            if len(poles) >= 2:
+            if np.count_nonzero(~np.isnan(poles)) >= 2:
                 # nPoles = len(poles)     ## number of poles
                 # check all possible combinations of F1, F2, F3:
                 # for i in range(min([nPoles - 1, 2])):

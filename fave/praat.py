@@ -1,23 +1,19 @@
-#
-# !!! This is NOT the original praat.py file !!!                    ##
-#
-# Last modified by Ingrid Rosenfelder:  February 2, 2012                             ##
-# - comments (all comments beginning with a double pound sign ("##"))                ##
-# - docstrings for all classes and functions                                         ##
-# - read() methods for TextGrid can read both long and short file formats            ##
-# - formant frames no longer need to have a minimum of x formants (formerly three)   ##
-# (smoothing routine in extractFormants.py demands equal spacing between frames)   ##
-# - added Intensity class                                                            ##
-# - round all times to three digits (i.e. ms)                                        ##
-# - improved reading of long TextGrid format                                         ##
-#
+import parselmouth
+from deprecated.sphinx import deprecated
 
+from fave import parselmouth_bridge as pm_bridge
 
-class Formant:
-
+@deprecated(version="2.1",reason="fave.praat.Formant is deprecated in favor of fave.parselmouth_bridge.")
+class Formant():
     """represents a formant contour as a series of frames"""
+    def __init__(self, name=None, formant = None, maxFormant = None):
+        self.blanks()  # Set empty by default
+        if isinstance(formant, parselmouth.Formant):
+            pm_formant = pm_bridge.Formant(formant, maxFormant)
+            self.__dict__ = pm_formant.__dict__ # replace this instance with the pm_bridge
 
-    def __init__(self, name=None):
+    def blanks(self):
+        """empty entries"""
         self.__times = []  # list of measurement times (frames)
         self.__intensities = []
             # list of intensities (maximum intensity in each frame)
@@ -25,15 +21,16 @@ class Formant:
             # list of formants frequencies (F1-F3, for each frame)
         self.__bandwidths = []
             # list of bandwidths (for each formant F1-F3, for each frame)
-                                      # !!! CHANGED:  all above lists no longer include frames with only
-                                      # a minimum of 2 formant measurements
-                                      # !!!
+                                    # !!! CHANGED:  all above lists no longer include frames with only
+                                    # a minimum of 2 formant measurements
+                                    # !!!
         self.__xmin = None  # start time (in seconds)
         self.__xmax = None  # end time (in seconds)
         self.__nx = None  # number of frames
         self.__dx = None  # time step = frame duration (in seconds)
         self.__x1 = None  # start time of first frame (in seconds)
         self.__maxFormants = None  # maximum number of formants in a frame
+
 
     def n(self):
         """returns the number of frames"""
@@ -150,7 +147,6 @@ class Formant:
 
 
 class LPC:
-
     """represents a Praat LPC (linear predictive coding) object"""
 
     def __init__(self):
@@ -290,11 +286,14 @@ class MFCC:
         text.close()
 
 
+@deprecated(version="2.1",reason="fave.praat.Intensity is deprecated in favor of fave.parselmouth_bridge.")
 class Intensity:
-
     """represents an intensity contour"""
-
-    def __init__(self):
+    def __init__(self, intensity = None):
+        if intensity and isinstance(intensity, parselmouth.Intensity):
+            pmi = pm_bridge.Intensity(intensity)
+            self.__dict__ = pmi.__dict__
+            return
         self.__xmin = None
         self.__xmax = None
         self.__n = None

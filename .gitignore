@@ -12,3 +12,5 @@ docs/_build
 *.orig
 env
 dist/*
+.ipynb_checkpoints/*
+venv/

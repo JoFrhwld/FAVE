@@ -1824,13 +1824,13 @@ def smoothTracks(poles, s):
         for i in range(s, len(poles) - s):
             # start with values at point i; check that center point values are
             # defined
-            if len(poles[i]) > n:
+            if np.count_nonzero(~np.isnan(poles[i])) > n:
                 smoothedF = poles[i][n]
                 # add samples on both sides
                 for j in range(1, s + 1):
                     # again, check that all values are defined
                     # (center point of smoothing might be defined, but parts of the window might not be!)
-                    if len(poles[i + j]) > n and len(poles[i - j]) > n:
+                    if np.count_nonzero(~np.isnan(poles[i + j])) > n and np.count_nonzero(~np.isnan(poles[i - j])) > n:
                         smoothedF += poles[i + j][n] + poles[i - j][n]
                     else:
                         # NOTE:  If part of the smoothing window is not defined, then no new value should be produced

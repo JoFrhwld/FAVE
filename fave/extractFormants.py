@@ -1625,7 +1625,7 @@ def predictF1F2(phone, selectedpoles, selectedbandwidths, means, covs):
             else:
                 # if there are gaps in the formant tracks and the vowel duration is
                 # short, the whole formant track may disappear during smoothing
-                if len(poles) == 1 and len(bandwidths) == 1:
+                if np.count_nonzero(~np.isnan(poles)) == 1 and np.count_nonzero(~np.isnan(bandwidths)) == 1:
                     values.append([poles[0], '', bandwidths[0], '', '', ''])
                 else:
                     values.append(['', '', '', '', '', ''])

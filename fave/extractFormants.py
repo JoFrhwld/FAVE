@@ -1984,11 +1984,6 @@ def writeLog(filename, wavFile, maxTime, meansFile, covsFile, opts):
     except subprocess.CalledProcessError:
         pass
 
-    if changes:
-        f.write("Uncommitted changes when run:\n")
-        f.write(str(changes,'utf-8'))
-
-
     f.write("\n\n")
 
     f.write("extractFormants statistics for file %s:\n\n" %

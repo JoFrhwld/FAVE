@@ -4,6 +4,22 @@ This is a repository for the FAVE-Align and FAVE-extract toolkits.
 The first commit here represents the toolkit as it was available on the FAVE website as of October 21, 2013.
 The extractFormants code in the JoFrhwld/FAAV repository represents an earlier version of the code.
 
+## Getting started
+
+You can install FAVE using pip by running the following:
+```
+python3 -m pip install fave
+```
+
+While FAVE can align transcripts to audio data, we recommend using the [https://montreal-forced-aligner.readthedocs.io/en/latest/first_steps/index.html#first-steps-align-pretrained](Montreal Force Aligner) for alignment because it is more recent and better maintained than the HTK library used by FAVE's aligner.
+
+When you have an aligned TextGrid and the matching audio, you can extract acoustic measures by running the following:
+```
+fave-extract AudioFileName.wav TextGridFileName.TextGrid OutputFileName
+```
+
+Where `AudioFileName.wav` is the path to the audio file to measure, `TextGridFileName.TextGrid` is the path to the aligned TextGrid, and `OutputFileName` is the name of the file where you want your measurements to be output.
+
 ## Documentation
 Current documentation for installation and usage available on the github wiki. [https://github.com/JoFrhwld/FAVE/wiki](https://github.com/JoFrhwld/FAVE/wiki)
 

@@ -13,7 +13,7 @@ numpy = "^1.22"
 tqdm = "^4.64.0"
 
 [tool.poetry.dev-dependencies]
-sphinx = "^4"
+sphinx = "^5"
 jinja2 = "~3.0"
 pylint = "^2.5.2"
 

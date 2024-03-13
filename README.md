@@ -11,7 +11,7 @@ You can install FAVE using pip by running the following:
 python3 -m pip install fave
 ```
 
-While FAVE can align transcripts to audio data, we recommend using the [https://montreal-forced-aligner.readthedocs.io/en/latest/first_steps/index.html#first-steps-align-pretrained](Montreal Force Aligner) for alignment because it is more recent and better maintained than the HTK library used by FAVE's aligner.
+While FAVE can align transcripts to audio data, we recommend using the [Montreal Force Aligner](https://montreal-forced-aligner.readthedocs.io/en/latest/first\_steps/index.html#first-steps-align-pretrained) for alignment because it is more recent and better maintained than the HTK library used by FAVE's aligner.
 
 When you have an aligned TextGrid and the matching audio, you can extract acoustic measures by running the following:
 ```

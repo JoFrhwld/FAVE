@@ -4,16 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FAVE Mahalanobis module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FAVE Mahalanobis module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyramid.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FAVE Plotnik module" href="plotnik.html" />
+    <link rel="prev" title="FAVE esps module" href="esps.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -31,7 +34,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="plotnik.html" title="FAVE Plotnik module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="esps.html" title="FAVE esps module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">FAVE Extract module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Mahalanobis module</a></li> 
       </ul>
     </div>  
 
@@ -40,11 +52,11 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fave.extract.mahalanobis">
+  <section id="module-fave.extract.mahalanobis">
 <span id="fave-mahalanobis-module"></span><h1>FAVE Mahalanobis module<a class="headerlink" href="#module-fave.extract.mahalanobis" title="Permalink to this headline">¶</a></h1>
 <dl class="py function">
-<dt id="fave.extract.mahalanobis.mahalanobis">
-<code class="sig-prename descclassname">fave.extract.mahalanobis.</code><code class="sig-name descname">mahalanobis</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">u</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">ic</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.mahalanobis.mahalanobis" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.mahalanobis.mahalanobis">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.mahalanobis.</span></span><span class="sig-name descname"><span class="pre">mahalanobis</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ic</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.mahalanobis.mahalanobis" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute Mahalanobis distance between two 1d vectors _u_, _v_ with
 sample inverse covariance matrix _ic_; a ValueError will be thrown
 if dimensions are incorrect.</p>
@@ -64,21 +76,32 @@ True</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ic</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cov</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span> <span class="o">*</span> <span class="n">N</span><span class="p">))))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="k">import</span> <span class="n">mahalanobis</span> <span class="k">as</span> <span class="n">mahalanobis_scipy</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">scipy.spatial.distance</span> <span class="kn">import</span> <span class="n">mahalanobis</span> <span class="k">as</span> <span class="n">mahalanobis_scipy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">mahalanobis</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span> <span class="o">==</span> <span class="n">mahalanobis_scipy</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">ic</span><span class="p">)</span>
 <span class="go">True</span>
 </pre></div>
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="esps.html"
+                          title="previous chapter">FAVE esps module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="plotnik.html"
+                          title="next chapter">FAVE Plotnik module</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -90,7 +113,7 @@ True</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -109,12 +132,21 @@ True</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="plotnik.html" title="FAVE Plotnik module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="esps.html" title="FAVE esps module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >FAVE Extract module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Mahalanobis module</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2022, Ingrid Rosenfelder, Josef Fruehwald, Christian Brickhouse, Keelan Evanini, Scott Seyfarth, Kyle Gorman, Hilary Prichard, Jiahong Yuan and FAVE contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

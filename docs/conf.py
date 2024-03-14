@@ -12,18 +12,44 @@
 #
 # pylint: skip-file
 import os
+import tempfile
 import sys
+# conf.py
+
+from sphinx_pyproject import SphinxConfig
+
+# Until Poetry supports PEP 621 we're gonna need to do this silly hack
+## Read the pyproject.toml file
+with open("../pyproject.toml") as f:
+    pyproj = f.read()
+## Do string replacements until it's in PEP 621 format
+pyproj = pyproj.replace("tool.poetry", "project")
+pyproj = pyproj.replace("	", "	{ name = ")
+pyproj = pyproj.replace('",\n','"},\n')
+pyproj = pyproj.replace('"\n]','"}\n]')
+pyproj = pyproj.replace(' <', '", email = "')
+pyproj = pyproj.replace('.edu>"','.edu"')
+## Write our transformed string to a temporary file
+tmp = tempfile.NamedTemporaryFile(mode="w",delete=False)
+try:
+    tmp.write(pyproj)
+    tmp.flush()  # Required, or later read won't work
+    # Below line imports our project info from the toml file
+    config = SphinxConfig(tmp.name, globalns=globals())  # tmp.name to open file is Unix only
+finally:
+    tmp.close()
+    os.unlink(tmp.name)  # deletes the temporary file
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'Forced Alignment and Vowel Extraction (FAVE)'
-copyright = '2022, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors'
-author = 'Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors'
+copyright = '2022, '+ author
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.1-dev'
+release = version
 
 
 # -- General configuration ---------------------------------------------------

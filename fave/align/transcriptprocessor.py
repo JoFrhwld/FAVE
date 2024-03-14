@@ -247,7 +247,13 @@ class TranscriptProcessor():
         """Reads file into memory"""
         with open(self.file) as f:
             lines = self.replace_smart_quotes(f.readlines())
-        self.lines = lines
+            self.lines = lines
+            try:
+                float(lines[0].split('\t')[2]) 
+            except ValueError:
+                # Log a warning about having detected a header row
+                self.logger.warning('Header row was detected')
+                del lines[0]
 
     # substitute any 'smart' quotes in the input file with the corresponding
     # ASCII equivalents (otherwise they will be excluded as out-of-

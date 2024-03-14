@@ -4,16 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FAVE Aligner module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FAVE Aligner module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyramid.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FAVE TranscriptProcessor module" href="transcriptprocessor.html" />
+    <link rel="prev" title="FAVE Align module" href="index.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -31,7 +34,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="transcriptprocessor.html" title="FAVE TranscriptProcessor module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="FAVE Align module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">FAVE Align module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Aligner module</a></li> 
       </ul>
     </div>  
 
@@ -40,68 +52,79 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fave.align.aligner">
+  <section id="module-fave.align.aligner">
 <span id="fave-aligner-module"></span><h1>FAVE Aligner module<a class="headerlink" href="#module-fave.align.aligner" title="Permalink to this headline">¶</a></h1>
 <p>aligner.py contains the Aligner class and coordinates the interaction of
 the other modules.</p>
 <dl class="py class">
-<dt id="fave.align.aligner.Aligner">
-<em class="property">class </em><code class="sig-prename descclassname">fave.align.aligner.</code><code class="sig-name descname">Aligner</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wavfile</span></em>, <em class="sig-param"><span class="n">trsfile</span></em>, <em class="sig-param"><span class="n">tgfile</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.align.aligner.</span></span><span class="sig-name descname"><span class="pre">Aligner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">wavfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trsfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tgfile</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner" title="Permalink to this definition">¶</a></dt>
 <dd><p>The Aligner class is the main user entry point to the FAVE library. It
 handles the interface between all the different modules and automates
 the process in a way that allows easy use in scripts or larger programs.</p>
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.align">
-<code class="sig-name descname">align</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">tempdir</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.align" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.align">
+<span class="sig-name descname"><span class="pre">align</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tempdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">FADIR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.align" title="Permalink to this definition">¶</a></dt>
 <dd><p>Main alignment function</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.check_against_dictionary">
-<code class="sig-name descname">check_against_dictionary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.check_against_dictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface with TranscriptProcesor to check dictionary entries</p>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.check_against_dictionary">
+<span class="sig-name descname"><span class="pre">check_against_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.check_against_dictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface with TranscriptProcessor to check dictionary entries</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.check_transcript">
-<code class="sig-name descname">check_transcript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.check_transcript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface with TranscriptProcesor to check a file</p>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.check_transcript">
+<span class="sig-name descname"><span class="pre">check_transcript</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.check_transcript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface with TranscriptProcessor to check a file</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.get_duration">
-<code class="sig-name descname">get_duration</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">FADIR</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">PRAATPATH</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.get_duration" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.get_duration">
+<span class="sig-name descname"><span class="pre">get_duration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">FADIR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">PRAATPATH</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.get_duration" title="Permalink to this definition">¶</a></dt>
 <dd><p>gets the overall duration of a soundfile</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.merge_textgrids">
-<code class="sig-name descname">merge_textgrids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">main_textgrid</span></em>, <em class="sig-param"><span class="n">new_textgrid</span></em>, <em class="sig-param"><span class="n">speaker</span></em>, <em class="sig-param"><span class="n">chunkname_textgrid</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.merge_textgrids" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.merge_textgrids">
+<span class="sig-name descname"><span class="pre">merge_textgrids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main_textgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_textgrid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">speaker</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chunkname_textgrid</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.merge_textgrids" title="Permalink to this definition">¶</a></dt>
 <dd><p>adds the contents of TextGrid new_textgrid to TextGrid main_textgrid</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.process_style_tier">
-<code class="sig-name descname">process_style_tier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">entries</span></em>, <em class="sig-param"><span class="n">style_tier</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.process_style_tier" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.process_style_tier">
+<span class="sig-name descname"><span class="pre">process_style_tier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entries</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style_tier</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.process_style_tier" title="Permalink to this definition">¶</a></dt>
 <dd><p>processes entries of style tier</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.align.aligner.Aligner.read_transcript">
-<code class="sig-name descname">read_transcript</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.read_transcript" title="Permalink to this definition">¶</a></dt>
-<dd><p>Interface with TranscriptProcesor to read a file</p>
+<dt class="sig sig-object py" id="fave.align.aligner.Aligner.read_transcript">
+<span class="sig-name descname"><span class="pre">read_transcript</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fave.align.aligner.Aligner.read_transcript" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interface with TranscriptProcessor to read a file</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="index.html"
+                          title="previous chapter">FAVE Align module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="transcriptprocessor.html"
+                          title="next chapter">FAVE TranscriptProcessor module</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -113,7 +136,7 @@ the process in a way that allows easy use in scripts or larger programs.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -132,12 +155,21 @@ the process in a way that allows easy use in scripts or larger programs.</p>
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="transcriptprocessor.html" title="FAVE TranscriptProcessor module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="FAVE Align module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >FAVE Align module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Aligner module</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2022, Ingrid Rosenfelder, Josef Fruehwald, Christian Brickhouse, Keelan Evanini, Scott Seyfarth, Kyle Gorman, Hilary Prichard, Jiahong Yuan and FAVE contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

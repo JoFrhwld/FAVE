@@ -4,16 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FAVE CMU Dictionary module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FAVE CMU Dictionary module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pyramid.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FAVE Praat module" href="praat.html" />
+    <link rel="prev" title="FAVE Vowel module" href="extract/vowel.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -31,7 +34,15 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="praat.html" title="FAVE Praat module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="extract/vowel.html" title="FAVE Vowel module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE CMU Dictionary module</a></li> 
       </ul>
     </div>  
 
@@ -40,16 +51,16 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fave.cmudictionary">
+  <section id="module-fave.cmudictionary">
 <span id="fave-cmu-dictionary-module"></span><h1>FAVE CMU Dictionary module<a class="headerlink" href="#module-fave.cmudictionary" title="Permalink to this headline">¶</a></h1>
 <p>Functions for working with CMU pronunciation dictionary</p>
 <dl class="py class">
-<dt id="fave.cmudictionary.CMU_Dictionary">
-<em class="property">class </em><code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">CMU_Dictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dictionary_file</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.cmudictionary.</span></span><span class="sig-name descname"><span class="pre">CMU_Dictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary_file</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Representation of the CMU dictionary</p>
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.add_dictionary_entries">
-<code class="sig-name descname">add_dictionary_entries</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">infile</span></em>, <em class="sig-param"><span class="n">path</span><span class="o">=</span><span class="default_value">'.'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.add_dictionary_entries" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.add_dictionary_entries">
+<span class="sig-name descname"><span class="pre">add_dictionary_entries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">infile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.add_dictionary_entries" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reads additional dictionary entries from file and adds them to the CMU dictionary</p>
 <p>&#64;param string infile
 &#64;param string path
@@ -57,78 +68,89 @@
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.check_phone">
-<code class="sig-name descname">check_phone</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">phone</span></em>, <em class="sig-param"><span class="n">transcription</span></em>, <em class="sig-param"><span class="n">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_phone" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.check_phone">
+<span class="sig-name descname"><span class="pre">check_phone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phone</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transcription</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_phone" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks that a phone entered by the user is part of the Arpabet</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.check_transcription">
-<code class="sig-name descname">check_transcription</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transcription</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_transcription" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.check_transcription">
+<span class="sig-name descname"><span class="pre">check_transcription</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transcription</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_transcription" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks that the transcription entered for a word conforms to the Arpabet style</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.check_word">
-<code class="sig-name descname">check_word</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">word</span></em>, <em class="sig-param"><span class="n">next_word</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">unknown</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">line</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_word" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.check_word">
+<span class="sig-name descname"><span class="pre">check_word</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_word</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unknown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.check_word" title="Permalink to this definition">¶</a></dt>
 <dd><p>checks whether a given word’s phonetic transcription is in the CMU dictionary;
 adds the transcription to the dictionary if not</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.merge_dicts">
-<em class="property">static </em><code class="sig-name descname">merge_dicts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d1</span></em>, <em class="sig-param"><span class="n">d2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.merge_dicts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.merge_dicts">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">merge_dicts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.merge_dicts" title="Permalink to this definition">¶</a></dt>
 <dd><p>merges two versions of the CMU pronouncing dictionary</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.read">
-<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dictionary_file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.read" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dictionary_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>&#64;author Keelan Evanini</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.write_dict">
-<code class="sig-name descname">write_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">dictionary</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.write_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.write_dict">
+<span class="sig-name descname"><span class="pre">write_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictionary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.write_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>writes the new version of the CMU dictionary (or any other dictionary) to file</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="fave.cmudictionary.CMU_Dictionary.write_unknown_words">
-<code class="sig-name descname">write_unknown_words</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">unknown</span></em>, <em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">'unknown.txt'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.write_unknown_words" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.CMU_Dictionary.write_unknown_words">
+<span class="sig-name descname"><span class="pre">write_unknown_words</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unknown</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'unknown.txt'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.CMU_Dictionary.write_unknown_words" title="Permalink to this definition">¶</a></dt>
 <dd><p>writes the list of unknown words to file</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="fave.cmudictionary.Phone">
-<em class="property">class </em><code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">Phone</code><a class="headerlink" href="#fave.cmudictionary.Phone" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.Phone">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.cmudictionary.</span></span><span class="sig-name descname"><span class="pre">Phone</span></span><a class="headerlink" href="#fave.cmudictionary.Phone" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents a CMU dict phoneme (label and distinctive features)</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.cmudictionary.read_dict">
-<code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">read_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.read_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.read_dict">
+<span class="sig-prename descclassname"><span class="pre">fave.cmudictionary.</span></span><span class="sig-name descname"><span class="pre">read_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.read_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>reads the CMU dictionary and returns it as dictionary object,
 allowing multiple pronunciations for the same word</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.cmudictionary.read_phoneset">
-<code class="sig-prename descclassname">fave.cmudictionary.</code><code class="sig-name descname">read_phoneset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.read_phoneset" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.cmudictionary.read_phoneset">
+<span class="sig-prename descclassname"><span class="pre">fave.cmudictionary.</span></span><span class="sig-name descname"><span class="pre">read_phoneset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.cmudictionary.read_phoneset" title="Permalink to this definition">¶</a></dt>
 <dd><p>reads the CMU phoneset (assigns distinctive features to each phoneme);
 returns it as dictionary object</p>
 </dd></dl>
 
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="extract/vowel.html"
+                          title="previous chapter">FAVE Vowel module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="praat.html"
+                          title="next chapter">FAVE Praat module</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -140,7 +162,7 @@ returns it as dictionary object</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -159,12 +181,20 @@ returns it as dictionary object</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="praat.html" title="FAVE Praat module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="extract/vowel.html" title="FAVE Vowel module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE CMU Dictionary module</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2022, Ingrid Rosenfelder, Josef Fruehwald, Christian Brickhouse, Keelan Evanini, Scott Seyfarth, Kyle Gorman, Hilary Prichard, Jiahong Yuan and FAVE contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

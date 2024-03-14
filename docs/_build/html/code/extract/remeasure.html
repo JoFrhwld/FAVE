@@ -4,16 +4,19 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>FAVE Remeasure module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/pyramid.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>FAVE Remeasure module &#8212; Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyramid.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FAVE Vowel module" href="vowel.html" />
+    <link rel="prev" title="FAVE Plotnik module" href="plotnik.html" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Neuton&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nobile:regular,italic,bold,bolditalic&amp;subset=latin" type="text/css" media="screen" charset="utf-8" />
 <!--[if lte IE 6]>
@@ -31,7 +34,16 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="vowel.html" title="FAVE Vowel module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="plotnik.html" title="FAVE Plotnik module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" accesskey="U">FAVE Extract module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Remeasure module</a></li> 
       </ul>
     </div>  
 
@@ -40,66 +52,77 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-fave.extract.remeasure">
+  <section id="module-fave.extract.remeasure">
 <span id="fave-remeasure-module"></span><h1>FAVE Remeasure module<a class="headerlink" href="#module-fave.extract.remeasure" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
-<dt id="fave.extract.remeasure.VowelMeasurement">
-<em class="property">class </em><code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">VowelMeasurement</code><a class="headerlink" href="#fave.extract.remeasure.VowelMeasurement" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.VowelMeasurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">VowelMeasurement</span></span><a class="headerlink" href="#fave.extract.remeasure.VowelMeasurement" title="Permalink to this definition">¶</a></dt>
 <dd><p>represents a vowel measurement</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.calculateVowelMeans">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">calculateVowelMeans</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vowels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.calculateVowelMeans" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.calculateVowelMeans">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">calculateVowelMeans</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vowels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.calculateVowelMeans" title="Permalink to this definition">¶</a></dt>
 <dd><p>calculates [means] and [covariance matrices] for each vowel class.
 It returns these as numpy arrays in dictionaries indexed by the vowel class.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.createVowelDictionary">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">createVowelDictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">measurements</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.createVowelDictionary" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.createVowelDictionary">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">createVowelDictionary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.createVowelDictionary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a dictionary of F1, F2, B1, B3 and Duration observations by vowel type.
 vowel index indicates the index in lines[x] which should be taken as identifying vowel categories.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.excludeOutliers">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">excludeOutliers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vowels</span></em>, <em class="sig-param"><span class="n">vowelMeans</span></em>, <em class="sig-param"><span class="n">vowelCovs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.excludeOutliers" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.excludeOutliers">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">excludeOutliers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vowels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelMeans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelCovs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.excludeOutliers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Finds outliers and excludes them.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.loadfile">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">loadfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.loadfile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.loadfile">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">loadfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.loadfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads an extractFormants file. Returns formatted list of lists.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.output">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">output</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">remeasurements</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.output" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.output">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">remeasurements</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.output" title="Permalink to this definition">¶</a></dt>
 <dd><p>writes measurements to file according to selected output format</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.pruneVowels">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">pruneVowels</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vowels</span></em>, <em class="sig-param"><span class="n">vowel</span></em>, <em class="sig-param"><span class="n">vowelMeans</span></em>, <em class="sig-param"><span class="n">vowelCovs</span></em>, <em class="sig-param"><span class="n">outlie</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.pruneVowels" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.pruneVowels">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">pruneVowels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vowels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelMeans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelCovs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outlie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.pruneVowels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Tries to prune outlier vowels, making sure enough tokens are left to calculate mahalanobis distance.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="fave.extract.remeasure.repredictF1F2">
-<code class="sig-prename descclassname">fave.extract.remeasure.</code><code class="sig-name descname">repredictF1F2</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">measurements</span></em>, <em class="sig-param"><span class="n">vowelMeans</span></em>, <em class="sig-param"><span class="n">vowelCovs</span></em>, <em class="sig-param"><span class="n">vowels</span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.repredictF1F2" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="fave.extract.remeasure.repredictF1F2">
+<span class="sig-prename descclassname"><span class="pre">fave.extract.remeasure.</span></span><span class="sig-name descname"><span class="pre">repredictF1F2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelMeans</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowelCovs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vowels</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fave.extract.remeasure.repredictF1F2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Predicts F1 and F2 from the speaker’s own vowel distributions based on the mahalanobis distance.</p>
 </dd></dl>
 
-</div>
+</section>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="plotnik.html"
+                          title="previous chapter">FAVE Plotnik module</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="vowel.html"
+                          title="next chapter">FAVE Vowel module</a></p>
+  </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -111,7 +134,7 @@ vowel index indicates the index in lines[x] which should be taken as identifying
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
@@ -130,12 +153,21 @@ vowel index indicates the index in lines[x] which should be taken as identifying
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.0 documentation</a> &#187;</li> 
+        <li class="right" >
+          <a href="vowel.html" title="FAVE Vowel module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="plotnik.html" title="FAVE Plotnik module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">Forced Alignment and Vowel Extraction (FAVE) 2.0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module documentation</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="index.html" >FAVE Extract module</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">FAVE Remeasure module</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Ingrid Rosenfelder, Josef Fruewald, Jiahong Yuan, and FAVE contributors.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.0.3.
+        &#169; Copyright 2022, Ingrid Rosenfelder, Josef Fruehwald, Christian Brickhouse, Keelan Evanini, Scott Seyfarth, Kyle Gorman, Hilary Prichard, Jiahong Yuan and FAVE contributors.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
     </div>
   </body>
 </html>

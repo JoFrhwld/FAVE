@@ -7,6 +7,7 @@
 *.wav
 build/*
 docs/_build
+*.code-workspace
 *.swp
 *.orig
 env
